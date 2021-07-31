@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,10 +26,13 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
+        val rcyc = view.findViewById<RecyclerView>(R.id.games)
         api.getGames().enqueue(object : Callback<GamesRemote> {
             override fun onResponse(call: Call<GamesRemote>, response: Response<GamesRemote>) {
                 if (response.isSuccessful) {
-                    Log.d("synthesizer-source", "onResponse: ${response.body().toString()}")
+                    response.body()?.let {
+                        gamesAdapter.submitList(it.results)
+                    }
                 }
             }
 
@@ -37,7 +41,7 @@ class HomeFragment : Fragment() {
             }
 
         })
-        val rcyc = view.findViewById<RecyclerView>(R.id.games)
+        var x: ImageView
         rcyc.layoutManager = LinearLayoutManager(context)
         rcyc.adapter = gamesAdapter
         return view
