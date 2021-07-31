@@ -1,4 +1,4 @@
-package com.synthesizer.source.empty
+package com.synthesizer.source.rawg
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

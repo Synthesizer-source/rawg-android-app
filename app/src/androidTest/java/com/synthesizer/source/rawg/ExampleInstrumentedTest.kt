@@ -1,4 +1,4 @@
-package com.synthesizer.source.empty
+package com.synthesizer.source.rawg
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
