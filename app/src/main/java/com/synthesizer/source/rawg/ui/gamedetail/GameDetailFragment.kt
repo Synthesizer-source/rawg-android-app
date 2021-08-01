@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.synthesizer.source.rawg.databinding.FragmentGameDetailBinding
+import com.synthesizer.source.rawg.repository.GameDetailRepository
 import com.synthesizer.source.rawg.utils.loadImage
 
 class GameDetailFragment : Fragment() {
@@ -18,7 +19,7 @@ class GameDetailFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: GameDetailViewModel by viewModels {
-        GameDetailViewModelFactory(args.gameId)
+        GameDetailViewModelFactory(args.gameId, GameDetailRepository())
     }
 
     override fun onCreateView(

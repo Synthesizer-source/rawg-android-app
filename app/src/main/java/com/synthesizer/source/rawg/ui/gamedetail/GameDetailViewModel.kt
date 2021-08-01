@@ -1,16 +1,19 @@
 package com.synthesizer.source.rawg.ui.gamedetail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.synthesizer.source.rawg.api.api
+import androidx.lifecycle.viewModelScope
 import com.synthesizer.source.rawg.data.remote.GameDetailRemote
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.synthesizer.source.rawg.repository.GameDetailRepository
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-class GameDetailViewModel(private val gameId: Int) : ViewModel() {
+class GameDetailViewModel(
+    private val gameId: Int,
+    private val repository: GameDetailRepository
+) :
+    ViewModel() {
     private var _gameDetail = MutableLiveData<GameDetailRemote>()
     val gameDetail: LiveData<GameDetailRemote> = _gameDetail
 
@@ -18,20 +21,9 @@ class GameDetailViewModel(private val gameId: Int) : ViewModel() {
         fetchGameDetail()
     }
 
-    private fun fetchGameDetail() {
-        api.getGameDetailById(gameId).enqueue(object : Callback<GameDetailRemote> {
-            override fun onResponse(
-                call: Call<GameDetailRemote>,
-                response: Response<GameDetailRemote>
-            ) {
-                if (response.isSuccessful) {
-                    _gameDetail.value = response.body()!!
-                }
-            }
-
-            override fun onFailure(call: Call<GameDetailRemote>, t: Throwable) {
-                Log.d("synthesizer-source", "onFailure: ${t.message}")
-            }
-        })
+    private fun fetchGameDetail() = viewModelScope.launch {
+        repository.fetchGameDetail(gameId).collect {
+            _gameDetail.value = it
+        }
     }
 }

@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.synthesizer.source.rawg.databinding.FragmentHomeBinding
+import com.synthesizer.source.rawg.repository.HomeRepository
 
 class HomeFragment : Fragment() {
 
@@ -17,7 +18,9 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels {
+        HomeViewModelFactory(HomeRepository())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

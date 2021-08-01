@@ -1,16 +1,15 @@
 package com.synthesizer.source.rawg.ui.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.synthesizer.source.rawg.api.api
+import androidx.lifecycle.viewModelScope
 import com.synthesizer.source.rawg.data.remote.GamesRemote
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.synthesizer.source.rawg.repository.HomeRepository
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     private var _games = MutableLiveData<GamesRemote>()
     val games: LiveData<GamesRemote> = _games
 
@@ -18,19 +17,9 @@ class HomeViewModel : ViewModel() {
         fetchGames()
     }
 
-    private fun fetchGames(){
-        api.getGames().enqueue(object : Callback<GamesRemote> {
-            override fun onResponse(call: Call<GamesRemote>, response: Response<GamesRemote>) {
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        _games.value = it
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<GamesRemote>, t: Throwable) {
-                Log.d("synthesizer-source", "onResponse: ${t.message}")
-            }
-        })
+    private fun fetchGames() = viewModelScope.launch {
+        repository.fetchGames().collect {
+            _games.value = it
+        }
     }
 }
