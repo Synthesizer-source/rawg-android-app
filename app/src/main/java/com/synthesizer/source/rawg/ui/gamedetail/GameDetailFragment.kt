@@ -1,19 +1,14 @@
 package com.synthesizer.source.rawg.ui.gamedetail
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import com.synthesizer.source.rawg.api.api
-import com.synthesizer.source.rawg.data.remote.GameDetailRemote
 import com.synthesizer.source.rawg.databinding.FragmentGameDetailBinding
 import com.synthesizer.source.rawg.utils.loadImage
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class GameDetailFragment : Fragment() {
 
@@ -21,6 +16,10 @@ class GameDetailFragment : Fragment() {
 
     private var _binding: FragmentGameDetailBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: GameDetailViewModel by viewModels {
+        GameDetailViewModelFactory(args.gameId)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,30 +32,17 @@ class GameDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        api.getGameDetailById(args.gameId).enqueue(object : Callback<GameDetailRemote> {
-            override fun onResponse(
-                call: Call<GameDetailRemote>,
-                response: Response<GameDetailRemote>
-            ) {
-                if (response.isSuccessful) {
-                    val body = response.body()!!
-
-                    binding.apply {
-                        gameBackground.loadImage(body.background_image)
-                        gameName.text = body.name
-                        gameReleaseDate.text = body.released
-                        gameMetacritic.text = body.metacritic.toString()
-                        gamePublisherName.text = body.publishers[0].name
-                        val platforms =
-                            body.parent_platforms.map { it.platform.name }.joinToString { it }
-                        gamePlatforms.text = platforms
-                        gameDescription.text = body.description_raw
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<GameDetailRemote>, t: Throwable) {
-                Log.d("synthesizer-source", "onFailure: ${t.message}")
+        viewModel.gameDetail.observe(viewLifecycleOwner, {
+            binding.apply {
+                gameBackground.loadImage(it.background_image)
+                gameName.text = it.name
+                gameReleaseDate.text = it.released
+                gameMetacritic.text = it.metacritic.toString()
+                gamePublisherName.text = it.publishers[0].name
+                val platforms =
+                    it.parent_platforms.map { p -> p.platform.name }.joinToString { it }
+                gamePlatforms.text = platforms
+                gameDescription.text = it.description_raw
             }
         })
     }
