@@ -16,6 +16,8 @@ import com.synthesizer.source.rawg.utils.loadImage
 
 class GamesAdapter : ListAdapter<Result, GamesViewHolder>(diff) {
 
+    var itemClickListener: (id: Int) -> Unit = {}
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GamesViewHolder {
         val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_games, parent, false)
@@ -26,10 +28,14 @@ class GamesAdapter : ListAdapter<Result, GamesViewHolder>(diff) {
         holder.bind(getItem(position))
     }
 
-    class GamesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class GamesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: Result) {
             itemView.findViewById<TextView>(R.id.name).setText(item.name)
             itemView.findViewById<ImageView>(R.id.gameBackground).loadImage(item.background_image)
+
+            itemView.setOnClickListener {
+                itemClickListener.invoke(item.id)
+            }
         }
     }
 

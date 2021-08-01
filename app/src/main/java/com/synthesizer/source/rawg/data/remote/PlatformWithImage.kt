@@ -1,6 +1,6 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class PlatformXX(
+data class PlatformWithImage(
     val games_count: Int,
     val id: Int,
     val image: Any,

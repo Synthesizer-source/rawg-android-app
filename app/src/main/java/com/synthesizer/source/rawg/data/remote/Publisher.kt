@@ -1,7 +1,6 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class StoreX(
-    val domain: String,
+data class Publisher(
     val games_count: Int,
     val id: Int,
     val image_background: String,

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.synthesizer.source.rawg.R
@@ -18,7 +19,7 @@ import retrofit2.Response
 
 class HomeFragment : Fragment() {
 
-    val gamesAdapter = GamesAdapter()
+    private val gamesAdapter = GamesAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,6 +28,11 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         val rcyc = view.findViewById<RecyclerView>(R.id.games)
+
+        gamesAdapter.itemClickListener = { id ->
+            navigateToGameDetail(id)
+        }
+
         api.getGames().enqueue(object : Callback<GamesRemote> {
             override fun onResponse(call: Call<GamesRemote>, response: Response<GamesRemote>) {
                 if (response.isSuccessful) {
@@ -45,5 +51,10 @@ class HomeFragment : Fragment() {
         rcyc.layoutManager = LinearLayoutManager(context)
         rcyc.adapter = gamesAdapter
         return view
+    }
+
+    private fun navigateToGameDetail(id: Int) {
+        val action = HomeFragmentDirections.showGameDetail(id)
+        findNavController().navigate(action)
     }
 }
