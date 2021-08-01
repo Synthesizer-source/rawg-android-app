@@ -5,14 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.synthesizer.source.rawg.R
 import com.synthesizer.source.rawg.api.api
 import com.synthesizer.source.rawg.data.remote.GamesRemote
+import com.synthesizer.source.rawg.databinding.FragmentHomeBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,13 +19,20 @@ class HomeFragment : Fragment() {
 
     private val gamesAdapter = GamesAdapter()
 
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
-        val rcyc = view.findViewById<RecyclerView>(R.id.games)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         gamesAdapter.itemClickListener = { id ->
             navigateToGameDetail(id)
@@ -45,12 +50,12 @@ class HomeFragment : Fragment() {
             override fun onFailure(call: Call<GamesRemote>, t: Throwable) {
                 Log.d("synthesizer-source", "onResponse: ${t.message}")
             }
-
         })
-        var x: ImageView
-        rcyc.layoutManager = LinearLayoutManager(context)
-        rcyc.adapter = gamesAdapter
-        return view
+
+        binding.games.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = gamesAdapter
+        }
     }
 
     private fun navigateToGameDetail(id: Int) {
