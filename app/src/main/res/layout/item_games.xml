@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="8dp"
@@ -8,7 +9,7 @@
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="true">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -18,14 +19,44 @@
             android:layout_width="match_parent"
             android:layout_height="256dp"
             android:scaleType="fitXY"
-            android:src="@drawable/ic_launcher_background" />
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/metacriticProgress"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:indeterminateOnly="false"
+            android:padding="4dp"
+            android:progressDrawable="@drawable/circular_bar_item_games"
+            android:progressTint="@color/teal_700"
+            android:progressTintMode="add"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/name"
+            tools:progress="50" />
+
+        <TextView
+            android:id="@+id/metacriticPoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@id/metacriticProgress"
+            app:layout_constraintEnd_toEndOf="@id/metacriticProgress"
+            app:layout_constraintStart_toStartOf="@id/metacriticProgress"
+            app:layout_constraintTop_toTopOf="@id/metacriticProgress"
+            tools:text="76" />
 
         <TextView
             android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:paddingHorizontal="24dp"
             android:text="Red dead redemption II"
-            android:textSize="24sp" />
-    </LinearLayout>
+            android:textSize="28sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/metacriticProgress"
+            app:layout_constraintTop_toBottomOf="@id/gameBackground" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

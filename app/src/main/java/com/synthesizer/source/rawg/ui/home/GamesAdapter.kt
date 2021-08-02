@@ -2,15 +2,14 @@ package com.synthesizer.source.rawg.ui.home
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.synthesizer.source.rawg.R
 import com.synthesizer.source.rawg.data.remote.Result
+import com.synthesizer.source.rawg.databinding.ItemGamesBinding
 import com.synthesizer.source.rawg.ui.home.GamesAdapter.GamesViewHolder
 import com.synthesizer.source.rawg.utils.loadImage
 
@@ -19,8 +18,7 @@ class GamesAdapter : ListAdapter<Result, GamesViewHolder>(diff) {
     var itemClickListener: (id: Int) -> Unit = {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GamesViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_games, parent, false)
+        val itemView = ItemGamesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return GamesViewHolder(itemView)
     }
 
@@ -28,13 +26,27 @@ class GamesAdapter : ListAdapter<Result, GamesViewHolder>(diff) {
         holder.bind(getItem(position))
     }
 
-    inner class GamesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class GamesViewHolder(private val itemBinding: ItemGamesBinding) :
+        RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(item: Result) {
-            itemView.findViewById<TextView>(R.id.name).setText(item.name)
-            itemView.findViewById<ImageView>(R.id.gameBackground).loadImage(item.background_image)
+            itemBinding.apply {
+                name.text = item.name
+                gameBackground.loadImage(item.background_image)
+                metacriticProgress.progress = item.metacritic
+                val color: Int = when (item.metacritic) {
+                    in 0..55 -> R.color.darker_red
+                    in 56..75 -> R.color.darker_yellow
+                    else -> R.color.darker_green
+                }
 
-            itemView.setOnClickListener {
-                itemClickListener.invoke(item.id)
+                metacriticPoint.text = item.metacritic.toString()
+                metacriticPoint.setTextColor(ContextCompat.getColor(itemView.context, color))
+                metacriticProgress.progressTintList =
+                    ContextCompat.getColorStateList(itemView.context, color)
+
+                root.setOnClickListener {
+                    itemClickListener.invoke(item.id)
+                }
             }
         }
     }
