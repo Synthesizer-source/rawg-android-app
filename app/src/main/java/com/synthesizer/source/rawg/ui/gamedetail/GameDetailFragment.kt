@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.synthesizer.source.rawg.databinding.FragmentGameDetailBinding
 import com.synthesizer.source.rawg.repository.GameDetailRepository
+import com.synthesizer.source.rawg.utils.convertToDate
 import com.synthesizer.source.rawg.utils.loadImage
 import com.synthesizer.source.rawg.utils.setVisibility
 
@@ -38,7 +39,7 @@ class GameDetailFragment : Fragment() {
             binding.apply {
                 gameBackground.loadImage(it.background_image)
                 gameName.text = it.name
-                gameReleaseDate.text = it.released
+                gameReleaseDate.text = it.released.convertToDate()
                 gameMetacritic.text = it.metacritic.toString()
                 gamePublisherName.text = it.publishers[0].name
                 it.parent_platforms.map { p -> showPlatform(p.platform.slug) }
