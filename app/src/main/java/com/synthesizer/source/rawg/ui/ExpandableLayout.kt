@@ -19,8 +19,7 @@ class ExpandableLayout(context: Context, attributeSet: AttributeSet?) :
     }
 
     private var _isContentInitialized = false
-    private var initState = COLLAPSE
-    private var _currState = initState
+    private var _currState = COLLAPSE
     val currState get() = _currState
 
 
@@ -33,7 +32,6 @@ class ExpandableLayout(context: Context, attributeSet: AttributeSet?) :
     private var currBodyHeight = 0
     var minBodyHeight: Int = 0
 
-    private var _isExpanded = false
     private var _isClickable = true
 
     var onExpandAnimationFinishedCallback: (Animator) -> Unit = { }
@@ -41,33 +39,13 @@ class ExpandableLayout(context: Context, attributeSet: AttributeSet?) :
     var onHeaderClickListener: (View) -> Unit = { }
 
     fun collapse() {
-        if (_isExpanded) {
-            body.viewTreeObserver.addOnGlobalLayoutListener(object :
-                ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    if (body.viewTreeObserver.isAlive) {
-                        body.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                        collapseAnimation(expandedBodyHeight, minBodyHeight)
-                    }
-                }
-
-            })
-        }
+        _currState = COLLAPSE
+        collapseAnimation(expandedBodyHeight, minBodyHeight)
     }
 
     fun expand() {
-        if (!_isExpanded) {
-            body.viewTreeObserver.addOnGlobalLayoutListener(object :
-                ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    if (body.viewTreeObserver.isAlive) {
-                        body.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                        expandAnimation(minBodyHeight, expandedBodyHeight)
-                    }
-                }
-
-            })
-        }
+        _currState = EXPAND
+        expandAnimation(minBodyHeight, expandedBodyHeight)
     }
 
     private fun collapseAnimation(start: Int, end: Int) {
@@ -77,7 +55,6 @@ class ExpandableLayout(context: Context, attributeSet: AttributeSet?) :
         }
 
         anim.doOnEnd {
-            _isExpanded = false
             _isClickable = true
             onCollapseAnimationFinishedCallback(it)
         }
@@ -92,7 +69,6 @@ class ExpandableLayout(context: Context, attributeSet: AttributeSet?) :
         }
 
         anim.doOnEnd {
-            _isExpanded = true
             _isClickable = true
             onExpandAnimationFinishedCallback(it)
         }
@@ -131,12 +107,32 @@ class ExpandableLayout(context: Context, attributeSet: AttributeSet?) :
         if (!_isContentInitialized) {
             when (initialState) {
                 COLLAPSE -> {
-                    _isExpanded = false
-                    setBodyHeight(0)
+                    _currState = COLLAPSE
+                    body.viewTreeObserver.addOnGlobalLayoutListener(object :
+                        ViewTreeObserver.OnGlobalLayoutListener {
+                        override fun onGlobalLayout() {
+                            if (body.viewTreeObserver.isAlive) {
+                                setBodyHeight(0)
+                                body.viewTreeObserver.removeOnGlobalLayoutListener(this)
+
+                            }
+                        }
+
+                    })
                 }
                 EXPAND -> {
-                    _isExpanded = true
-                    setBodyHeight(expandedBodyHeight)
+                    _currState = EXPAND
+                    body.viewTreeObserver.addOnGlobalLayoutListener(object :
+                        ViewTreeObserver.OnGlobalLayoutListener {
+                        override fun onGlobalLayout() {
+                            if (body.viewTreeObserver.isAlive) {
+                                setBodyHeight(expandedBodyHeight)
+                                body.viewTreeObserver.removeOnGlobalLayoutListener(this)
+
+                            }
+                        }
+
+                    })
                 }
                 else -> throw IllegalArgumentException("undefined state parameter!")
             }

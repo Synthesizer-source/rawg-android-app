@@ -23,8 +23,11 @@ class BlankFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
-            expandableLayout.initialize(ExpandableLayout.COLLAPSE)
-            expandableLayout.expand()
+            expandableLayout.initialize(ExpandableLayout.EXPAND)
+            expandableLayout.onHeaderClickListener = {
+                if (expandableLayout.currState == ExpandableLayout.COLLAPSE) expandableLayout.expand()
+                else expandableLayout.collapse()
+            }
         }
 
     }
