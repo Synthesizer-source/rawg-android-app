@@ -13,7 +13,7 @@ import com.synthesizer.source.rawg.utils.loadImage
 
 class GameDetailFragment : Fragment() {
 
-    val args: GameDetailFragmentArgs by navArgs()
+    private val args: GameDetailFragmentArgs by navArgs()
 
     private var _binding: FragmentGameDetailBinding? = null
     private val binding get() = _binding!!
@@ -26,7 +26,7 @@ class GameDetailFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentGameDetailBinding.inflate(inflater, container, false)
         return binding.root
     }

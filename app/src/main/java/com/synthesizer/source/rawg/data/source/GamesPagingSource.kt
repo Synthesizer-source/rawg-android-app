@@ -5,7 +5,7 @@ import androidx.paging.PagingState
 import com.synthesizer.source.rawg.api.api
 import com.synthesizer.source.rawg.data.remote.Result
 
-class GamesPagingSource() : PagingSource<Int, Result>() {
+class GamesPagingSource : PagingSource<Int, Result>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Result> {
         val pageIndex = params.key ?: 1
