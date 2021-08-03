@@ -43,7 +43,7 @@ class GameDetailFragment : Fragment() {
                 gameMetacritic.text = it.metacritic.toString()
                 gamePublisherName.text = it.publishers[0].name
                 it.parent_platforms.map { p -> showPlatform(p.platform.slug) }
-                gameDescription.text = it.description_raw
+//                gameDescription.text = it.description_raw
             }
         })
     }

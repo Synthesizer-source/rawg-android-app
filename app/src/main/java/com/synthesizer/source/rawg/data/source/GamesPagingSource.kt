@@ -1,5 +1,6 @@
 package com.synthesizer.source.rawg.data.source
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.synthesizer.source.rawg.api.api
@@ -11,6 +12,7 @@ class GamesPagingSource : PagingSource<Int, Result>() {
         val pageIndex = params.key ?: 1
         return try {
             val response = api.getGames(pageIndex)
+            Log.d("synthesizer-source", "load: ${response.toString()}")
             val responseData = mutableListOf<Result>()
             val data = response.results
             responseData.addAll(data)
@@ -22,6 +24,7 @@ class GamesPagingSource : PagingSource<Int, Result>() {
                 nextKey = pageIndex + 1
             )
         } catch (exception: Exception) {
+            Log.d("synthesizer-source", "load: ${exception.message}")
             LoadResult.Error(exception)
         }
     }

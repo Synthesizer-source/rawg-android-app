@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/blankFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -22,4 +22,8 @@
             app:argType="integer"
             app:nullable="false" />
     </fragment>
+    <fragment
+        android:id="@+id/blankFragment"
+        android:name="com.synthesizer.source.rawg.ui.BlankFragment"
+        android:label="BlankFragment" />
 </navigation>
