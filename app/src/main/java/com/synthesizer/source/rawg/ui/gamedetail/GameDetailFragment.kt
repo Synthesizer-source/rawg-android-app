@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import com.synthesizer.source.rawg.databinding.FragmentGameDetailBinding
 import com.synthesizer.source.rawg.repository.GameDetailRepository
 import com.synthesizer.source.rawg.utils.loadImage
+import com.synthesizer.source.rawg.utils.setVisibility
 
 class GameDetailFragment : Fragment() {
 
@@ -40,9 +41,7 @@ class GameDetailFragment : Fragment() {
                 gameReleaseDate.text = it.released
                 gameMetacritic.text = it.metacritic.toString()
                 gamePublisherName.text = it.publishers[0].name
-                val platforms =
-                    it.parent_platforms.map { p -> p.platform.name }.joinToString { it }
-                gamePlatforms.text = platforms
+                it.parent_platforms.map { p -> showPlatform(p.platform.slug) }
                 gameDescription.text = it.description_raw
             }
         })
@@ -51,5 +50,16 @@ class GameDetailFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun showPlatform(platform: String) {
+        binding.apply {
+            when (platform) {
+                "pc" -> pcPlatformIcon.setVisibility(true)
+                "ps" -> psPlatformIcon.setVisibility(true)
+                "xbox" -> xboxPlatformIcon.setVisibility(true)
+                "nintendo" -> nintendoPlatformIcon.setVisibility(true)
+            }
+        }
     }
 }

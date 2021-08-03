@@ -17,8 +17,8 @@
             android:layout_height="256dp"
             android:scaleType="fitXY"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_launcher_background"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/ic_launcher_background" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineStart"
@@ -88,16 +88,45 @@
             app:layout_constraintTop_toBottomOf="@id/gameReleaseDate"
             tools:text="Publisher : Rockstar Games" />
 
-        <TextView
-            android:id="@+id/gamePlatforms"
-            android:layout_width="0dp"
+        <ImageView
+            android:id="@+id/pcPlatformIcon"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            android:padding="2dp"
+            android:src="@drawable/ic_windows"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@id/guidelineCenter"
-            app:layout_constraintTop_toBottomOf="@id/gameMetacritic"
-            tools:text="Platforms : PC, XBOX, Playstation, Nintendo" />
+            app:layout_constraintTop_toBottomOf="@id/gameMetacritic" />
+
+        <ImageView
+            android:id="@+id/psPlatformIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:src="@drawable/ic_playstation"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/pcPlatformIcon"
+            app:layout_constraintTop_toBottomOf="@id/gameMetacritic" />
+
+        <ImageView
+            android:id="@+id/xboxPlatformIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:src="@drawable/ic_xbox"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/psPlatformIcon"
+            app:layout_constraintTop_toBottomOf="@id/gameMetacritic" />
+
+        <ImageView
+            android:id="@+id/nintendoPlatformIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:src="@drawable/ic_nintendo"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/xboxPlatformIcon"
+            app:layout_constraintTop_toBottomOf="@id/gameMetacritic" />
 
         <TextView
             android:id="@+id/gameDescription"
