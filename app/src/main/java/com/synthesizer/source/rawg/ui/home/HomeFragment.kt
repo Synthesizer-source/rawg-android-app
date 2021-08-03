@@ -34,7 +34,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.games.observe(viewLifecycleOwner, {
-            gamesAdapter.submitList(it.results)
+            gamesAdapter.submitData(lifecycle, it)
         })
 
         gamesAdapter.itemClickListener = { id ->

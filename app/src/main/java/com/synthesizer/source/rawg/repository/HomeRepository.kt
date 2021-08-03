@@ -1,16 +1,20 @@
 package com.synthesizer.source.rawg.repository
 
-import android.util.Log
-import com.synthesizer.source.rawg.api.api
-import kotlinx.coroutines.flow.flow
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.synthesizer.source.rawg.data.source.GamesPagingSource
+import com.synthesizer.source.rawg.data.remote.Result
+import kotlinx.coroutines.flow.Flow
 
 class HomeRepository {
 
-    fun fetchGames() = flow {
-        try {
-            emit(api.getGames())
-        } catch (exception: Exception) {
-            Log.d("synthesizer-source", "fetchGames: ${exception.message}")
-        }
+    fun fetchGames(): Flow<PagingData<Result>> {
+        return (Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = true
+            ),
+            pagingSourceFactory = { GamesPagingSource() }).flow)
     }
 }

@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.synthesizer.source.rawg.R
 import com.synthesizer.source.rawg.data.remote.Result
@@ -13,7 +13,7 @@ import com.synthesizer.source.rawg.databinding.ItemGamesBinding
 import com.synthesizer.source.rawg.ui.home.GamesAdapter.GamesViewHolder
 import com.synthesizer.source.rawg.utils.loadImage
 
-class GamesAdapter : ListAdapter<Result, GamesViewHolder>(diff) {
+class GamesAdapter : PagingDataAdapter<Result, GamesViewHolder>(diff) {
 
     var itemClickListener: (id: Int) -> Unit = {}
 
@@ -23,7 +23,7 @@ class GamesAdapter : ListAdapter<Result, GamesViewHolder>(diff) {
     }
 
     override fun onBindViewHolder(holder: GamesViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        getItem(position)?.let { holder.bind(it) }
     }
 
     inner class GamesViewHolder(private val itemBinding: ItemGamesBinding) :
