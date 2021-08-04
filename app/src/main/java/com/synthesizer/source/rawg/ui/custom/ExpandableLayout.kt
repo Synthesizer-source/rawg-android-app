@@ -1,4 +1,4 @@
-package com.synthesizer.source.rawg.ui
+package com.synthesizer.source.rawg.ui.custom
 
 import android.animation.Animator
 import android.animation.ValueAnimator
