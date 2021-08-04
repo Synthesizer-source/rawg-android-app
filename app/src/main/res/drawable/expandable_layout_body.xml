@@ -6,10 +6,10 @@
         android:right="0dp"
         android:top="-6dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/darker_gray_2" />
+            <solid android:color="@color/gray_normal" />
             <stroke
                 android:width="5dp"
-                android:color="@color/gray"
+                android:color="@color/gray_soft"
                 android:dashWidth="24dp"
                 android:dashGap="24dp" />
             <corners android:bottomRightRadius="24dp" />

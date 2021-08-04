@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="darker_gray">#202020</color>
-    <color name="darker_gray_2">#2D2D2D</color>
-    <color name="gray">#3A3A3A</color>
-    <color name="darker_yellow">#D2B401</color>
-    <color name="darker_red">#D32F2F</color>
-    <color name="secondary_darker_red">#AF2828</color>
-    <color name="darker_green">#388E3C</color>
+
+    <color name="red_soft">#E56161</color>
+    <color name="red_normal">#E04040</color>
+    <color name="red_dark">#AF1D1D</color>
+
+    <color name="white_dark">#CBCBCB</color>
+
+    <color name="gray_soft">#525252</color>
+    <color name="gray_normal">#3D3D3D</color>
+    <color name="gray_dark">#202020</color>
+
+    <color name="yellow_dark">#D2B401</color>
+    <color name="green_dark">#388E3C</color>
 </resources>

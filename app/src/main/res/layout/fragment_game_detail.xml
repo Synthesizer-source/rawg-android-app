@@ -12,7 +12,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/gameBackground"
+            android:id="@+id/background"
             android:layout_width="match_parent"
             android:layout_height="256dp"
             android:scaleType="fitXY"
@@ -43,49 +43,45 @@
 
 
         <TextView
-            android:id="@+id/gameName"
+            android:id="@+id/name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingVertical="16dp"
             android:textAlignment="center"
-            android:textColor="@color/white"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/gameBackground"
+            app:layout_constraintTop_toBottomOf="@id/background"
             tools:text="Red dead Redemption II" />
 
         <TextView
-            android:id="@+id/gameReleaseDate"
+            android:id="@+id/releaseDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@id/guidelineCenter"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/gameName"
+            app:layout_constraintTop_toBottomOf="@id/name"
             tools:text="Release Date : May 7, 2021" />
 
         <TextView
-            android:id="@+id/gameMetacritic"
+            android:id="@+id/score"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineCenter"
-            app:layout_constraintTop_toBottomOf="@id/gameName"
+            app:layout_constraintTop_toBottomOf="@id/name"
             tools:text="Metacritic : 97" />
 
         <TextView
-            android:id="@+id/gamePublisherName"
+            android:id="@+id/publisherName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@id/guidelineCenter"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/gameReleaseDate"
+            app:layout_constraintTop_toBottomOf="@id/releaseDate"
             tools:text="Publisher : Rockstar Games" />
 
         <ImageView
@@ -96,7 +92,7 @@
             android:src="@drawable/ic_windows"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="@id/guidelineCenter"
-            app:layout_constraintTop_toBottomOf="@id/gameMetacritic" />
+            app:layout_constraintTop_toBottomOf="@id/score" />
 
         <ImageView
             android:id="@+id/psPlatformIcon"
@@ -106,7 +102,7 @@
             android:src="@drawable/ic_playstation"
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@id/pcPlatformIcon"
-            app:layout_constraintTop_toBottomOf="@id/gameMetacritic" />
+            app:layout_constraintTop_toBottomOf="@id/score" />
 
         <ImageView
             android:id="@+id/xboxPlatformIcon"
@@ -116,7 +112,7 @@
             android:src="@drawable/ic_xbox"
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@id/psPlatformIcon"
-            app:layout_constraintTop_toBottomOf="@id/gameMetacritic" />
+            app:layout_constraintTop_toBottomOf="@id/score" />
 
         <ImageView
             android:id="@+id/nintendoPlatformIcon"
@@ -126,7 +122,7 @@
             android:src="@drawable/ic_nintendo"
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@id/xboxPlatformIcon"
-            app:layout_constraintTop_toBottomOf="@id/gameMetacritic" />
+            app:layout_constraintTop_toBottomOf="@id/score" />
 
         <com.synthesizer.source.rawg.ui.custom.ExpandableLayout
             android:id="@+id/description"
@@ -136,7 +132,7 @@
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/gamePublisherName">
+            app:layout_constraintTop_toBottomOf="@id/publisherName">
 
             <TextView
                 android:id="@+id/descriptionHeader"
@@ -146,7 +142,7 @@
                 android:padding="8dp"
                 android:paddingEnd="36dp"
                 android:text="@string/description"
-                android:textColor="@color/secondary_darker_red"
+                android:textColor="@color/red_normal"
                 android:textSize="24sp"
                 app:drawableEndCompat="@drawable/ic_dashed_plus" />
 
@@ -156,7 +152,6 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/expandable_layout_body"
                 android:padding="8dp"
-                android:textColor="@color/white"
                 android:textSize="16sp"
                 tools:text="@string/lorem_ipsum" />
         </com.synthesizer.source.rawg.ui.custom.ExpandableLayout>

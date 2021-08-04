@@ -39,11 +39,11 @@ class GameDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.gameDetail.observe(viewLifecycleOwner, {
             binding.apply {
-                gameBackground.loadImage(it.background_image)
-                gameName.text = it.name
-                gameReleaseDate.text = it.released.convertToDate()
-                gameMetacritic.text = it.metacritic.toString()
-                gamePublisherName.text = it.publishers[0].name
+                background.loadImage(it.background_image)
+                name.text = it.name
+                releaseDate.text = it.released.convertToDate()
+                score.text = it.metacritic.toString()
+                publisherName.text = it.publishers[0].name
                 it.parent_platforms.map { p -> showPlatform(p.platform.slug) }
                 description.initialize(ExpandableLayout.EXPAND)
                 descriptionBody.text = it.description_raw

@@ -31,17 +31,17 @@ class GamesAdapter : PagingDataAdapter<Result, GamesViewHolder>(diff) {
         fun bind(item: Result) {
             itemBinding.apply {
                 name.text = item.name
-                gameBackground.loadImage(item.background_image)
-                metacriticProgress.progress = item.metacritic
+                background.loadImage(item.background_image)
+                scoreProgress.progress = item.metacritic
                 val color: Int = when (item.metacritic) {
-                    in 0..55 -> R.color.darker_red
-                    in 56..75 -> R.color.darker_yellow
-                    else -> R.color.darker_green
+                    in 0..55 -> R.color.red_dark
+                    in 56..75 -> R.color.yellow_dark
+                    else -> R.color.green_dark
                 }
 
-                metacriticPoint.text = item.metacritic.toString()
-                metacriticPoint.setTextColor(ContextCompat.getColor(itemView.context, color))
-                metacriticProgress.progressTintList =
+                score.text = item.metacritic.toString()
+                score.setTextColor(ContextCompat.getColor(itemView.context, color))
+                scoreProgress.progressTintList =
                     ContextCompat.getColorStateList(itemView.context, color)
 
                 root.setOnClickListener {
