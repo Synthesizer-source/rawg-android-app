@@ -39,8 +39,8 @@ class GamesAdapter : PagingDataAdapter<Result, GamesViewHolder>(diff) {
                     else -> R.color.green_dark
                 }
 
-                score.text = item.metacritic.toString()
-                score.setTextColor(ContextCompat.getColor(itemView.context, color))
+                metascore.text = item.metacritic.toString()
+                metascore.setTextColor(ContextCompat.getColor(itemView.context, color))
                 scoreProgress.progressTintList =
                     ContextCompat.getColorStateList(itemView.context, color)
 

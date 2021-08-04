@@ -42,10 +42,10 @@ class GameDetailFragment : Fragment() {
                 background.loadImage(it.background_image)
                 name.text = it.name
                 releaseDate.text = it.released.convertToDate()
-                score.text = it.metacritic.toString()
+                metascore.text = it.metacritic.toString()
                 publisherName.text = it.publishers[0].name
                 it.parent_platforms.map { p -> showPlatform(p.platform.slug) }
-                description.initialize(ExpandableLayout.EXPAND)
+                description.initialize(ExpandableLayout.COLLAPSE)
                 descriptionBody.text = it.description_raw
                 description.onHeaderClickListener = {
                     if (description.currState == ExpandableLayout.EXPAND) description.collapse()
@@ -81,7 +81,7 @@ class GameDetailFragment : Fragment() {
         binding.apply {
             when (platform) {
                 "pc" -> pcPlatformIcon.setVisibility(true)
-                "ps" -> psPlatformIcon.setVisibility(true)
+                "playstation" -> psPlatformIcon.setVisibility(true)
                 "xbox" -> xboxPlatformIcon.setVisibility(true)
                 "nintendo" -> nintendoPlatformIcon.setVisibility(true)
             }
