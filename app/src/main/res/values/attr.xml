@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ShowMoreLayout">
+        <attr name="initialState" format="string">
+            <enum name="hide" value="0" />
+            <enum name="show" value="1" />
+        </attr>
+    </declare-styleable>
+</resources>
