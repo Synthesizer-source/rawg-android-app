@@ -1,9 +1,9 @@
 package com.synthesizer.source.rawg.data.mapper
 
-import com.synthesizer.source.rawg.data.domain.RequirementDomain
+import com.synthesizer.source.rawg.data.domain.RequirementsDomain
 import com.synthesizer.source.rawg.data.remote.Requirements
 
-fun Requirements.minimumToDomain(): RequirementDomain {
+fun Requirements.minimumToDomain(): RequirementsDomain {
     val info = minimum?.split(delimiters = arrayOf(":"))
     var os = ""
     var processor = ""
@@ -17,7 +17,7 @@ fun Requirements.minimumToDomain(): RequirementDomain {
         graphics = it[5].substring(0, it[5].indexOf("Storage")).trim()
         storage = it[6].substring(0, it[6].indexOf("spaceSound")).trim()
     }
-    return RequirementDomain(
+    return RequirementsDomain(
         os = os,
         processor = processor,
         memory = memory,
@@ -26,7 +26,7 @@ fun Requirements.minimumToDomain(): RequirementDomain {
     )
 }
 
-fun Requirements.recommendedToDomain(): RequirementDomain {
+fun Requirements.recommendedToDomain(): RequirementsDomain {
     val info = recommended?.split(delimiters = arrayOf(":"))
     var os = ""
     var processor = ""
@@ -40,7 +40,7 @@ fun Requirements.recommendedToDomain(): RequirementDomain {
         graphics = it[5].substring(0, it[5].indexOf("Storage")).trim()
         storage = it[6].substring(0, it[6].indexOf("spaceSound")).trim()
     }
-    return RequirementDomain(
+    return RequirementsDomain(
         os = os,
         processor = processor,
         memory = memory,
