@@ -5,5 +5,6 @@
             <enum name="hide" value="0" />
             <enum name="show" value="1" />
         </attr>
+        <attr name="collapseLines" format="integer" />
     </declare-styleable>
 </resources>
