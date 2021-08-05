@@ -61,8 +61,8 @@
             app:layout_constraintBottom_toBottomOf="@id/publisherName"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/name" />
-
+            app:layout_constraintTop_toBottomOf="@id/name"
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/releaseDateLabel"
@@ -71,7 +71,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:labelFor="@id/releaseDate"
-            android:text="Release"
+            android:text="@string/release_date"
             app:layout_constraintEnd_toEndOf="@id/guidelineCenter"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
             app:layout_constraintTop_toBottomOf="@id/name" />
@@ -94,7 +94,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:labelFor="@id/publisherName"
-            android:text="Publisher"
+            android:text="@string/publisher"
             app:flow_horizontalAlign="center"
             app:flow_verticalAlign="top"
             app:layout_constraintEnd_toEndOf="@id/guidelineCenter"
@@ -114,25 +114,25 @@
             tools:text="Rockstar Games" />
 
         <TextView
-            android:id="@+id/metascoreLabel"
+            android:id="@+id/ratingLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:text="Metascore"
+            android:text="@string/rating"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineCenter"
             app:layout_constraintTop_toBottomOf="@id/name" />
 
         <TextView
-            android:id="@+id/metascore"
+            android:id="@+id/rating"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/metascoreLabel"
-            app:layout_constraintTop_toBottomOf="@id/metascoreLabel"
+            app:layout_constraintStart_toStartOf="@id/ratingLabel"
+            app:layout_constraintTop_toBottomOf="@id/ratingLabel"
             tools:text="97" />
 
 
@@ -145,7 +145,7 @@
             android:src="@drawable/ic_windows"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="@id/guidelineCenter"
-            app:layout_constraintTop_toBottomOf="@id/metascore"
+            app:layout_constraintTop_toBottomOf="@id/rating"
             tools:visibility="visible" />
 
         <ImageView

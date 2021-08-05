@@ -42,7 +42,7 @@ class GameDetailFragment : Fragment() {
                 background.loadImage(it.background_image)
                 name.text = it.name
                 releaseDate.text = it.released.convertToDate()
-                metascore.text = it.metacritic.toString()
+                rating.text = it.rating.toString()
                 publisherName.text = it.publishers[0].name
                 it.parent_platforms.map { p -> showPlatform(p.platform.slug) }
                 description.initialize(ExpandableLayout.COLLAPSE)
