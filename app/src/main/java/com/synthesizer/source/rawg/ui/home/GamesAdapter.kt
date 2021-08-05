@@ -3,15 +3,14 @@ package com.synthesizer.source.rawg.ui.home
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.synthesizer.source.rawg.R
 import com.synthesizer.source.rawg.data.remote.Result
 import com.synthesizer.source.rawg.databinding.ItemGamesBinding
 import com.synthesizer.source.rawg.ui.home.GamesAdapter.GamesViewHolder
 import com.synthesizer.source.rawg.utils.loadImage
+import com.synthesizer.source.rawg.utils.setVisibility
 
 class GamesAdapter : PagingDataAdapter<Result, GamesViewHolder>(diff) {
 
@@ -32,20 +31,21 @@ class GamesAdapter : PagingDataAdapter<Result, GamesViewHolder>(diff) {
             itemBinding.apply {
                 name.text = item.name
                 background.loadImage(item.background_image)
-                scoreProgress.progress = item.metacritic
-                val color: Int = when (item.metacritic) {
-                    in 0..55 -> R.color.red_dark
-                    in 56..75 -> R.color.yellow_dark
-                    else -> R.color.green_dark
-                }
-
-                rating.text = item.metacritic.toString()
-                rating.setTextColor(ContextCompat.getColor(itemView.context, color))
-                scoreProgress.progressTintList =
-                    ContextCompat.getColorStateList(itemView.context, color)
+                item.parent_platforms.forEach { showPlatform(it.platform.slug) }
 
                 root.setOnClickListener {
                     itemClickListener.invoke(item.id)
+                }
+            }
+        }
+
+        private fun showPlatform(platform: String) {
+            itemBinding.apply {
+                when (platform) {
+                    "pc" -> pcPlatformIcon.setVisibility(true)
+                    "playstation" -> psPlatformIcon.setVisibility(true)
+                    "xbox" -> xboxPlatformIcon.setVisibility(true)
+                    "nintendo" -> nintendoPlatformIcon.setVisibility(true)
                 }
             }
         }

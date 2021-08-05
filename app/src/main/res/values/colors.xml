@@ -10,9 +10,9 @@
 
     <color name="white_dark">#CBCBCB</color>
 
-    <color name="gray_soft">#525252</color>
-    <color name="gray_normal">#3D3D3D</color>
-    <color name="gray_dark">#202020</color>
+    <color name="gray_soft">#3D3D3D</color>
+    <color name="gray_normal">#202020</color>
+    <color name="gray_dark">#151515</color>
 
     <color name="yellow_dark">#D2B401</color>
     <color name="green_dark">#388E3C</color>

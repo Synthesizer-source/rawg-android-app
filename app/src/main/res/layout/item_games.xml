@@ -24,39 +24,70 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
 
-        <ProgressBar
-            android:id="@+id/scoreProgress"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:indeterminateOnly="false"
-            android:padding="4dp"
-            android:progressDrawable="@drawable/progress_bar_game_score"
-            android:progressTintMode="add"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/name"
-            tools:progress="50" />
-
-        <TextView
-            android:id="@+id/rating"
+        <ImageView
+            android:id="@+id/pcPlatformIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="@id/scoreProgress"
-            app:layout_constraintEnd_toEndOf="@id/scoreProgress"
-            app:layout_constraintStart_toStartOf="@id/scoreProgress"
-            app:layout_constraintTop_toTopOf="@id/scoreProgress"
-            tools:text="76" />
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:padding="2dp"
+            android:scaleX="0.75"
+            android:scaleY="0.75"
+            android:src="@drawable/ic_windows"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/background"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/psPlatformIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:scaleX="0.75"
+            android:scaleY="0.75"
+            android:src="@drawable/ic_playstation"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/pcPlatformIcon"
+            app:layout_constraintTop_toTopOf="@id/pcPlatformIcon"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/xboxPlatformIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:scaleX="0.75"
+            android:scaleY="0.75"
+            android:src="@drawable/ic_xbox"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/psPlatformIcon"
+            app:layout_constraintTop_toTopOf="@id/pcPlatformIcon"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/nintendoPlatformIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:scaleX="0.75"
+            android:scaleY="0.75"
+            android:src="@drawable/ic_nintendo"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/xboxPlatformIcon"
+            app:layout_constraintTop_toTopOf="@id/pcPlatformIcon"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
+            android:layout_marginTop="36dp"
             android:paddingHorizontal="24dp"
-            android:paddingTop="8dp"
-            android:textSize="28sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/scoreProgress"
+            android:paddingBottom="18dp"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/background"
             tools:text="Red Dead Redemption II" />
     </androidx.constraintlayout.widget.ConstraintLayout>
