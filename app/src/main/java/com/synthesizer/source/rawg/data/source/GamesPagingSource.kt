@@ -4,16 +4,16 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.synthesizer.source.rawg.api.api
-import com.synthesizer.source.rawg.data.remote.Result
+import com.synthesizer.source.rawg.data.remote.GameRemote
 
-class GamesPagingSource : PagingSource<Int, Result>() {
+class GamesPagingSource : PagingSource<Int, GameRemote>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Result> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, GameRemote> {
         val pageIndex = params.key ?: 1
         return try {
             val response = api.getGames(pageIndex)
             Log.d("synthesizer-source", "load: ${response.toString()}")
-            val responseData = mutableListOf<Result>()
+            val responseData = mutableListOf<GameRemote>()
             val data = response.results
             responseData.addAll(data)
             val prevKey = if (pageIndex == 1) null else pageIndex - 1
@@ -29,7 +29,7 @@ class GamesPagingSource : PagingSource<Int, Result>() {
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, Result>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, GameRemote>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)

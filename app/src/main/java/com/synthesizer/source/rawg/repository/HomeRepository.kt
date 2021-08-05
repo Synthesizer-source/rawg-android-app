@@ -4,12 +4,12 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.synthesizer.source.rawg.data.source.GamesPagingSource
-import com.synthesizer.source.rawg.data.remote.Result
+import com.synthesizer.source.rawg.data.remote.GameRemote
 import kotlinx.coroutines.flow.Flow
 
 class HomeRepository {
 
-    fun fetchGames(): Flow<PagingData<Result>> {
+    fun fetchGames(): Flow<PagingData<GameRemote>> {
         return (Pager(
             config = PagingConfig(
                 pageSize = 20,

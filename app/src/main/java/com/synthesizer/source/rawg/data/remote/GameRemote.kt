@@ -1,6 +1,6 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class Result(
+data class GameRemote(
     val added: Int,
     val added_by_status: AddedByStatus,
     val background_image: String,

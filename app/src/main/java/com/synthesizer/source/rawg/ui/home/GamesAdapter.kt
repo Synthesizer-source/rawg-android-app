@@ -6,13 +6,14 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.synthesizer.source.rawg.data.remote.Result
+import com.synthesizer.source.rawg.data.mapper.toDomain
+import com.synthesizer.source.rawg.data.remote.GameRemote
 import com.synthesizer.source.rawg.databinding.ItemGamesBinding
 import com.synthesizer.source.rawg.ui.home.GamesAdapter.GamesViewHolder
 import com.synthesizer.source.rawg.utils.loadImage
 import com.synthesizer.source.rawg.utils.setVisibility
 
-class GamesAdapter : PagingDataAdapter<Result, GamesViewHolder>(diff) {
+class GamesAdapter : PagingDataAdapter<GameRemote, GamesViewHolder>(diff) {
 
     var itemClickListener: (id: Int) -> Unit = {}
 
@@ -27,11 +28,12 @@ class GamesAdapter : PagingDataAdapter<Result, GamesViewHolder>(diff) {
 
     inner class GamesViewHolder(private val itemBinding: ItemGamesBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
-        fun bind(item: Result) {
+        fun bind(item: GameRemote) {
+            val domainItem = item.toDomain()
             itemBinding.apply {
-                name.text = item.name
-                background.loadImage(item.background_image)
-                item.parent_platforms.forEach { showPlatform(it.platform.slug) }
+                name.text = domainItem.name
+                background.loadImage(domainItem.imageUrl)
+                domainItem.platforms.forEach { showPlatform(it) }
 
                 root.setOnClickListener {
                     itemClickListener.invoke(item.id)
@@ -51,14 +53,14 @@ class GamesAdapter : PagingDataAdapter<Result, GamesViewHolder>(diff) {
         }
     }
 
-    object diff : DiffUtil.ItemCallback<Result>() {
+    object diff : DiffUtil.ItemCallback<GameRemote>() {
 
-        override fun areItemsTheSame(oldItem: Result, newItem: Result): Boolean {
+        override fun areItemsTheSame(oldItem: GameRemote, newItem: GameRemote): Boolean {
             return oldItem.id == newItem.id
         }
 
         @SuppressLint("DiffUtilEquals")
-        override fun areContentsTheSame(oldItem: Result, newItem: Result): Boolean {
+        override fun areContentsTheSame(oldItem: GameRemote, newItem: GameRemote): Boolean {
             return oldItem.id == newItem.id
         }
     }
