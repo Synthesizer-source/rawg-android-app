@@ -30,24 +30,23 @@ class GamesAdapter : PagingDataAdapter<GameRemote, GamesViewHolder>(diff) {
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(item: GameRemote) {
             val domainItem = item.toDomain()
-            itemBinding.apply {
+            with(itemBinding) {
+
                 name.text = domainItem.name
                 background.loadImage(domainItem.imageUrl)
-                domainItem.platforms.forEach { showPlatform(it) }
+
+                val isPcGame = domainItem.platforms.any { it == "pc" }
+                val isPsGame = domainItem.platforms.any { it == "playstation" }
+                val isXboxGame = domainItem.platforms.any { it == "xbox" }
+                val isNintendoGame = domainItem.platforms.any { it == "nintendo" }
+
+                pcPlatformIcon.setVisibility(isPcGame)
+                psPlatformIcon.setVisibility(isPsGame)
+                xboxPlatformIcon.setVisibility(isXboxGame)
+                nintendoPlatformIcon.setVisibility(isNintendoGame)
 
                 root.setOnClickListener {
                     itemClickListener.invoke(item.id)
-                }
-            }
-        }
-
-        private fun showPlatform(platform: String) {
-            itemBinding.apply {
-                when (platform) {
-                    "pc" -> pcPlatformIcon.setVisibility(true)
-                    "playstation" -> psPlatformIcon.setVisibility(true)
-                    "xbox" -> xboxPlatformIcon.setVisibility(true)
-                    "nintendo" -> nintendoPlatformIcon.setVisibility(true)
                 }
             }
         }
