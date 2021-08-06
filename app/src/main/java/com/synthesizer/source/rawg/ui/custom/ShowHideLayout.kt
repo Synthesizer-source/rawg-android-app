@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.os.Build
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.LinearLayout
@@ -60,8 +61,7 @@ class ShowHideLayout @JvmOverloads constructor(
 
     private fun setUpBody() {
         typedArray.getString(R.styleable.ShowMoreLayout_collapseLines)!!.let {
-            _collapseLines =
-                if (body.lineCount < _collapseLines) body.lineCount else it.toInt()
+            _collapseLines = it.toInt()
             if (_collapseLines <= 0) throw IllegalArgumentException("collapseLines must be positive!!")
         }
         typedArray.getString(R.styleable.ShowMoreLayout_bodyContent)?.let { body.text = it }
@@ -85,6 +85,11 @@ class ShowHideLayout @JvmOverloads constructor(
                 }
             }
         typedArray.recycle()
+    }
+
+    fun setBodyContent(text: String) {
+        body.text = text
+        _maxHeight = body.layout.height + body.paddingTop + body.paddingBottom
     }
 
     fun setButtonText(text: String) {
@@ -128,12 +133,14 @@ class ShowHideLayout @JvmOverloads constructor(
         if (_currHeight > _maxHeight) _maxHeight = _currHeight
 
         if (_minHeight == 0) {
-            _minHeight = if (_currState == 0) {
-                body.measuredHeight
-            } else {
+            _minHeight =
                 ((_collapseLines * (body.paint.fontMetrics.bottom - body.paint.fontMetrics.top)) + body.paddingTop + body.paddingBottom - body.paint.fontMetrics.bottom).toInt()
-            }
         }
+
+        Log.d(
+            "synthesizer-source",
+            "onMeasure: $_minHeight $_maxHeight $_currHeight $_collapseLines"
+        )
     }
 
     private fun setBodyHeight(height: Int) {

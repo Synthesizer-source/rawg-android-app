@@ -7,10 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import com.synthesizer.source.rawg.R
 import com.synthesizer.source.rawg.databinding.FragmentGameDetailBinding
 import com.synthesizer.source.rawg.repository.GameDetailRepository
-import com.synthesizer.source.rawg.ui.custom.ExpandableLayout
 import com.synthesizer.source.rawg.utils.convertToDate
 import com.synthesizer.source.rawg.utils.loadImage
 import com.synthesizer.source.rawg.utils.setVisibility
@@ -45,29 +43,7 @@ class GameDetailFragment : Fragment() {
                 rating.text = it.rating.toString()
                 publisherName.text = it.publisher
                 it.platforms.map { p -> showPlatform(p) }
-                description.initialize(ExpandableLayout.COLLAPSE)
-                descriptionBody.text = it.description
-                description.onHeaderClickListener = {
-                    if (description.currState == ExpandableLayout.EXPAND) description.collapse()
-                    else description.expand()
-                }
-                description.onCollapseAnimationFinishedCallback = {
-                    descriptionHeader.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        0,
-                        0,
-                        R.drawable.ic_dashed_plus,
-                        0
-                    )
-                }
-
-                description.onExpandAnimationFinishedCallback = {
-                    descriptionHeader.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        0,
-                        0,
-                        R.drawable.ic_dashed_minus,
-                        0
-                    )
-                }
+                description.setBodyContent(it.description)
             }
         })
     }

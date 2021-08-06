@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -58,11 +59,11 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/shape_common_game_detail_info_dashed_red_border"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@id/publisherName"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/name"
-            android:visibility="invisible" />
+            app:layout_constraintTop_toBottomOf="@id/name" />
 
         <TextView
             android:id="@+id/releaseDateLabel"
@@ -181,36 +182,30 @@
             app:layout_constraintTop_toTopOf="@id/pcPlatformIcon"
             tools:visibility="visible" />
 
-        <com.synthesizer.source.rawg.ui.custom.ExpandableLayout
+        <TextView
+            android:id="@+id/descriptionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/description"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@id/publisherName" />
+
+        <com.synthesizer.source.rawg.ui.custom.ShowHideLayout
             android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:orientation="vertical"
+            android:paddingHorizontal="8dp"
+            android:paddingTop="8dp"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/publisherName">
-
-            <TextView
-                android:id="@+id/descriptionHeader"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/expandable_layout_header"
-                android:padding="8dp"
-                android:paddingEnd="36dp"
-                android:text="@string/description"
-                android:textColor="@color/red_normal"
-                android:textSize="24sp"
-                app:drawableEndCompat="@drawable/ic_dashed_plus" />
-
-            <TextView
-                android:id="@+id/descriptionBody"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/expandable_layout_body"
-                android:padding="8dp"
-                android:textSize="16sp"
-                tools:text="@string/lorem_ipsum" />
-        </com.synthesizer.source.rawg.ui.custom.ExpandableLayout>
+            app:layout_constraintTop_toBottomOf="@id/descriptionLabel"
+            custom:buttonText="SHOW | HIDE"
+            custom:buttonTextColor="@color/red_normal"
+            custom:collapseLines="3"
+            custom:initialState="hide" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
