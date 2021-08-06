@@ -6,5 +6,9 @@
             <enum name="show" value="1" />
         </attr>
         <attr name="collapseLines" format="integer" />
+        <attr name="animationDuration" format="integer" />
+        <attr name="bodyContent" format="string" />
+        <attr name="bodyTextColor" format="color|reference" />
+        <attr name="bodyDrawable" format="color|reference" />
     </declare-styleable>
 </resources>

@@ -4,12 +4,11 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
-import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.animation.doOnEnd
 import androidx.core.view.get
 import com.synthesizer.source.rawg.R
 
@@ -18,7 +17,7 @@ class ShowMoreLayout @JvmOverloads constructor(
     attributeSet: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) :
-    FrameLayout(context, attributeSet, defStyleAttr) {
+    LinearLayout(context, attributeSet, defStyleAttr) {
 
     private var _textView: TextView? = null
     private val textView get() = _textView!!
@@ -26,47 +25,71 @@ class ShowMoreLayout @JvmOverloads constructor(
     private val button get() = _button!!
     private var _currState: Int = 0 // 0 : hide , 1 : show
     private var _collapseLines = 0
+    private var _isClickable = true
 
     private var _maxHeight = 0
     private var _minHeight = 0
     private var _currHeight = 0
 
-    var animationDuration: Long = 1000L
+    private var _typedArray: TypedArray? = null
+    private val typedArray get() = _typedArray!!
+
+    private var _animationDuration: Long = 1000L
 
     init {
         LayoutInflater.from(context).inflate(R.layout.layout_show_hide, this)
         attributeSet?.let {
-            val typedArray: TypedArray =
+            _typedArray =
                 context.obtainStyledAttributes(it, R.styleable.ShowMoreLayout, 0, 0)
+
             typedArray.getString(R.styleable.ShowMoreLayout_initialState)?.let { state ->
                 _currState = state.toInt()
             }
+
             typedArray.getString(R.styleable.ShowMoreLayout_collapseLines)?.let { state ->
                 _collapseLines = state.toInt()
                 if (_collapseLines < 0) throw IllegalArgumentException("collapseLines can not be negative!!")
             }
-            typedArray.recycle()
+
+            typedArray.getString(R.styleable.ShowMoreLayout_animationDuration)?.let { state ->
+                _animationDuration = state.toLong()
+                if (_animationDuration < 0) throw IllegalArgumentException("animationDuration can not be negative!!")
+            }
         }
+    }
+
+    private fun setUpBody() {
+        typedArray.getString(R.styleable.ShowMoreLayout_bodyContent)?.let { textView.text = it }
+        typedArray.getColorStateList(R.styleable.ShowMoreLayout_bodyTextColor)?.let {
+            textView.setTextColor(it)
+        }
+        typedArray.getDrawable(R.styleable.ShowMoreLayout_bodyDrawable)
+            ?.let { textView.background = it }
+        typedArray.recycle()
     }
 
     override fun onFinishInflate() {
         super.onFinishInflate()
-        _textView = (get(0) as LinearLayout)[0] as TextView
-        _button = (get(0) as LinearLayout)[1] as Button
+
+        _textView = get(0) as TextView
+        _button = get(1) as Button
+
+        setUpBody()
 
         if (_currState == 0) {
             textView.maxLines = _collapseLines
         }
 
         button.setOnClickListener {
-            if (_currState == 0) {
-//                textView.maxLines = textView.lineCount
-                expandAnimation(_minHeight, _maxHeight)
-                _currState = 1
-            } else {
-//                textView.maxLines = _collapseLines
-                collapseAnimation(_maxHeight, _minHeight)
-                _currState = 0
+            if (_isClickable) {
+                _isClickable = false
+                if (_currState == 0) {
+                    expandAnimation(_minHeight, _maxHeight)
+                    _currState = 1
+                } else {
+                    collapseAnimation(_maxHeight, _minHeight)
+                    _currState = 0
+                }
             }
         }
     }
@@ -84,17 +107,9 @@ class ShowMoreLayout @JvmOverloads constructor(
             _minHeight = if (_currState == 0) {
                 textView.measuredHeight
             } else {
-                // not working
-                ((_collapseLines * (textView.paint.fontMetrics.bottom - textView.paint.fontMetrics.top)) - textView.paint.fontMetrics.top - textView.paint.fontMetrics.bottom).toInt()
+                ((_collapseLines * (textView.paint.fontMetrics.bottom - textView.paint.fontMetrics.top)) + textView.paddingTop + textView.paddingBottom - textView.paint.fontMetrics.bottom).toInt()
             }
         }
-
-        Log.d(
-            "synthesizer-source",
-            "onFinishInflate: ${_maxHeight} " +
-                    " ${textView.measuredHeight} " +
-                    " ${_minHeight}"
-        )
     }
 
     private fun setBodyHeight(height: Int) {
@@ -120,7 +135,11 @@ class ShowMoreLayout @JvmOverloads constructor(
             setBodyHeight(value)
         }
 
-        anim.duration = animationDuration
+        anim.doOnEnd {
+            _isClickable = true
+        }
+
+        anim.duration = _animationDuration
         anim.start()
     }
 
@@ -141,7 +160,11 @@ class ShowMoreLayout @JvmOverloads constructor(
             setBodyHeight(value)
         }
 
-        anim.duration = animationDuration
+        anim.doOnEnd {
+            _isClickable = true
+        }
+
+        anim.duration = _animationDuration
         anim.start()
     }
 }
