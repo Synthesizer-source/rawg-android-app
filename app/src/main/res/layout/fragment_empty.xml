@@ -9,10 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        custom:animationDuration="500"
         custom:bodyContent="@string/lorem_ipsum"
-        custom:collapseLines="3"
-        custom:initialState="hide" />
+        custom:collapseLines="1" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

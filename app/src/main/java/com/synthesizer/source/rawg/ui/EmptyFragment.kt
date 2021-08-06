@@ -19,6 +19,18 @@ class EmptyFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.layout.onExpandAnimationFinishedCallback = {
+            binding.layout.setButtonText("HIDE")
+        }
+
+        binding.layout.onCollapseAnimationFinishedCallback = {
+            binding.layout.setButtonText("SHOW")
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -3,6 +3,7 @@ package com.synthesizer.source.rawg.ui.custom
 import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.TypedArray
+import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.Button
@@ -19,11 +20,13 @@ class ShowMoreLayout @JvmOverloads constructor(
 ) :
     LinearLayout(context, attributeSet, defStyleAttr) {
 
-    private var _textView: TextView? = null
-    private val textView get() = _textView!!
+    private var _body: TextView? = null
+    private val body get() = _body!!
     private var _button: Button? = null
     private val button get() = _button!!
+
     private var _currState: Int = 0 // 0 : hide , 1 : show
+    val currentState get() = _currState
     private var _collapseLines = 0
     private var _isClickable = true
 
@@ -36,6 +39,9 @@ class ShowMoreLayout @JvmOverloads constructor(
 
     private var _animationDuration: Long = 1000L
 
+    var onExpandAnimationFinishedCallback: () -> Unit = { }
+    var onCollapseAnimationFinishedCallback: () -> Unit = { }
+
     init {
         LayoutInflater.from(context).inflate(R.layout.layout_show_hide, this)
         attributeSet?.let {
@@ -46,43 +52,61 @@ class ShowMoreLayout @JvmOverloads constructor(
                 _currState = state.toInt()
             }
 
-            typedArray.getString(R.styleable.ShowMoreLayout_collapseLines)?.let { state ->
-                _collapseLines = state.toInt()
-                if (_collapseLines < 0) throw IllegalArgumentException("collapseLines can not be negative!!")
-            }
-
-            typedArray.getString(R.styleable.ShowMoreLayout_animationDuration)?.let { state ->
-                _animationDuration = state.toLong()
-                if (_animationDuration < 0) throw IllegalArgumentException("animationDuration can not be negative!!")
+            typedArray.getInt(R.styleable.ShowMoreLayout_animationDuration, 1000).let { duration ->
+                _animationDuration = if (duration > 0) duration.toLong() else 0
             }
         }
     }
 
     private fun setUpBody() {
-        typedArray.getString(R.styleable.ShowMoreLayout_bodyContent)?.let { textView.text = it }
+        typedArray.getString(R.styleable.ShowMoreLayout_collapseLines)!!.let {
+            _collapseLines =
+                if (body.lineCount < _collapseLines) body.lineCount else it.toInt()
+            if (_collapseLines <= 0) throw IllegalArgumentException("collapseLines must be positive!!")
+        }
+        typedArray.getString(R.styleable.ShowMoreLayout_bodyContent)?.let { body.text = it }
         typedArray.getColorStateList(R.styleable.ShowMoreLayout_bodyTextColor)?.let {
-            textView.setTextColor(it)
+            body.setTextColor(it)
         }
         typedArray.getDrawable(R.styleable.ShowMoreLayout_bodyDrawable)
-            ?.let { textView.background = it }
+            ?.let { body.background = it }
+    }
+
+    private fun setUpButton() {
+        typedArray.getString(R.styleable.ShowMoreLayout_buttonText)?.let { button.text = it }
+        typedArray.getColorStateList(R.styleable.ShowMoreLayout_buttonTextColor)?.let {
+            button.setTextColor(it)
+        }
+
+        typedArray.getDrawable(R.styleable.ShowMoreLayout_buttonForeground)
+            ?.let {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    button.foreground = it
+                }
+            }
         typedArray.recycle()
+    }
+
+    fun setButtonText(text: String) {
+        button.setText(text)
     }
 
     override fun onFinishInflate() {
         super.onFinishInflate()
 
-        _textView = get(0) as TextView
+        _body = get(0) as TextView
         _button = get(1) as Button
 
         setUpBody()
+        setUpButton()
 
         if (_currState == 0) {
-            textView.maxLines = _collapseLines
+            body.maxLines = _collapseLines
         }
 
         button.setOnClickListener {
-            if (_isClickable) {
-                _isClickable = false
+            if (button.isClickable) {
+                button.isClickable = false
                 if (_currState == 0) {
                     expandAnimation(_minHeight, _maxHeight)
                     _currState = 1
@@ -96,47 +120,48 @@ class ShowMoreLayout @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        _currHeight = textView.measuredHeight
+        _currHeight = body.measuredHeight
         if (_maxHeight == 0) {
-            _maxHeight = textView.layout.height + textView.paddingTop + textView.paddingBottom
+            _maxHeight = body.layout.height + body.paddingTop + body.paddingBottom
         }
 
         if (_currHeight > _maxHeight) _maxHeight = _currHeight
 
         if (_minHeight == 0) {
             _minHeight = if (_currState == 0) {
-                textView.measuredHeight
+                body.measuredHeight
             } else {
-                ((_collapseLines * (textView.paint.fontMetrics.bottom - textView.paint.fontMetrics.top)) + textView.paddingTop + textView.paddingBottom - textView.paint.fontMetrics.bottom).toInt()
+                ((_collapseLines * (body.paint.fontMetrics.bottom - body.paint.fontMetrics.top)) + body.paddingTop + body.paddingBottom - body.paint.fontMetrics.bottom).toInt()
             }
         }
     }
 
     private fun setBodyHeight(height: Int) {
-        val layoutParams = textView.layoutParams
+        val layoutParams = body.layoutParams
         layoutParams?.height = height
-        textView.layoutParams = layoutParams
+        body.layoutParams = layoutParams
     }
 
     private fun expandAnimation(start: Int, end: Int) {
         var diffHeight = end - start
-        var diffLines = textView.lineCount - _collapseLines
+        var diffLines = body.lineCount - _collapseLines
         var currShowedLines = _collapseLines
         val anim = ValueAnimator.ofInt(start, end)
         anim.addUpdateListener {
             val value = it.animatedValue as Int
-            if (diffLines == 0) textView.maxLines = textView.lineCount
+            if (diffLines == 0) body.maxLines = body.lineCount
             else if (value >= (diffHeight / diffLines)) {
                 currShowedLines++
                 diffHeight -= value
                 diffLines--
-                textView.maxLines = currShowedLines
+                body.maxLines = currShowedLines
             }
             setBodyHeight(value)
         }
 
         anim.doOnEnd {
-            _isClickable = true
+            onExpandAnimationFinishedCallback()
+            button.isClickable = true
         }
 
         anim.duration = _animationDuration
@@ -145,23 +170,24 @@ class ShowMoreLayout @JvmOverloads constructor(
 
     private fun collapseAnimation(start: Int, end: Int) {
         var diffHeight = start - end
-        var diffLines = textView.lineCount - _collapseLines
-        var currShowedLines = textView.lineCount
+        var diffLines = body.lineCount - _collapseLines
+        var currShowedLines = body.lineCount
         val anim = ValueAnimator.ofInt(start, end)
         anim.addUpdateListener {
             val value = it.animatedValue as Int
-            if (diffLines == 0) textView.maxLines = _collapseLines
+            if (diffLines == 0) body.maxLines = _collapseLines
             if (value == diffHeight) {
                 currShowedLines--
                 diffHeight -= value
                 diffLines--
-                textView.maxLines = currShowedLines
+                body.maxLines = currShowedLines
             }
             setBodyHeight(value)
         }
 
         anim.doOnEnd {
-            _isClickable = true
+            onCollapseAnimationFinishedCallback()
+            button.isClickable = true
         }
 
         anim.duration = _animationDuration

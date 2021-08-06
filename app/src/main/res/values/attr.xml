@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="ShowMoreLayout">
+        
         <attr name="initialState" format="string">
             <enum name="hide" value="0" />
             <enum name="show" value="1" />
         </attr>
-        <attr name="collapseLines" format="integer" />
+
         <attr name="animationDuration" format="integer" />
+
+        <attr name="collapseLines" format="integer" />
         <attr name="bodyContent" format="string" />
         <attr name="bodyTextColor" format="color|reference" />
         <attr name="bodyDrawable" format="color|reference" />
+
+        <attr name="buttonForeground" format="color|reference" />
+        <attr name="buttonText" format="string" />
+        <attr name="buttonTextColor" format="color|reference" />
     </declare-styleable>
 </resources>
