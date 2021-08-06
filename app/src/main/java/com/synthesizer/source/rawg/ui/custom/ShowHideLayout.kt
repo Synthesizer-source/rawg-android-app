@@ -13,7 +13,7 @@ import androidx.core.animation.doOnEnd
 import androidx.core.view.get
 import com.synthesizer.source.rawg.R
 
-class ShowMoreLayout @JvmOverloads constructor(
+class ShowHideLayout @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null,
     defStyleAttr: Int = 0
