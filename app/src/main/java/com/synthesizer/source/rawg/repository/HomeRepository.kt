@@ -3,11 +3,12 @@ package com.synthesizer.source.rawg.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.synthesizer.source.rawg.data.source.GamesPagingSource
 import com.synthesizer.source.rawg.data.remote.GameRemote
+import com.synthesizer.source.rawg.data.source.GamesPagingSource
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class HomeRepository {
+class HomeRepository @Inject constructor() {
 
     fun fetchGames(): Flow<PagingData<GameRemote>> {
         return (Pager(

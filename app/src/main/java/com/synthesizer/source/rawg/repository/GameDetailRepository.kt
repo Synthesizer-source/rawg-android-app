@@ -4,8 +4,9 @@ import android.util.Log
 import com.synthesizer.source.rawg.api.api
 import com.synthesizer.source.rawg.data.mapper.toDomain
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class GameDetailRepository {
+class GameDetailRepository @Inject constructor() {
 
     fun fetchGameDetail(id: Int) = flow {
         try {

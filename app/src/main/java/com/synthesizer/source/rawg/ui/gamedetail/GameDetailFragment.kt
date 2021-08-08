@@ -8,12 +8,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.synthesizer.source.rawg.databinding.FragmentGameDetailBinding
-import com.synthesizer.source.rawg.repository.GameDetailRepository
 import com.synthesizer.source.rawg.utils.convertToDate
 import com.synthesizer.source.rawg.utils.loadImage
 import com.synthesizer.source.rawg.utils.setVisibility
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class GameDetailFragment : Fragment() {
+
+    @Inject
+    lateinit var gameDetailViewModelFactory: GameDetailViewModel.AssistedFactory
 
     private val args: GameDetailFragmentArgs by navArgs()
 
@@ -21,7 +27,7 @@ class GameDetailFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: GameDetailViewModel by viewModels {
-        GameDetailViewModelFactory(args.gameId, GameDetailRepository())
+        GameDetailViewModel.provideFactory(gameDetailViewModelFactory, args.gameId)
     }
 
     override fun onCreateView(

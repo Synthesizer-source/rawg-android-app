@@ -8,10 +8,13 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.synthesizer.source.rawg.data.remote.GameRemote
 import com.synthesizer.source.rawg.repository.HomeRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(private val repository: HomeRepository) : ViewModel() {
 
     private var _games = MutableLiveData<PagingData<GameRemote>>()
     val games: LiveData<PagingData<GameRemote>> = _games
