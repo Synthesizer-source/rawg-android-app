@@ -1,6 +1,7 @@
 package com.synthesizer.source.rawg.ui.gamedetail
 
 import androidx.lifecycle.*
+import com.synthesizer.source.rawg.data.Resource
 import com.synthesizer.source.rawg.data.domain.GameDetailDomain
 import com.synthesizer.source.rawg.repository.GameDetailRepository
 import dagger.assisted.Assisted
@@ -39,7 +40,10 @@ class GameDetailViewModel @AssistedInject constructor(
 
     private fun fetchGameDetail() = viewModelScope.launch {
         repository.fetchGameDetail(gameId).collect {
-            _gameDetail.value = it
+            when (it) {
+                is Resource.Success -> _gameDetail.value = it.data!!
+                else -> { }
+            }
         }
     }
 }
