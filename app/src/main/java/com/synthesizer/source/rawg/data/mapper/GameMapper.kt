@@ -7,8 +7,8 @@ fun GameRemote.toDomain(): GameDomain {
     return GameDomain(
         id = id,
         name = name,
-        imageUrl = background_image,
-        platforms = parent_platforms.map {
+        imageUrl = background_image!!,
+        platforms = parent_platforms!!.map {
             it.platform.slug
         })
 }

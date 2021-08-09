@@ -11,7 +11,7 @@ class GamesPagingSource : PagingSource<Int, GameRemote>() {
         val pageIndex = params.key ?: 1
         return try {
             val response = api.getGames(pageIndex)
-            val data = response.results
+            val data = response.results.filter { it.isValid() }
             val responseData = mutableListOf<GameRemote>()
             responseData.addAll(data)
             val prevKey = if (pageIndex == 1) null else pageIndex - 1
