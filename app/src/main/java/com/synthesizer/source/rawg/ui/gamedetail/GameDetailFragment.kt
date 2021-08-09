@@ -41,6 +41,38 @@ class GameDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observe()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun observe() {
+
+        viewModel.isLoading.observe(viewLifecycleOwner, {
+            binding.apply {
+                val state = if (it) View.INVISIBLE else View.VISIBLE
+                val loadingIconState = if (it) View.VISIBLE else View.GONE
+                loadingIcon.visibility = loadingIconState
+                background.visibility = state
+                name.visibility = state
+                releaseDateLabel.visibility = state
+                releaseDate.visibility = state
+                publisherNameLabel.visibility = state
+                publisherName.visibility = state
+                ratingLabel.visibility = state
+                rating.visibility = state
+                pcPlatformIcon.visibility = state
+                psPlatformIcon.visibility = state
+                xboxPlatformIcon.visibility = state
+                nintendoPlatformIcon.visibility = state
+                descriptionLabel.visibility = state
+                description.visibility = state
+            }
+        })
+
         viewModel.gameDetail.observe(viewLifecycleOwner, {
             binding.apply {
                 background.loadImage(it.backgroundImage)
@@ -52,11 +84,6 @@ class GameDetailFragment : Fragment() {
                 description.setBodyContent(it.description)
             }
         })
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun showPlatform(platform: String) {

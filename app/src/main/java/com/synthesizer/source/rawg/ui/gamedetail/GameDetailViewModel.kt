@@ -17,6 +17,9 @@ class GameDetailViewModel @AssistedInject constructor(
     private var _gameDetail = MutableLiveData<GameDetailDomain>()
     val gameDetail: LiveData<GameDetailDomain> = _gameDetail
 
+    private var _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     @dagger.assisted.AssistedFactory
     interface AssistedFactory {
         fun create(gameId: Int): GameDetailViewModel
@@ -41,9 +44,23 @@ class GameDetailViewModel @AssistedInject constructor(
     private fun fetchGameDetail() = viewModelScope.launch {
         repository.fetchGameDetail(gameId).collect {
             when (it) {
-                is Resource.Success -> _gameDetail.value = it.data!!
-                else -> { }
+                is Resource.Loading -> onLoading()
+                is Resource.Success -> onSuccess(it.data)
+                else -> onFailure()
             }
         }
+    }
+
+    private fun onSuccess(data: GameDetailDomain) {
+        _gameDetail.value = data
+        _isLoading.value = false
+    }
+
+    private fun onFailure() {
+
+    }
+
+    private fun onLoading() {
+        _isLoading.value = true
     }
 }
