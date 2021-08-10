@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ConstraintSet android:id="@+id/start">
-        <Constraint android:id="@+id/linearLayout" />
+        <Constraint android:id="@+id/searchCardView" />
         <Constraint android:id="@+id/rawg" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
-        <Constraint android:id="@id/linearLayout" />
+        <Constraint android:id="@id/searchCardView" />
         <Constraint android:id="@+id/rawg" />
     </ConstraintSet>
 
@@ -22,7 +22,7 @@
             <KeyAttribute
                 android:translationY="-256dp"
                 app:framePosition="100"
-                app:motionTarget="@+id/linearLayout" />
+                app:motionTarget="@+id/searchCardView" />
             <KeyAttribute
                 android:scaleX="0.5"
                 android:scaleY="0.5"
@@ -43,7 +43,7 @@
             <KeyAttribute
                 android:translationY="256dp"
                 app:framePosition="100"
-                app:motionTarget="@+id/linearLayout" />
+                app:motionTarget="@+id/searchCardView" />
             <KeyAttribute
                 android:scaleX="1"
                 android:scaleY="1"

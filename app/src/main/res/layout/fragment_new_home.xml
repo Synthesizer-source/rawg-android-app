@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -75,13 +76,15 @@
             app:strokeColor="@color/gray_soft"
             app:strokeWidth="2dp" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/searchCardView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="96dp"
-            android:orientation="vertical"
-            android:paddingHorizontal="16dp"
+            android:backgroundTint="@android:color/transparent"
+            android:paddingHorizontal="0dp"
+            app:cardCornerRadius="20dp"
+            app:cardUseCompatPadding="true"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
             app:layout_constraintTop_toBottomOf="@id/arthur">
@@ -91,11 +94,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusableInTouchMode="true"
-                android:textColorHint="@color/gray_soft"
-                app:boxCornerRadiusBottomEnd="24dp"
-                app:boxCornerRadiusBottomStart="24dp"
-                app:boxCornerRadiusTopEnd="24dp"
-                app:boxCornerRadiusTopStart="24dp"
+                app:boxCornerRadiusBottomEnd="20dp"
+                app:boxCornerRadiusBottomStart="20dp"
+                app:boxCornerRadiusTopEnd="20dp"
+                app:boxCornerRadiusTopStart="20dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
                 app:hintAnimationEnabled="false"
                 app:hintEnabled="false">
 
@@ -103,18 +107,18 @@
                     android:id="@+id/edittextfield"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/gray_soft"
+                    android:backgroundTint="@color/gray_normal"
                     android:drawableEnd="@android:drawable/ic_menu_search"
-                    android:drawableTint="@color/white_dark"
+                    android:drawableTint="@color/gray_soft"
                     android:hint="Search"
                     android:imeOptions="actionSearch"
                     android:inputType="textNoSuggestions"
                     android:paddingVertical="4dp"
-                    android:textColor="@color/white_dark"
-                    android:textColorHint="@color/white_dark"
+                    android:textColor="@color/gray_light"
+                    android:textColorHint="@color/gray_soft"
                     android:textCursorDrawable="@null"
-                    android:textSize="24sp" />
+                    android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </ScrollView>
