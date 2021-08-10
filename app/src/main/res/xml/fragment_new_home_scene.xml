@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@+id/linearLayout" />
+        <Constraint android:id="@+id/rawg" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint android:id="@id/linearLayout" />
+        <Constraint android:id="@+id/rawg" />
+    </ConstraintSet>
+
+    <Transition
+        android:id="@+id/clickSearch"
+        app:autoTransition="none"
+        app:constraintSetEnd="@id/end"
+        app:constraintSetStart="@+id/start"
+        app:layoutDuringTransition="ignoreRequest">
+        <KeyFrameSet>
+            <KeyAttribute
+                android:translationY="-256dp"
+                app:framePosition="100"
+                app:motionTarget="@+id/linearLayout" />
+            <KeyAttribute
+                android:scaleX="0.5"
+                android:scaleY="0.5"
+                android:translationY="-48dp"
+                app:framePosition="100"
+                app:motionTarget="@+id/rawg" />
+        </KeyFrameSet>
+        <OnSwipe app:dragDirection="dragUp" />
+    </Transition>
+
+
+    <Transition
+        android:id="@+id/back"
+        app:autoTransition="none"
+        app:constraintSetEnd="@id/start"
+        app:constraintSetStart="@+id/end"
+        app:layoutDuringTransition="ignoreRequest">
+        <KeyFrameSet>
+            <KeyAttribute
+                android:translationY="256dp"
+                app:framePosition="100"
+                app:motionTarget="@+id/linearLayout" />
+            <KeyAttribute
+                android:scaleX="1"
+                android:scaleY="1"
+                android:translationY="48dp"
+                app:framePosition="100"
+                app:motionTarget="@+id/rawg" />
+        </KeyFrameSet>
+    </Transition>
+</MotionScene>
