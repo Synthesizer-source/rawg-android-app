@@ -30,7 +30,6 @@
                 app:framePosition="100"
                 app:motionTarget="@+id/rawg" />
         </KeyFrameSet>
-        <OnSwipe app:dragDirection="dragUp" />
     </Transition>
 
 

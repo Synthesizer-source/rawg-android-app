@@ -80,7 +80,6 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginTop="96dp"
-            android:background="@color/gray_dark"
             android:orientation="vertical"
             android:paddingHorizontal="16dp"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
@@ -91,13 +90,13 @@
                 android:id="@+id/textField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
                 android:textColorHint="@color/gray_soft"
                 app:boxCornerRadiusBottomEnd="24dp"
                 app:boxCornerRadiusBottomStart="24dp"
                 app:boxCornerRadiusTopEnd="24dp"
                 app:boxCornerRadiusTopStart="24dp"
                 app:hintAnimationEnabled="false"
-                android:focusableInTouchMode="false"
                 app:hintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -115,10 +114,7 @@
                     android:textColorHint="@color/white_dark"
                     android:textCursorDrawable="@null"
                     android:textSize="24sp" />
-
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-
-
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </ScrollView>
