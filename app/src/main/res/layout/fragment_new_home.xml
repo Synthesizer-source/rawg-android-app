@@ -26,6 +26,13 @@
             android:orientation="vertical"
             app:layout_constraintGuide_end="16dp" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.50" />
+
         <ImageView
             android:id="@+id/arthur"
             android:layout_width="wrap_content"
@@ -123,16 +130,45 @@
             </com.google.android.material.textfield.TextInputLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/popularGamesButton"
+            android:layout_width="0dp"
+            android:layout_height="112dp"
+            android:layout_marginHorizontal="8dp"
+            android:backgroundTint="@color/gray_normal"
+            android:drawableLeft="@drawable/ic_baseline_bar_chart_24"
+            android:text="Popular ın 2020"
+            android:textColor="@color/gray_light"
+            app:cornerRadius="24dp"
+            app:layout_constraintEnd_toEndOf="@id/guidelineCenter"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@id/searchCardView" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bestOfTheYearGamesButton"
+            android:layout_width="0dp"
+            android:layout_height="112dp"
+            android:layout_marginHorizontal="8dp"
+            android:backgroundTint="@color/gray_normal"
+            android:drawableLeft="@drawable/ic_trophy"
+            android:text="Best of the year"
+            android:textColor="@color/gray_light"
+            app:cornerRadius="24dp"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@id/guidelineCenter"
+            app:layout_constraintTop_toBottomOf="@id/searchCardView" />
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/homeScreenGames"
             android:layout_width="match_parent"
             android:layout_height="300dp"
+            android:layout_marginTop="48dp"
             android:orientation="horizontal"
             android:paddingHorizontal="12dp"
             android:paddingVertical="48dp"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/searchCardView" />
+            app:layout_constraintTop_toBottomOf="@id/popularGamesButton" />
 
         <FrameLayout
             android:id="@+id/gradientLayout"
@@ -152,6 +188,5 @@
                 android:scaleType="fitXY"
                 tools:src="@drawable/gta" />
         </FrameLayout>
-
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </ScrollView>
