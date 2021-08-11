@@ -13,9 +13,15 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
+import androidx.core.view.ViewCompat
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
+import com.synthesizer.source.rawg.R
 import com.synthesizer.source.rawg.databinding.FragmentNewHomeBinding
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+
 
 class NewHomeFragment : Fragment() {
 
@@ -24,6 +30,15 @@ class NewHomeFragment : Fragment() {
     private var isExpand = true
     private var onBackPressedCallback: OnBackPressedCallback? = null
     private var inputMethodManager: InputMethodManager? = null
+    val list = listOf<HomeScreenItem>(
+        HomeScreenItem(R.drawable.rdr),
+        HomeScreenItem(R.drawable.gta),
+        HomeScreenItem(R.drawable.mafia2),
+        HomeScreenItem(R.drawable.rdr),
+        HomeScreenItem(R.drawable.gta),
+    )
+
+    private val adapter = HomeScreenAdapter(list)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +52,33 @@ class NewHomeFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.homeScreenGames.offscreenPageLimit = 3
+        binding.homeScreenGames.adapter = adapter
+        binding.homeScreenGames.setPageTransformer(OffsetPageTransformer(24, 24))
+
+
+        binding.homeScreenGames.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrollStateChanged(state: Int) {
+                if (state != ViewPager2.SCROLL_STATE_IDLE) {
+                    binding.homeScreenGames.children.forEach {
+                        it.setLayerType(View.LAYER_TYPE_NONE, null)
+                    }
+                }
+            }
+
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                Glide.with(requireContext())
+                    .load(adapter.getItem(position).resId)
+                    .override(512)
+                    .into(binding.selectedGameImageView)
+            }
+        })
+    }
+    
     @SuppressLint("ClickableViewAccessibility")
     private fun registerListeners() {
 

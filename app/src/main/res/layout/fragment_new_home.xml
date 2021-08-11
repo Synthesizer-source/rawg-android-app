@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:fillViewport="true">
 
     <androidx.constraintlayout.motion.widget.MotionLayout
@@ -121,5 +122,36 @@
                     android:textSize="18sp" />
             </com.google.android.material.textfield.TextInputLayout>
         </com.google.android.material.card.MaterialCardView>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/homeScreenGames"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="48dp"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@id/searchCardView" />
+
+        <FrameLayout
+            android:id="@+id/gradientLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:foreground="@drawable/gradient_home_screen_selected_game"
+            android:translationZ="-20dp"
+            app:layout_constraintBottom_toBottomOf="@id/homeScreenGames"
+            app:layout_constraintEnd_toEndOf="@id/homeScreenGames"
+            app:layout_constraintStart_toStartOf="@id/homeScreenGames"
+            app:layout_constraintTop_toTopOf="@id/homeScreenGames">
+
+            <ImageView
+                android:id="@+id/selectedGameImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                tools:src="@drawable/gta" />
+        </FrameLayout>
+
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </ScrollView>
