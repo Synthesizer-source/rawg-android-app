@@ -6,14 +6,11 @@ import android.content.Context
 import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import androidx.core.animation.doOnEnd
-import androidx.core.animation.doOnStart
-import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
@@ -57,7 +54,16 @@ class NewHomeFragment : Fragment() {
         binding.homeScreenGames.offscreenPageLimit = 3
         binding.homeScreenGames.adapter = adapter
         binding.homeScreenGames.setPageTransformer(OffsetPageTransformer(24, 24))
+    }
 
+    override fun onPause() {
+        super.onPause()
+        hideKeyboard()
+        binding.edittextfield.clearFocus()
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun registerListeners() {
 
         binding.homeScreenGames.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
@@ -77,10 +83,6 @@ class NewHomeFragment : Fragment() {
                     .into(binding.selectedGameImageView)
             }
         })
-    }
-    
-    @SuppressLint("ClickableViewAccessibility")
-    private fun registerListeners() {
 
         KeyboardVisibilityEvent.setEventListener(requireActivity(), viewLifecycleOwner, {
             if (!it && !isExpand) transitionToStart()
@@ -109,16 +111,19 @@ class NewHomeFragment : Fragment() {
             }
         }
 
-        binding.edittextfield.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                onSearchViewClick()
-                return false
-            }
-        })
+        binding.edittextfield.setOnClickListener {
+            onSearchViewClick()
+        }
     }
 
     private fun onSearchViewClick() {
-        if (binding.root.scrollY != 0) scrollToTop() else transitionToEnd()
+        if (binding.root.scrollY != 0) {
+            hideKeyboard()
+            scrollToTop()
+        } else {
+            transitionToEnd()
+            showKeyboard()
+        }
     }
 
     private fun scrollToTop() {
@@ -129,10 +134,6 @@ class NewHomeFragment : Fragment() {
         valueAnimator.addUpdateListener {
             val value = it.animatedValue as Int
             binding.root.scrollTo(0, value)
-        }
-
-        valueAnimator.doOnStart {
-            hideKeyboard()
         }
 
         valueAnimator.doOnEnd {
@@ -169,7 +170,6 @@ class NewHomeFragment : Fragment() {
     }
 
     private fun hideKeyboard() {
-        binding.edittextfield.clearFocus()
-        binding.edittextfield.setRawInputType(InputType.TYPE_NULL)
+        inputMethodManager!!.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 }
