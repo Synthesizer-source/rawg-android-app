@@ -1,6 +1,7 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Theme.Rawg" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/gray_dark</item>
         <item name="android:windowBackground">@color/gray_dark</item>
         <item name="android:textColor">@color/white_dark</item>
     </style>

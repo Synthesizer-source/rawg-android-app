@@ -17,4 +17,6 @@
 
     <color name="yellow_dark">#D2B401</color>
     <color name="green_dark">#388E3C</color>
+
+    <color name="button_ripple_color">#A1A1A1</color>
 </resources>

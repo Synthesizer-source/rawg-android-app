@@ -4,17 +4,17 @@
 
     <ConstraintSet android:id="@+id/start">
         <Constraint android:id="@+id/searchCardView" />
-        <Constraint android:id="@id/rawgDescription" />
-        <Constraint android:id="@+id/rawg" />
-        <Constraint android:id="@+id/arthur" />
+        <Constraint android:id="@id/descriptionText" />
+        <Constraint android:id="@+id/titleText" />
+        <Constraint android:id="@+id/headerImage" />
         <Constraint android:id="@+id/visitWebSiteButton" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
         <Constraint android:id="@id/searchCardView" />
-        <Constraint android:id="@id/rawgDescription" />
-        <Constraint android:id="@+id/rawg" />
-        <Constraint android:id="@+id/arthur" />
+        <Constraint android:id="@id/descriptionText" />
+        <Constraint android:id="@+id/titleText" />
+        <Constraint android:id="@+id/headerImage" />
         <Constraint android:id="@+id/visitWebSiteButton" />
     </ConstraintSet>
 
@@ -33,11 +33,11 @@
                 android:scaleX="0.5"
                 android:scaleY="0.5"
                 app:framePosition="100"
-                app:motionTarget="@+id/rawg" />
+                app:motionTarget="@+id/titleText" />
             <KeyAttribute
                 android:alpha="0.1"
                 app:framePosition="100"
-                app:motionTarget="@+id/arthur" />
+                app:motionTarget="@+id/headerImage" />
             <KeyAttribute
                 android:alpha="0.1"
                 app:framePosition="100"
@@ -45,7 +45,7 @@
             <KeyAttribute
                 android:alpha="0.1"
                 app:framePosition="100"
-                app:motionTarget="@+id/rawgDescription" />
+                app:motionTarget="@+id/descriptionText" />
         </KeyFrameSet>
     </Transition>
 
@@ -64,15 +64,15 @@
                 android:scaleX="1"
                 android:scaleY="1"
                 app:framePosition="100"
-                app:motionTarget="@+id/rawg" />
+                app:motionTarget="@+id/titleText" />
             <KeyAttribute
                 android:alpha="1"
                 app:framePosition="100"
-                app:motionTarget="@+id/arthur" />
+                app:motionTarget="@+id/headerImage" />
             <KeyAttribute
                 android:alpha="1"
                 app:framePosition="100"
-                app:motionTarget="@+id/rawgDescription" />
+                app:motionTarget="@+id/descriptionText" />
             <KeyAttribute
                 android:alpha="1"
                 app:framePosition="100"

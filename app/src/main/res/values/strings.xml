@@ -5,4 +5,11 @@
     <string name="rating">Rating</string>
     <string name="description">Description</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="see_more">See more</string>
+    <string name="best_of_the_year">Best of the year</string>
+    <string name="popular_in_2020">POPULAR IN 2020</string>
+    <string name="search">Search</string>
+    <string name="visit_website">VISIT WEBSITE</string>
+    <string name="rawg_description">The Largest\nVideo Game Database</string>
+    <string name="rawg">RAWG</string>
 </resources>

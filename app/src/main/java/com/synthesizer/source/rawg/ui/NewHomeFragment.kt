@@ -59,7 +59,7 @@ class NewHomeFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         hideKeyboard()
-        binding.edittextfield.clearFocus()
+        binding.searchEditText.clearFocus()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -105,13 +105,13 @@ class NewHomeFragment : Fragment() {
             onBackPressedCallback!!
         )
 
-        binding.edittextfield.setOnFocusChangeListener { view, isFocused ->
+        binding.searchEditText.setOnFocusChangeListener { view, isFocused ->
             if (view.isInTouchMode && isFocused) {
                 view.performClick()
             }
         }
 
-        binding.edittextfield.setOnClickListener {
+        binding.searchEditText.setOnClickListener {
             onSearchViewClick()
         }
     }
@@ -147,13 +147,13 @@ class NewHomeFragment : Fragment() {
 
     private fun transitionToStart() {
         binding.visitWebSiteButton.isEnabled = true
-        binding.constraintLayout.transitionToStart()
+        binding.homeMotionLayout.transitionToStart()
         isExpand = true
     }
 
     private fun transitionToEnd() {
         binding.visitWebSiteButton.isEnabled = false
-        binding.constraintLayout.transitionToEnd()
+        binding.homeMotionLayout.transitionToEnd()
         isExpand = false
     }
 
@@ -164,9 +164,9 @@ class NewHomeFragment : Fragment() {
     }
 
     private fun showKeyboard() {
-        binding.edittextfield.inputType = InputType.TYPE_CLASS_TEXT
-        binding.edittextfield.requestFocus()
-        inputMethodManager!!.showSoftInput(binding.edittextfield, InputMethodManager.SHOW_FORCED)
+        binding.searchEditText.inputType = InputType.TYPE_CLASS_TEXT
+        binding.searchEditText.requestFocus()
+        inputMethodManager!!.showSoftInput(binding.searchEditText, InputMethodManager.SHOW_FORCED)
     }
 
     private fun hideKeyboard() {

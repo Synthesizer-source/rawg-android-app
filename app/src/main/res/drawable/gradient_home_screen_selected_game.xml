@@ -11,15 +11,6 @@
     <item>
         <shape>
             <gradient
-                android:angle="90"
-                android:centerColor="@android:color/transparent"
-                android:centerY="0.65"
-                android:startColor="@color/gray_dark" />
-        </shape>
-    </item>
-    <item>
-        <shape>
-            <gradient
                 android:angle="180"
                 android:centerColor="@android:color/transparent"
                 android:centerX="0.25"
@@ -30,6 +21,15 @@
         <shape>
             <gradient
                 android:angle="270"
+                android:centerColor="@android:color/transparent"
+                android:centerY="0.65"
+                android:startColor="@color/gray_dark" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <gradient
+                android:angle="90"
                 android:centerColor="@android:color/transparent"
                 android:centerY="0.65"
                 android:startColor="@color/gray_dark" />
