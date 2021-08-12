@@ -3,6 +3,8 @@ package com.synthesizer.source.rawg.ui.home
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
@@ -20,6 +22,7 @@ import com.synthesizer.source.rawg.databinding.FragmentHomeBinding
 import com.synthesizer.source.rawg.utils.loadImage
 import dagger.hilt.android.AndroidEntryPoint
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -114,6 +117,10 @@ class HomeFragment : Fragment() {
                 showKeyboard()
             }
         }
+
+        binding.visitWebSiteButton.setOnClickListener {
+            goToRAWGWebsite()
+        }
     }
 
     private fun scrollToTop() {
@@ -155,5 +162,11 @@ class HomeFragment : Fragment() {
 
     private fun hideKeyboard() {
         inputMethodManager!!.hideSoftInputFromWindow(binding.root.windowToken, 0)
+    }
+
+    private fun goToRAWGWebsite() {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse("https://rawg.io/")
+        startActivity(intent)
     }
 }
