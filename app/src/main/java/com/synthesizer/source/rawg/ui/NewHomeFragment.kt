@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,29 +14,24 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.animation.doOnEnd
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
-import com.synthesizer.source.rawg.R
 import com.synthesizer.source.rawg.databinding.FragmentNewHomeBinding
+import com.synthesizer.source.rawg.utils.loadImage
+import dagger.hilt.android.AndroidEntryPoint
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 
-
+@AndroidEntryPoint
 class NewHomeFragment : Fragment() {
 
     private var _binding: FragmentNewHomeBinding? = null
     private val binding get() = _binding!!
     private var isExpand = true
     private var inputMethodManager: InputMethodManager? = null
-    val list = listOf<HomeScreenItem>(
-        HomeScreenItem(R.drawable.rdr),
-        HomeScreenItem(R.drawable.gta),
-        HomeScreenItem(R.drawable.mafia2),
-        HomeScreenItem(R.drawable.rdr),
-        HomeScreenItem(R.drawable.gta),
-    )
 
-    private val adapter = HomeScreenAdapter(list)
+    private val viewModel: NewHomeViewModel by viewModels()
+    private val adapter = HomeScreenAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,9 +50,15 @@ class NewHomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
             homeScreenGames.offscreenPageLimit = 3
-            homeScreenGames.adapter = adapter
             (homeScreenGames[0] as RecyclerView).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             homeScreenGames.setPageTransformer(OffsetPageTransformer(24, 24))
+//            homeScreenGames.adapter = adapter
+            viewModel.games.observe(viewLifecycleOwner, {
+                Log.d("synthesizer-source", "onViewCreated: $it")
+                adapter.loadDataSet(it)
+                homeScreenGames.adapter = adapter
+            })
+
         }
     }
 
@@ -79,10 +81,7 @@ class NewHomeFragment : Fragment() {
 
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                Glide.with(requireContext())
-                    .load(adapter.getItem(position).resId)
-                    .override(512)
-                    .into(binding.selectedGameImageView)
+                binding.selectedGameImageView.loadImage(adapter.getItem(position).imageUrl)
             }
         })
 
