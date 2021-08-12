@@ -2,8 +2,16 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/newHomeFragment">
+    app:startDestination="@id/homeFragment">
 
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.synthesizer.source.rawg.ui.home.HomeFragment"
+        android:label="HomeFragment">
+        <action
+            android:id="@+id/showGames"
+            app:destination="@id/gameListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/gameDetailFragment"
         android:name="com.synthesizer.source.rawg.ui.gamedetail.GameDetailFragment"
@@ -15,7 +23,23 @@
             app:nullable="false" />
     </fragment>
     <fragment
-        android:id="@+id/newHomeFragment"
-        android:name="com.synthesizer.source.rawg.ui.home.HomeFragment"
-        android:label="NewHomeFragment" />
+        android:id="@+id/gameListFragment"
+        android:name="com.synthesizer.source.rawg.ui.gamelist.GameListFragment"
+        android:label="GameListFragment">
+        <action
+            android:id="@+id/showGameDetail"
+            app:destination="@id/gameDetailFragment" />
+        <argument
+            android:name="search"
+            android:defaultValue=""
+            app:argType="string" />
+        <argument
+            android:name="ordering"
+            android:defaultValue=""
+            app:argType="string" />
+        <argument
+            android:name="dates"
+            android:defaultValue=""
+            app:argType="string" />
+    </fragment>
 </navigation>
