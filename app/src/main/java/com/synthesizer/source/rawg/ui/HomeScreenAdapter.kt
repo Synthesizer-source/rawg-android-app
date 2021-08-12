@@ -1,5 +1,6 @@
 package com.synthesizer.source.rawg.ui
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -7,10 +8,9 @@ import com.synthesizer.source.rawg.databinding.ItemHomeScreenGameBinding
 import com.synthesizer.source.rawg.ui.HomeScreenAdapter.HomeScreenItemViewHolder
 import com.synthesizer.source.rawg.utils.loadImage
 
-class HomeScreenAdapter() :
-    RecyclerView.Adapter<HomeScreenItemViewHolder>() {
+class HomeScreenAdapter : RecyclerView.Adapter<HomeScreenItemViewHolder>() {
 
-    private val _items = mutableListOf<HomeScreenItem>()
+    private var _items = listOf<HomeScreenItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeScreenItemViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -26,8 +26,10 @@ class HomeScreenAdapter() :
         return _items.size
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun loadDataSet(items: List<HomeScreenItem>) {
-        _items.addAll(items)
+        _items = items
+        notifyItemChanged(_items.size - 1)
     }
 
     fun getItem(position: Int) = _items[position]

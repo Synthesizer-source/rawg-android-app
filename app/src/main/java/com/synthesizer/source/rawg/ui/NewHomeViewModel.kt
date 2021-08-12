@@ -7,8 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.synthesizer.source.rawg.data.Resource
 import com.synthesizer.source.rawg.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -37,54 +35,30 @@ class NewHomeViewModel @Inject constructor(private val repository: HomeRepositor
     )
 
     init {
-//        fetchGames()
-        fetchGames2()
+        fetchGames()
     }
 
     private fun fetchGames() = viewModelScope.launch {
-
-        val objects = mutableListOf<HomeScreenItem>()
-        val defferedList = gameIds.map {
-            viewModelScope.async {
-                repository.fetchHomeGame(it)
-            }
-        }
-
-        val responses = defferedList.awaitAll()
-        responses.map {
-            it.collect { response ->
-                if (response is Resource.Success) objects.add(response.data)
-            }
-        }
-
-        _games.value = objects
-    }
-
-    private fun fetchGames2() = viewModelScope.launch {
-        val objects = mutableListOf<HomeScreenItem>()
-        repository.fetchHomeGameWithList(gameIds).collect {
+        repository.fetchHomeScreenGames(gameIds).collect {
             when (it) {
                 is Resource.Loading -> onLoading()
-                is Resource.Success -> {
-                    objects.add(it.data)
-                    if (objects.size == gameIds.size) {
-                        onSuccess(objects)
-                    }
-                }
+                is Resource.Success -> onSuccess(it.data)
                 else -> onFailure()
             }
         }
     }
 
-    private fun onFailure() {
+    private fun onLoading() {}
 
+    private fun onSuccess(data: HomeScreenItem) {
+        if (_games.value.isNullOrEmpty()) _games.value = listOf(data)
+        else {
+            val gameList = _games.value!!
+                .toMutableList()
+            gameList.add(data)
+            _games.value = gameList.distinctBy { it.id }
+        }
     }
 
-    private fun onSuccess(data: List<HomeScreenItem>) {
-        _games.value = data
-    }
-
-    private fun onLoading() {
-
-    }
+    private fun onFailure() {}
 }

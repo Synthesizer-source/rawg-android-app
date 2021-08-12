@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,13 +51,10 @@ class NewHomeFragment : Fragment() {
             homeScreenGames.offscreenPageLimit = 3
             (homeScreenGames[0] as RecyclerView).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             homeScreenGames.setPageTransformer(OffsetPageTransformer(24, 24))
-//            homeScreenGames.adapter = adapter
+            homeScreenGames.adapter = adapter
             viewModel.games.observe(viewLifecycleOwner, {
-                Log.d("synthesizer-source", "onViewCreated: $it")
                 adapter.loadDataSet(it)
-                homeScreenGames.adapter = adapter
             })
-
         }
     }
 

@@ -24,43 +24,21 @@ class HomeRepository @Inject constructor() {
             pagingSourceFactory = { GamesPagingSource() }).flow)
     }
 
-    fun fetchHomeGame(id: Int) = flow {
+    fun fetchHomeScreenGames(ids: List<Int>) = flow {
         emit(Resource.Loading())
-        val response = try {
-            api.getGameDetailById(id)
-        } catch (exception: Exception) {
-            null
-        }
-
-        emit(
-            when (response?.code()) {
-                null -> Resource.Failure(ErrorHolder.NetworkError)
-                200 -> Resource.Success(response.body()!!.toHomeScreenItem())
-                401 -> Resource.Failure(ErrorHolder.UnauthorizedError)
-                else -> Resource.Failure(ErrorHolder.UnExpectedError)
-            }
-        )
-    }
-
-    fun fetchHomeGameWithList(ids: List<Int>) = flow {
-        emit(Resource.Loading())
-        val response = ids.map {
+        ids.forEach {
             try {
-                api.getGameDetailById(it)
+                val data = api.getGameDetailById(it)
+                emit(
+                    when (data.code()) {
+                        null -> Resource.Failure(ErrorHolder.NetworkError)
+                        200 -> Resource.Success(data.body()!!.toHomeScreenItem())
+                        401 -> Resource.Failure(ErrorHolder.UnauthorizedError)
+                        else -> Resource.Failure(ErrorHolder.UnExpectedError)
+                    }
+                )
             } catch (exception: Exception) {
-                null
             }
-
-        }
-        response.map {
-            emit(
-                when (it?.code()) {
-                    null -> Resource.Failure(ErrorHolder.NetworkError)
-                    200 -> Resource.Success(it.body()!!.toHomeScreenItem())
-                    401 -> Resource.Failure(ErrorHolder.UnauthorizedError)
-                    else -> Resource.Failure(ErrorHolder.UnExpectedError)
-                }
-            )
         }
     }
 }
