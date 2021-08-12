@@ -11,8 +11,9 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import androidx.core.animation.doOnEnd
-import androidx.core.view.children
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.synthesizer.source.rawg.R
@@ -25,7 +26,6 @@ class NewHomeFragment : Fragment() {
     private var _binding: FragmentNewHomeBinding? = null
     private val binding get() = _binding!!
     private var isExpand = true
-    private var onBackPressedCallback: OnBackPressedCallback? = null
     private var inputMethodManager: InputMethodManager? = null
     val list = listOf<HomeScreenItem>(
         HomeScreenItem(R.drawable.rdr),
@@ -45,21 +45,30 @@ class NewHomeFragment : Fragment() {
         _binding = FragmentNewHomeBinding.inflate(inflater, container, false)
         inputMethodManager =
             requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        hideKeyboard()
         registerListeners()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.homeScreenGames.offscreenPageLimit = 3
-        binding.homeScreenGames.adapter = adapter
-        binding.homeScreenGames.setPageTransformer(OffsetPageTransformer(24, 24))
+        binding.apply {
+            homeScreenGames.offscreenPageLimit = 3
+            homeScreenGames.adapter = adapter
+            (homeScreenGames[0] as RecyclerView).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+            homeScreenGames.setPageTransformer(OffsetPageTransformer(24, 24))
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        hideKeyboard()
         binding.searchEditText.clearFocus()
+        hideKeyboard()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        inputMethodManager = null
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -67,13 +76,6 @@ class NewHomeFragment : Fragment() {
 
         binding.homeScreenGames.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
-            override fun onPageScrollStateChanged(state: Int) {
-                if (state != ViewPager2.SCROLL_STATE_IDLE) {
-                    binding.homeScreenGames.children.forEach {
-                        it.setLayerType(View.LAYER_TYPE_NONE, null)
-                    }
-                }
-            }
 
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -88,21 +90,18 @@ class NewHomeFragment : Fragment() {
             if (!it && !isExpand) transitionToStart()
         })
 
-        onBackPressedCallback = object :
-            OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                this.remove()
-                if (isExpand) {
-                    requireActivity().onBackPressed()
-                } else {
-                    transitionToStart()
-                }
-            }
-        }
-
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
-            onBackPressedCallback!!
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    this.remove()
+                    if (isExpand) {
+                        requireActivity().onBackPressed()
+                    } else {
+                        transitionToStart()
+                    }
+                }
+            }
         )
 
         binding.searchEditText.setOnFocusChangeListener { view, isFocused ->
@@ -112,17 +111,13 @@ class NewHomeFragment : Fragment() {
         }
 
         binding.searchEditText.setOnClickListener {
-            onSearchViewClick()
-        }
-    }
-
-    private fun onSearchViewClick() {
-        if (binding.root.scrollY != 0) {
-            hideKeyboard()
-            scrollToTop()
-        } else {
-            transitionToEnd()
-            showKeyboard()
+            if (binding.root.scrollY != 0) {
+                hideKeyboard()
+                scrollToTop()
+            } else {
+                transitionToEnd()
+                showKeyboard()
+            }
         }
     }
 
@@ -155,12 +150,6 @@ class NewHomeFragment : Fragment() {
         binding.visitWebSiteButton.isEnabled = false
         binding.homeMotionLayout.transitionToEnd()
         isExpand = false
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        onBackPressedCallback = null
-        inputMethodManager = null
     }
 
     private fun showKeyboard() {

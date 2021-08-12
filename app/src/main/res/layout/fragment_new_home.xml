@@ -46,15 +46,17 @@
 
         <TextView
             android:id="@+id/titleText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_64sdp"
             android:fontFamily="@font/impact"
+            android:includeFontPadding="false"
             android:letterSpacing="0.2"
             android:text="@string/rawg"
             android:textSize="@dimen/_36sdp"
-            android:transformPivotX="0px"
+            android:transformPivotX="@dimen/_12sdp"
             android:transformPivotY="0px"
+            app:layout_constraintEnd_toEndOf="@id/guidelineCenter"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,10 +64,12 @@
             android:id="@+id/descriptionText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_4sdp"
             android:layout_marginTop="@dimen/_96sdp"
             android:fontFamily="@font/impact"
             android:letterSpacing="0.2"
             android:text="@string/rawg_description"
+            android:textColor="@color/gray_light"
             android:textSize="@dimen/_14sdp"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
@@ -76,6 +80,7 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_4sdp"
             android:layout_marginTop="@dimen/_36sdp"
             android:drawableLeft="@drawable/ic_baseline_link_24"
             android:outlineProvider="background"
@@ -143,6 +148,7 @@
             android:drawableLeft="@drawable/ic_baseline_bar_chart_24"
             android:text="@string/popular_in_2020"
             android:textColor="@color/gray_light"
+            android:textSize="@dimen/_10sdp"
             app:cornerRadius="@dimen/_16sdp"
             app:layout_constraintEnd_toEndOf="@id/guidelineCenter"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
@@ -158,11 +164,26 @@
             android:drawableLeft="@drawable/ic_trophy"
             android:text="@string/best_of_the_year"
             android:textColor="@color/gray_light"
+            android:textSize="@dimen/_10sdp"
             app:cornerRadius="@dimen/_16sdp"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineCenter"
             app:layout_constraintTop_toBottomOf="@id/searchCardView"
             app:rippleColor="@color/button_ripple_color" />
+
+        <TextView
+            android:id="@+id/gamesLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_24sdp"
+            android:fontFamily="@font/impact"
+            android:text="Games"
+            android:textColor="@color/gray_light"
+            android:textSize="@dimen/_24sdp"
+            app:layout_constraintEnd_toEndOf="@id/guidelineCenter"
+            app:layout_constraintStart_toStartOf="@id/guidelineStart"
+            app:layout_constraintTop_toBottomOf="@id/popularGamesButton" />
 
         <FrameLayout
             android:id="@+id/gradientLayout"
@@ -187,14 +208,13 @@
             android:id="@+id/homeScreenGames"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_216sdp"
-            android:layout_marginTop="@dimen/_36sdp"
+            android:layout_marginTop="@dimen/_14sdp"
             android:orientation="horizontal"
-            android:overScrollMode="never"
             android:paddingHorizontal="@dimen/_8sdp"
             android:paddingVertical="@dimen/_16sdp"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/popularGamesButton" />
+            app:layout_constraintTop_toBottomOf="@id/gamesLabel" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/seeMoreGamesButton"
@@ -202,11 +222,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_16sdp"
-            android:layout_marginVertical="@dimen/_48sdp"
+            android:layout_marginVertical="@dimen/_36sdp"
+            android:backgroundTint="@color/gray_normal"
             android:outlineProvider="background"
             android:paddingHorizontal="@dimen/_16sdp"
             android:text="@string/see_more"
-            android:textColor="@color/gray_soft"
+            android:textColor="@color/gray_light"
             app:cornerRadius="@dimen/_16sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
