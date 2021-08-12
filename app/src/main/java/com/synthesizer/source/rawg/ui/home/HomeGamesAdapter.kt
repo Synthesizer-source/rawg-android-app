@@ -1,16 +1,17 @@
-package com.synthesizer.source.rawg.ui
+package com.synthesizer.source.rawg.ui.home
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.synthesizer.source.rawg.databinding.ItemHomeScreenGameBinding
-import com.synthesizer.source.rawg.ui.HomeScreenAdapter.HomeScreenItemViewHolder
+import com.synthesizer.source.rawg.data.domain.HomeGameItem
+import com.synthesizer.source.rawg.ui.home.HomeGamesAdapter.HomeScreenItemViewHolder
 import com.synthesizer.source.rawg.utils.loadImage
 
-class HomeScreenAdapter : RecyclerView.Adapter<HomeScreenItemViewHolder>() {
+class HomeGamesAdapter : RecyclerView.Adapter<HomeScreenItemViewHolder>() {
 
-    private var _items = listOf<HomeScreenItem>()
+    private var _items = listOf<HomeGameItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeScreenItemViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -27,7 +28,7 @@ class HomeScreenAdapter : RecyclerView.Adapter<HomeScreenItemViewHolder>() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun loadDataSet(items: List<HomeScreenItem>) {
+    fun loadDataSet(items: List<HomeGameItem>) {
         _items = items
         notifyItemChanged(_items.size - 1)
     }
@@ -37,7 +38,7 @@ class HomeScreenAdapter : RecyclerView.Adapter<HomeScreenItemViewHolder>() {
     class HomeScreenItemViewHolder(private val binding: ItemHomeScreenGameBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: HomeScreenItem) {
+        fun bind(item: HomeGameItem) {
             binding.homeScreenGameImage.loadImage(item.imageUrl)
         }
     }

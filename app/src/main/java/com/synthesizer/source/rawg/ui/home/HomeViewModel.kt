@@ -4,10 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import com.synthesizer.source.rawg.data.remote.GameRemote
+import com.synthesizer.source.rawg.data.Resource
 import com.synthesizer.source.rawg.repository.HomeRepository
+import com.synthesizer.source.rawg.data.domain.HomeGameItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -16,16 +15,51 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val repository: HomeRepository) : ViewModel() {
 
-    private var _games = MutableLiveData<PagingData<GameRemote>>()
-    val games: LiveData<PagingData<GameRemote>> = _games
+    private var _games = MutableLiveData<List<HomeGameItem>>()
+    val games: LiveData<List<HomeGameItem>> = _games
+
+    private val gameIds = listOf(
+        28,
+        30899,
+        3990,
+        3328,
+        22511,
+        22509,
+        13537,
+        3498,
+        29642,
+        2518,
+        4535,
+        15002,
+        10065,
+        58175
+    )
 
     init {
         fetchGames()
     }
 
     private fun fetchGames() = viewModelScope.launch {
-        repository.fetchGames().cachedIn(this).collect {
-            _games.value = it
+        repository.fetchHomeScreenGames(gameIds).collect {
+            when (it) {
+                is Resource.Loading -> onLoading()
+                is Resource.Success -> onSuccess(it.data)
+                else -> onFailure()
+            }
         }
     }
+
+    private fun onLoading() {}
+
+    private fun onSuccess(data: HomeGameItem) {
+        if (_games.value.isNullOrEmpty()) _games.value = listOf(data)
+        else {
+            val gameList = _games.value!!
+                .toMutableList()
+            gameList.add(data)
+            _games.value = gameList.distinctBy { it.id }
+        }
+    }
+
+    private fun onFailure() {}
 }

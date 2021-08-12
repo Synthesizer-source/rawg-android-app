@@ -1,4 +1,4 @@
-package com.synthesizer.source.rawg.ui
+package com.synthesizer.source.rawg.ui.home
 
 import android.view.View
 import android.view.ViewGroup
