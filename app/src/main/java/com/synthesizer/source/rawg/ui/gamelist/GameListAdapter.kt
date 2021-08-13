@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.synthesizer.source.rawg.data.domain.GameDomain
 import com.synthesizer.source.rawg.databinding.ItemGameListBinding
 import com.synthesizer.source.rawg.ui.gamelist.GameListAdapter.GameListViewHolder
@@ -26,8 +27,13 @@ class GameListAdapter : PagingDataAdapter<GameDomain, GameListViewHolder>(diff) 
         getItem(position)?.let { holder.bind(it) }
     }
 
+    override fun onViewRecycled(holder: GameListViewHolder) {
+        super.onViewRecycled(holder)
+        Glide.with(holder.itemBinding.root).clear(holder.itemBinding.background)
+    }
+
     class GameListViewHolder(
-        private val itemBinding: ItemGameListBinding,
+        val itemBinding: ItemGameListBinding,
         private val itemClickListener: (Int) -> Unit
     ) :
         RecyclerView.ViewHolder(itemBinding.root) {

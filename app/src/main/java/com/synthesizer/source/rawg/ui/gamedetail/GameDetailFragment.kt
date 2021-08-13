@@ -1,9 +1,11 @@
 package com.synthesizer.source.rawg.ui.gamedetail
 
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -30,6 +32,8 @@ class GameDetailFragment : Fragment() {
         GameDetailViewModel.provideFactory(gameDetailViewModelFactory, args.gameId)
     }
 
+    private var _ratingAnimator: ValueAnimator? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,9 +48,18 @@ class GameDetailFragment : Fragment() {
         observe()
     }
 
+    override fun onPause() {
+        super.onPause()
+        _ratingAnimator?.let {
+            if (it.isRunning) it.pause()
+            it.removeAllUpdateListeners()
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        _ratingAnimator = null
+//        _binding = null
     }
 
     private fun observe() {
@@ -68,6 +81,8 @@ class GameDetailFragment : Fragment() {
                 psPlatformIcon.visibility = state
                 xboxPlatformIcon.visibility = state
                 nintendoPlatformIcon.visibility = state
+                metascoreLabel.visibility = state
+                metascore.visibility = state
                 descriptionLabel.visibility = state
                 description.visibility = state
             }
@@ -78,10 +93,11 @@ class GameDetailFragment : Fragment() {
                 background.loadImage(it.backgroundImage)
                 name.text = it.name
                 releaseDate.text = it.releaseDate.convertToDate()
-                rating.text = it.rating.toString()
                 publisherName.text = it.publisher
                 it.platforms.map { p -> showPlatform(p) }
+                setMetascore(it.metascore)
                 description.setBodyContent(it.description)
+                animateRatingBar(it.rating)
             }
         })
     }
@@ -94,6 +110,31 @@ class GameDetailFragment : Fragment() {
                 "xbox" -> xboxPlatformIcon.setVisibility(true)
                 "nintendo" -> nintendoPlatformIcon.setVisibility(true)
             }
+        }
+    }
+
+    private fun animateRatingBar(rating: Double) {
+        val duration = 500L
+        _ratingAnimator = ValueAnimator.ofFloat(0.00f, rating.toFloat())
+        _ratingAnimator!!.duration = duration
+        _ratingAnimator!!.addUpdateListener {
+            val currentValue = it.animatedValue as Float
+            binding.rating.rating = currentValue
+        }
+
+        _ratingAnimator!!.start()
+    }
+
+    private fun setMetascore(score: Int) {
+        binding.apply {
+            metascore.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    viewModel.metascoreColor
+                )
+            )
+            metascore.setStrokeColorResource(viewModel.metascoreColor)
+            metascore.text = score.toString()
         }
     }
 }

@@ -34,6 +34,7 @@ data class GameRemote(
     fun isValid(): Boolean {
         return background_image != null &&
                 metacritic != null &&
+                metacritic != 0 &&
                 parent_platforms != null &&
                 (parent_platforms.count {
                     it.platform.slug == "pc" ||

@@ -12,6 +12,7 @@ fun GameDetailRemote.toDomain(): GameDetailDomain {
         releaseDate = released,
         publisher = if (!publishers.isNullOrEmpty()) publishers[0].name else developers[0].name,
         rating = rating,
+        metascore = metacritic,
         description = description_raw,
         platforms = parent_platforms.map { it.platform.slug }
     )

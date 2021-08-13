@@ -1,6 +1,8 @@
 package com.synthesizer.source.rawg.ui.gamedetail
 
+import androidx.annotation.ColorRes
 import androidx.lifecycle.*
+import com.synthesizer.source.rawg.R
 import com.synthesizer.source.rawg.data.Resource
 import com.synthesizer.source.rawg.data.domain.GameDetailDomain
 import com.synthesizer.source.rawg.repository.GameDetailRepository
@@ -19,6 +21,10 @@ class GameDetailViewModel @AssistedInject constructor(
 
     private var _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    @ColorRes
+    private var _metascoreColor: Int? = null
+    val metascoreColor get() = _metascoreColor!!
 
     @dagger.assisted.AssistedFactory
     interface AssistedFactory {
@@ -52,6 +58,11 @@ class GameDetailViewModel @AssistedInject constructor(
     }
 
     private fun onSuccess(data: GameDetailDomain) {
+        _metascoreColor = when (data.metascore) {
+            in 70..100 -> R.color.green_dark
+            in 51..69 -> R.color.yellow_dark
+            else -> R.color.red_dark
+        }
         _gameDetail.value = data
         _isLoading.value = false
     }
