@@ -8,6 +8,7 @@ data class GameDetailDomain(
     val publisher: String,
     val rating: Double,
     val metascore: Int,
+    val genres: List<String>,
     val description: String,
     val platforms: List<String>
 )

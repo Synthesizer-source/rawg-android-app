@@ -43,6 +43,7 @@ data class GameRemote(
                             it.platform.slug == "nintendo"
                 } > 0) &&
                 rating != null &&
-                released != null
+                released != null &&
+                genres.isNotEmpty()
     }
 }

@@ -4,5 +4,14 @@
         <item name="android:statusBarColor">@color/gray_dark</item>
         <item name="android:windowBackground">@color/gray_dark</item>
         <item name="android:textColor">@color/white_dark</item>
+        <item name="chipStyle">@style/styleGameDetailGenreChip</item>
+    </style>
+
+    <style name="styleGameDetailGenreChip" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="android:textSize">@dimen/_10sdp</item>
+        <item name="chipBackgroundColor">@color/gray_normal</item>
+        <item name="android:textColor">@color/white_dark</item>
+        <item name="ensureMinTouchTargetSize">false</item>
+        <item name="rippleColor">@color/button_ripple_color</item>
     </style>
 </resources>

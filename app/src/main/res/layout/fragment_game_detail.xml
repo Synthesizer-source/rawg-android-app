@@ -199,6 +199,14 @@
             app:layout_constraintTop_toTopOf="@id/pcPlatformIcon"
             tools:visibility="visible" />
 
+        <androidx.constraintlayout.helper.widget.Layer
+            android:id="@+id/infoLayer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="name, releaseDateLabel, releaseDate, ratingLabel, publisherNameLabel, publisherName,metascoreLabel, metascore, genreLabel, genreChipGroup"
+            app:layout_constraintStart_toStartOf="@id/name"
+            app:layout_constraintTop_toTopOf="@id/name" />
+
         <TextView
             android:id="@+id/metascoreLabel"
             android:layout_width="0dp"
@@ -230,15 +238,35 @@
             tools:text="97" />
 
         <TextView
+            android:id="@+id/genreLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_24sdp"
+            android:text="Genre"
+            android:textColor="@color/gray_light"
+            android:textSize="@dimen/_10sdp"
+            app:layout_constraintStart_toEndOf="@id/metascoreLabel"
+            app:layout_constraintTop_toTopOf="@id/metascoreLabel" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/genreChipGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:chipSpacing="@dimen/_4sdp"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@id/genreLabel"
+            app:layout_constraintTop_toTopOf="@id/metascore" />
+
+        <TextView
             android:id="@+id/descriptionLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_24sdp"
+            android:layout_marginTop="@dimen/_36sdp"
             android:text="@string/description"
             android:textSize="@dimen/_14sdp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/metascore" />
+            app:layout_constraintTop_toBottomOf="@id/genreChipGroup" />
 
         <com.synthesizer.source.rawg.ui.custom.ShowHideLayout
             android:id="@+id/description"

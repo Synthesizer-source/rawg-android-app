@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.chip.Chip
 import com.synthesizer.source.rawg.databinding.FragmentGameDetailBinding
 import com.synthesizer.source.rawg.utils.convertToDate
 import com.synthesizer.source.rawg.utils.loadImage
@@ -59,7 +60,7 @@ class GameDetailFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _ratingAnimator = null
-//        _binding = null
+        _binding = null
     }
 
     private fun observe() {
@@ -69,20 +70,13 @@ class GameDetailFragment : Fragment() {
                 val state = if (it) View.INVISIBLE else View.VISIBLE
                 val loadingIconState = if (it) View.VISIBLE else View.GONE
                 loadingIcon.visibility = loadingIconState
+                infoLayer.visibility = state
                 background.visibility = state
-                name.visibility = state
-                releaseDateLabel.visibility = state
-                releaseDate.visibility = state
-                publisherNameLabel.visibility = state
-                publisherName.visibility = state
-                ratingLabel.visibility = state
                 rating.visibility = state
                 pcPlatformIcon.visibility = state
                 psPlatformIcon.visibility = state
                 xboxPlatformIcon.visibility = state
                 nintendoPlatformIcon.visibility = state
-                metascoreLabel.visibility = state
-                metascore.visibility = state
                 descriptionLabel.visibility = state
                 description.visibility = state
             }
@@ -96,6 +90,7 @@ class GameDetailFragment : Fragment() {
                 publisherName.text = it.publisher
                 it.platforms.map { p -> showPlatform(p) }
                 setMetascore(it.metascore)
+                createGenreChips(it.genres)
                 description.setBodyContent(it.description)
                 animateRatingBar(it.rating)
             }
@@ -135,6 +130,14 @@ class GameDetailFragment : Fragment() {
             )
             metascore.setStrokeColorResource(viewModel.metascoreColor)
             metascore.text = score.toString()
+        }
+    }
+
+    private fun createGenreChips(genres: List<String>) {
+        genres.forEach {
+            val chip = Chip(requireContext())
+            chip.text = it
+            binding.genreChipGroup.addView(chip)
         }
     }
 }
