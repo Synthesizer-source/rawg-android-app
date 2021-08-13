@@ -9,7 +9,12 @@ import retrofit2.http.Query
 
 interface RawgService {
     @GET("games")
-    suspend fun getGames(@Query("page") page: Int): GamesRemote
+    suspend fun getGames(
+        @Query("page") page: Int,
+        @Query("search") search: String,
+        @Query("ordering") ordering: String,
+        @Query("dates") dates: String
+    ): GamesRemote
 
     @GET("games/{id}")
     suspend fun getGameDetailById(@Path("id") id: Int): Response<GameDetailRemote>

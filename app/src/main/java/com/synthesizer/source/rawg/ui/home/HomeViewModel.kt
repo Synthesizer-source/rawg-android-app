@@ -1,15 +1,22 @@
 package com.synthesizer.source.rawg.ui.home
 
+import android.annotation.SuppressLint
+import android.icu.text.SimpleDateFormat
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.synthesizer.source.rawg.data.Resource
-import com.synthesizer.source.rawg.repository.HomeRepository
 import com.synthesizer.source.rawg.data.domain.HomeGameItem
+import com.synthesizer.source.rawg.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,6 +24,23 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
 
     private var _games = MutableLiveData<List<HomeGameItem>>()
     val games: LiveData<List<HomeGameItem>> = _games
+
+    @SuppressLint("SimpleDateFormat")
+    @RequiresApi(Build.VERSION_CODES.N)
+    private val _currentDate = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd")
+        current.format(formatter)
+    } else {
+        val formatter = SimpleDateFormat("yyyy-MM-dd")
+        formatter.format(Date())
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    val startDate = _currentDate.substring(0, 4) + "-01-01"
+    val currentDate: String
+        @RequiresApi(Build.VERSION_CODES.N)
+        get() = _currentDate
 
     private val gameIds = listOf(
         28,

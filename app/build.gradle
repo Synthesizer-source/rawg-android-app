@@ -73,6 +73,7 @@ dependencies {
     // Hilt
     implementation "com.google.dagger:hilt-android:2.38.1"
     kapt "com.google.dagger:hilt-compiler:2.38.1"
+    kapt "com.google.dagger:dagger-android-processor:2.38.1"
 
     // Lottie
     implementation 'com.airbnb.android:lottie:4.0.0'

@@ -4,7 +4,6 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -29,9 +28,6 @@ import com.synthesizer.source.rawg.databinding.FragmentHomeBinding
 import com.synthesizer.source.rawg.utils.loadImage
 import dagger.hilt.android.AndroidEntryPoint
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 
 @AndroidEntryPoint
@@ -142,6 +138,10 @@ class HomeFragment : Fragment() {
             navigateToPopularIn2020()
         }
 
+        binding.seeMoreGamesButton.setOnClickListener {
+            navigateToAllGames()
+        }
+
         binding.searchEditText.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -218,21 +218,17 @@ class HomeFragment : Fragment() {
     @SuppressLint("SimpleDateFormat")
     @RequiresApi(Build.VERSION_CODES.N)
     private fun navigateToBestOfTheYear() {
-        val currentDate = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val current = LocalDateTime.now()
-            val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd")
-            current.format(formatter)
-        } else {
-            val formatter = SimpleDateFormat("yyyy-MM-dd")
-            formatter.format(Date())
-        }
-
         val action =
             HomeFragmentDirections.showGames(
                 ordering = "-added",
-                dates = "${currentDate.substring(0, 4)}-01-01,$currentDate"
+                dates = "${viewModel.startDate},${viewModel.currentDate}"
             )
 
+        findNavController().navigate(action)
+    }
+
+    private fun navigateToAllGames() {
+        val action = HomeFragmentDirections.showGames()
         findNavController().navigate(action)
     }
 }

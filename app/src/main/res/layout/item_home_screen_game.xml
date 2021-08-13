@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:background="@null"
     app:cardBackgroundColor="@android:color/transparent"
-    app:cardCornerRadius="24dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="@dimen/_24sdp"
+    app:cardElevation="@dimen/_4sdp">
 
     <ImageView
         android:id="@+id/homeScreenGameImage"
