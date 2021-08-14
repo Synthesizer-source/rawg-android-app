@@ -35,12 +35,16 @@ class GameDetailFragment : Fragment() {
 
     private var _ratingAnimator: ValueAnimator? = null
 
+    private var _adapter: GameDetailScreenshotAdapter? = null
+    private val adapter get() = _adapter!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentGameDetailBinding.inflate(inflater, container, false)
+        _adapter = GameDetailScreenshotAdapter()
         return binding.root
     }
 
@@ -51,6 +55,8 @@ class GameDetailFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
+        _adapter = null
+        binding.screenshots.adapter = null
         _ratingAnimator?.let {
             if (it.isRunning) it.pause()
             it.removeAllUpdateListeners()
@@ -64,6 +70,7 @@ class GameDetailFragment : Fragment() {
     }
 
     private fun observe() {
+        binding.screenshots.adapter = adapter
 
         viewModel.isLoading.observe(viewLifecycleOwner, {
             binding.apply {
@@ -80,6 +87,15 @@ class GameDetailFragment : Fragment() {
                 descriptionLabel.visibility = state
                 description.visibility = state
             }
+        })
+
+        viewModel.screenshotsVisibility.observe(viewLifecycleOwner, {
+            binding.screenshotsLabel.setVisibility(it)
+            binding.screenshots.setVisibility(it)
+        })
+
+        viewModel.screenshots.observe(viewLifecycleOwner, {
+            adapter.submitList(it)
         })
 
         viewModel.gameDetail.observe(viewLifecycleOwner, {

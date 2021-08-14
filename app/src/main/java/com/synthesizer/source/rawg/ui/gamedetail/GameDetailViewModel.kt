@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.synthesizer.source.rawg.R
 import com.synthesizer.source.rawg.data.Resource
 import com.synthesizer.source.rawg.data.domain.GameDetailDomain
+import com.synthesizer.source.rawg.data.remote.ShortScreenshot
 import com.synthesizer.source.rawg.repository.GameDetailRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -21,6 +22,12 @@ class GameDetailViewModel @AssistedInject constructor(
 
     private var _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private var _screenshots = MutableLiveData<List<ShortScreenshot>>()
+    val screenshots: LiveData<List<ShortScreenshot>> = _screenshots
+
+    private var _screenshotsVisibility = MutableLiveData<Boolean>()
+    val screenshotsVisibility: LiveData<Boolean> = _screenshotsVisibility
 
     @ColorRes
     private var _metascoreColor: Int? = null
@@ -45,6 +52,7 @@ class GameDetailViewModel @AssistedInject constructor(
 
     init {
         fetchGameDetail()
+        fetchGameScreenshots()
     }
 
     private fun fetchGameDetail() = viewModelScope.launch {
@@ -55,6 +63,27 @@ class GameDetailViewModel @AssistedInject constructor(
                 else -> onFailure()
             }
         }
+    }
+
+    private fun fetchGameScreenshots() = viewModelScope.launch {
+        repository.fetchGameScreenshots(gameId).collect {
+            when (it) {
+                is Resource.Loading -> onScreenshotLoading()
+                is Resource.Success -> onScreenshotSuccess(it.data)
+                else -> onFailure()
+            }
+        }
+    }
+
+    private fun onScreenshotSuccess(data: List<ShortScreenshot>) {
+        if (!data.isNullOrEmpty() && data.isNotEmpty()) {
+            _screenshots.value = data
+            _screenshotsVisibility.value = true
+        }
+    }
+
+    private fun onScreenshotLoading() {
+        _screenshotsVisibility.value = false
     }
 
     private fun onSuccess(data: GameDetailDomain) {

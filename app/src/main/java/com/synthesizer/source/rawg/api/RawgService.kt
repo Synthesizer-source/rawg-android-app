@@ -1,6 +1,7 @@
 package com.synthesizer.source.rawg.api
 
 import com.synthesizer.source.rawg.data.remote.GameDetailRemote
+import com.synthesizer.source.rawg.data.remote.GameScreenshotRemote
 import com.synthesizer.source.rawg.data.remote.GamesRemote
 import retrofit2.Response
 import retrofit2.http.GET
@@ -18,4 +19,7 @@ interface RawgService {
 
     @GET("games/{id}")
     suspend fun getGameDetailById(@Path("id") id: Int): Response<GameDetailRemote>
+
+    @GET("games/{id}/screenshots")
+    suspend fun getGameScreenshots(@Path("id") id: Int): Response<GameScreenshotRemote>
 }
