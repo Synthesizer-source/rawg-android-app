@@ -7,7 +7,7 @@ import androidx.paging.map
 import com.synthesizer.source.rawg.data.Resource
 import com.synthesizer.source.rawg.data.mapper.toDomain
 import com.synthesizer.source.rawg.data.source.GamesPagingSource
-import com.synthesizer.source.rawg.repository.GameListRepository
+import com.synthesizer.source.rawg.data.repository.GameListRepository
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

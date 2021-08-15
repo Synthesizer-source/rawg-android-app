@@ -3,7 +3,7 @@ package com.synthesizer.source.rawg.data.source
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.synthesizer.source.rawg.data.remote.GameListItemResponse
-import com.synthesizer.source.rawg.repository.GameListRepository
+import com.synthesizer.source.rawg.data.repository.GameListRepository
 import javax.inject.Inject
 
 class GamesPagingSource @Inject constructor(

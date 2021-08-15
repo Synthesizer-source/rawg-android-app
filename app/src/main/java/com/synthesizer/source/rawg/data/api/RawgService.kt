@@ -1,4 +1,4 @@
-package com.synthesizer.source.rawg.api
+package com.synthesizer.source.rawg.data.api
 
 import com.synthesizer.source.rawg.data.remote.GameDetailResponse
 import com.synthesizer.source.rawg.data.remote.GameScreenshotResponse

@@ -2,7 +2,7 @@ package com.synthesizer.source.rawg.data.usecase
 
 import com.synthesizer.source.rawg.data.Resource
 import com.synthesizer.source.rawg.data.domain.GameImage
-import com.synthesizer.source.rawg.repository.GameDetailRepository
+import com.synthesizer.source.rawg.data.repository.GameDetailRepository
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
