@@ -1,6 +1,6 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class AddedByStatus(
+data class AddedByStatusResponse(
     val beaten: Int,
     val dropped: Int,
     val owned: Int,

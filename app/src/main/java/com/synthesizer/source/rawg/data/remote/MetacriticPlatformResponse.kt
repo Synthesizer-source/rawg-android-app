@@ -1,7 +1,7 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class MetacriticPlatform(
+data class MetacriticPlatformResponse(
     val metascore: Int,
-    val platform: Platform,
+    val platform: PlatformResponse,
     val url: String
 )

@@ -4,8 +4,8 @@ import androidx.annotation.ColorRes
 import androidx.lifecycle.*
 import com.synthesizer.source.rawg.R
 import com.synthesizer.source.rawg.data.Resource
-import com.synthesizer.source.rawg.data.domain.GameDetailDomain
-import com.synthesizer.source.rawg.data.remote.ShortScreenshot
+import com.synthesizer.source.rawg.data.domain.GameDetail
+import com.synthesizer.source.rawg.data.remote.ShortScreenshotResponse
 import com.synthesizer.source.rawg.repository.GameDetailRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -17,14 +17,14 @@ class GameDetailViewModel @AssistedInject constructor(
     @Assisted private val gameId: Int
 ) : ViewModel() {
 
-    private var _gameDetail = MutableLiveData<GameDetailDomain>()
-    val gameDetail: LiveData<GameDetailDomain> = _gameDetail
+    private var _gameDetail = MutableLiveData<GameDetail>()
+    val gameDetail: LiveData<GameDetail> = _gameDetail
 
     private var _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private var _screenshots = MutableLiveData<List<ShortScreenshot>>()
-    val screenshots: LiveData<List<ShortScreenshot>> = _screenshots
+    private var _screenshots = MutableLiveData<List<ShortScreenshotResponse>>()
+    val screenshots: LiveData<List<ShortScreenshotResponse>> = _screenshots
 
     private var _screenshotsVisibility = MutableLiveData<Boolean>()
     val screenshotsVisibility: LiveData<Boolean> = _screenshotsVisibility
@@ -75,7 +75,7 @@ class GameDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun onScreenshotSuccess(data: List<ShortScreenshot>) {
+    private fun onScreenshotSuccess(data: List<ShortScreenshotResponse>) {
         if (!data.isNullOrEmpty() && data.isNotEmpty()) {
             _screenshots.value = data
             _screenshotsVisibility.value = true
@@ -86,7 +86,7 @@ class GameDetailViewModel @AssistedInject constructor(
         _screenshotsVisibility.value = false
     }
 
-    private fun onSuccess(data: GameDetailDomain) {
+    private fun onSuccess(data: GameDetail) {
         _metascoreColor = when (data.metascore) {
             in 70..100 -> R.color.green_dark
             in 51..69 -> R.color.yellow_dark

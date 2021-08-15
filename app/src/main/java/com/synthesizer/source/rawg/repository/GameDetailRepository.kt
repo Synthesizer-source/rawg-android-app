@@ -1,11 +1,10 @@
 package com.synthesizer.source.rawg.repository
 
-import android.util.Log
 import com.synthesizer.source.rawg.api.api
 import com.synthesizer.source.rawg.data.ErrorHolder.*
 import com.synthesizer.source.rawg.data.Resource
 import com.synthesizer.source.rawg.data.mapper.toDomain
-import com.synthesizer.source.rawg.data.remote.ShortScreenshot
+import com.synthesizer.source.rawg.data.remote.ShortScreenshotResponse
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -36,13 +35,12 @@ class GameDetailRepository @Inject constructor() {
         } catch (exception: Exception) {
             null
         }
-        Log.d("synthesizer-source", "fetchGameScreenshots: ${response?.body()}")
 
         emit(
             when (response?.code()) {
                 null -> Resource.Failure(NetworkError)
                 200 -> Resource.Success(response.body()!!.results.map {
-                    ShortScreenshot(
+                    ShortScreenshotResponse(
                         id = it.id,
                         image = it.image
                     )

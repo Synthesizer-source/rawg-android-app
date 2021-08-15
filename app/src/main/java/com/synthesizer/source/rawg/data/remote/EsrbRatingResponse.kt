@@ -1,9 +1,7 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class Developer(
-    val games_count: Int,
+data class EsrbRatingResponse(
     val id: Int,
-    val image_background: String,
     val name: String,
     val slug: String
 )

@@ -1,11 +1,11 @@
 package com.synthesizer.source.rawg.data.mapper
 
-import com.synthesizer.source.rawg.data.domain.GameDetailDomain
+import com.synthesizer.source.rawg.data.domain.GameDetail
 import com.synthesizer.source.rawg.data.domain.HomeGameItem
-import com.synthesizer.source.rawg.data.remote.GameDetailRemote
+import com.synthesizer.source.rawg.data.remote.GameDetailResponse
 
-fun GameDetailRemote.toDomain(): GameDetailDomain {
-    return GameDetailDomain(
+fun GameDetailResponse.toDomain(): GameDetail {
+    return GameDetail(
         id = id,
         name = name,
         backgroundImage = background_image,
@@ -19,6 +19,6 @@ fun GameDetailRemote.toDomain(): GameDetailDomain {
     )
 }
 
-fun GameDetailRemote.toHomeScreenItem(): HomeGameItem {
+fun GameDetailResponse.toHomeScreenItem(): HomeGameItem {
     return HomeGameItem(id = id, imageUrl = background_image)
 }

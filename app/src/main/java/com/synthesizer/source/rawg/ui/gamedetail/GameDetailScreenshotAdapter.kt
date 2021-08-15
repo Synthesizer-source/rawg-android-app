@@ -5,13 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.synthesizer.source.rawg.data.remote.ShortScreenshot
+import com.synthesizer.source.rawg.data.remote.ShortScreenshotResponse
 import com.synthesizer.source.rawg.databinding.ItemGameDetailScreenshotBinding
 import com.synthesizer.source.rawg.ui.gamedetail.GameDetailScreenshotAdapter.GameDetailScreenshotViewHolder
 import com.synthesizer.source.rawg.utils.loadImage
 
 class GameDetailScreenshotAdapter :
-    ListAdapter<ShortScreenshot, GameDetailScreenshotViewHolder>(diff) {
+    ListAdapter<ShortScreenshotResponse, GameDetailScreenshotViewHolder>(diff) {
 
 
     override fun onCreateViewHolder(
@@ -29,19 +29,19 @@ class GameDetailScreenshotAdapter :
     class GameDetailScreenshotViewHolder(private val binding: ItemGameDetailScreenshotBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: ShortScreenshot) {
+        fun bind(item: ShortScreenshotResponse) {
             binding.screenshot.loadImage(item.image)
         }
     }
 
-    object diff : DiffUtil.ItemCallback<ShortScreenshot>() {
-        override fun areItemsTheSame(oldItem: ShortScreenshot, newItem: ShortScreenshot): Boolean {
+    object diff : DiffUtil.ItemCallback<ShortScreenshotResponse>() {
+        override fun areItemsTheSame(oldItem: ShortScreenshotResponse, newItem: ShortScreenshotResponse): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: ShortScreenshot,
-            newItem: ShortScreenshot
+            oldItem: ShortScreenshotResponse,
+            newItem: ShortScreenshotResponse
         ): Boolean {
             return oldItem.id == newItem.id
         }

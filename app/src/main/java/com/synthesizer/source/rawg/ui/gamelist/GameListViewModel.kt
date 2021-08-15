@@ -4,7 +4,7 @@ import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.synthesizer.source.rawg.data.Resource
-import com.synthesizer.source.rawg.data.domain.GameDomain
+import com.synthesizer.source.rawg.data.domain.GameListItem
 import com.synthesizer.source.rawg.repository.HomeRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -20,8 +20,8 @@ class GameListViewModel @AssistedInject constructor(
     @Assisted("dates") private val dates: String
 ) : ViewModel() {
 
-    private var _games = MutableLiveData<PagingData<GameDomain>>()
-    val games: LiveData<PagingData<GameDomain>> = _games
+    private var _games = MutableLiveData<PagingData<GameListItem>>()
+    val games: LiveData<PagingData<GameListItem>> = _games
 
     private var _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading

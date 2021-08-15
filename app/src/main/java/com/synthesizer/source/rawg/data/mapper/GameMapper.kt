@@ -1,10 +1,10 @@
 package com.synthesizer.source.rawg.data.mapper
 
-import com.synthesizer.source.rawg.data.domain.GameDomain
-import com.synthesizer.source.rawg.data.remote.GameRemote
+import com.synthesizer.source.rawg.data.domain.GameListItem
+import com.synthesizer.source.rawg.data.remote.GameListItemResponse
 
-fun GameRemote.toDomain(): GameDomain {
-    return GameDomain(
+fun GameListItemResponse.toDomain(): GameListItem {
+    return GameListItem(
         id = id,
         name = name,
         imageUrl = background_image!!,

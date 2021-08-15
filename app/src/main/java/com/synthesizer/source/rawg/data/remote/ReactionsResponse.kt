@@ -1,6 +1,6 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class Reactions(
+data class ReactionsResponse(
     val `1`: Int,
     val `10`: Int,
     val `11`: Int,

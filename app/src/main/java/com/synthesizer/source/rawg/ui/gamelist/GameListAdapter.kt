@@ -7,13 +7,13 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.synthesizer.source.rawg.data.domain.GameDomain
+import com.synthesizer.source.rawg.data.domain.GameListItem
 import com.synthesizer.source.rawg.databinding.ItemGameListBinding
 import com.synthesizer.source.rawg.ui.gamelist.GameListAdapter.GameListViewHolder
 import com.synthesizer.source.rawg.utils.loadImage
 import com.synthesizer.source.rawg.utils.setVisibility
 
-class GameListAdapter : PagingDataAdapter<GameDomain, GameListViewHolder>(diff) {
+class GameListAdapter : PagingDataAdapter<GameListItem, GameListViewHolder>(diff) {
 
     var itemClickListener: (id: Int) -> Unit = {}
 
@@ -38,7 +38,7 @@ class GameListAdapter : PagingDataAdapter<GameDomain, GameListViewHolder>(diff) 
     ) :
         RecyclerView.ViewHolder(itemBinding.root) {
 
-        fun bind(item: GameDomain) {
+        fun bind(item: GameListItem) {
 
             with(itemBinding) {
 
@@ -62,14 +62,14 @@ class GameListAdapter : PagingDataAdapter<GameDomain, GameListViewHolder>(diff) 
         }
     }
 
-    object diff : DiffUtil.ItemCallback<GameDomain>() {
+    object diff : DiffUtil.ItemCallback<GameListItem>() {
 
-        override fun areItemsTheSame(oldItem: GameDomain, newItem: GameDomain): Boolean {
+        override fun areItemsTheSame(oldItem: GameListItem, newItem: GameListItem): Boolean {
             return oldItem.id == newItem.id
         }
 
         @SuppressLint("DiffUtilEquals")
-        override fun areContentsTheSame(oldItem: GameDomain, newItem: GameDomain): Boolean {
+        override fun areContentsTheSame(oldItem: GameListItem, newItem: GameListItem): Boolean {
             return oldItem.id == newItem.id
         }
     }

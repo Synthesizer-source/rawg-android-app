@@ -1,7 +1,6 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class EsrbRating(
+data class ShortScreenshotResponse(
     val id: Int,
-    val name: String,
-    val slug: String
+    val image: String
 )

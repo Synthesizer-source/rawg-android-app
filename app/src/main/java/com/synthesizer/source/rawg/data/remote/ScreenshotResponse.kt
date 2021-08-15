@@ -1,6 +1,6 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class Screenshot(
+data class ScreenshotResponse(
     val height: Int,
     val id: Int,
     val image: String,

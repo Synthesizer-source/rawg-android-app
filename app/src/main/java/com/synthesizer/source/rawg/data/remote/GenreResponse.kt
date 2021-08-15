@@ -1,6 +1,6 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class Publisher(
+data class GenreResponse(
     val games_count: Int,
     val id: Int,
     val image_background: String,

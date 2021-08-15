@@ -1,6 +1,6 @@
 package com.synthesizer.source.rawg.data.domain
 
-data class GameDomain(
+data class GameListItem(
     val id: Int,
     val name: String,
     val imageUrl: String,

@@ -1,7 +1,7 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class Store(
+data class StoreResponse(
     val id: Int,
-    val store: StoreDetail,
+    val store: StoreDetailResponse,
     var url: String? = null
 )
