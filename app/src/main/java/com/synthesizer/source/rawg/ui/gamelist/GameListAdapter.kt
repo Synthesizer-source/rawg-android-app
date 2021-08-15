@@ -13,7 +13,7 @@ import com.synthesizer.source.rawg.ui.gamelist.GameListAdapter.GameListViewHolde
 import com.synthesizer.source.rawg.utils.loadImage
 import com.synthesizer.source.rawg.utils.setVisibility
 
-class GameListAdapter : PagingDataAdapter<GameListItem, GameListViewHolder>(diff) {
+class GameListAdapter : PagingDataAdapter<GameListItem, GameListViewHolder>(DIFF) {
 
     var itemClickListener: (id: Int) -> Unit = {}
 
@@ -62,7 +62,7 @@ class GameListAdapter : PagingDataAdapter<GameListItem, GameListViewHolder>(diff
         }
     }
 
-    object diff : DiffUtil.ItemCallback<GameListItem>() {
+    private object DIFF : DiffUtil.ItemCallback<GameListItem>() {
 
         override fun areItemsTheSame(oldItem: GameListItem, newItem: GameListItem): Boolean {
             return oldItem.id == newItem.id

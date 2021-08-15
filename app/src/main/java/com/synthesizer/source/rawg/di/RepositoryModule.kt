@@ -1,7 +1,7 @@
 package com.synthesizer.source.rawg.di
 
 import com.synthesizer.source.rawg.repository.GameDetailRepository
-import com.synthesizer.source.rawg.repository.HomeRepository
+import com.synthesizer.source.rawg.repository.GameListRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,5 +18,5 @@ object RepositoryModule {
 
     @ViewModelScoped
     @Provides
-    fun provideHomeRepository() = HomeRepository()
+    fun provideGameListRepository() = GameListRepository()
 }

@@ -9,8 +9,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.synthesizer.source.rawg.data.Resource
-import com.synthesizer.source.rawg.data.domain.HomeGameItem
-import com.synthesizer.source.rawg.repository.HomeRepository
+import com.synthesizer.source.rawg.data.domain.GameImage
+import com.synthesizer.source.rawg.data.usecase.FetchGamesBackgroundImagesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -20,10 +20,11 @@ import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val repository: HomeRepository) : ViewModel() {
+class HomeViewModel @Inject constructor(private val fetchGamesBackgroundImagesUseCase: FetchGamesBackgroundImagesUseCase) :
+    ViewModel() {
 
-    private var _games = MutableLiveData<List<HomeGameItem>>()
-    val games: LiveData<List<HomeGameItem>> = _games
+    private var _games = MutableLiveData<List<GameImage>>()
+    val games: LiveData<List<GameImage>> = _games
 
     @SuppressLint("SimpleDateFormat")
     @RequiresApi(Build.VERSION_CODES.N)
@@ -63,8 +64,19 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
         fetchGames()
     }
 
+//    private fun fetchGames() = viewModelScope.launch {
+//        repository.fetchHomeScreenGames(gameIds).collect {
+//            when (it) {
+//                is Resource.Loading -> onLoading()
+//                is Resource.Success -> onSuccess(it.data)
+//                else -> onFailure()
+//            }
+//        }
+//    }
+
+
     private fun fetchGames() = viewModelScope.launch {
-        repository.fetchHomeScreenGames(gameIds).collect {
+        fetchGamesBackgroundImagesUseCase(gameIds).collect {
             when (it) {
                 is Resource.Loading -> onLoading()
                 is Resource.Success -> onSuccess(it.data)
@@ -75,7 +87,7 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
 
     private fun onLoading() {}
 
-    private fun onSuccess(data: HomeGameItem) {
+    private fun onSuccess(data: GameImage) {
         if (_games.value.isNullOrEmpty()) _games.value = listOf(data)
         else {
             val gameList = _games.value!!

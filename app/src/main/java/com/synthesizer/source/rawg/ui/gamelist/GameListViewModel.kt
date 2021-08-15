@@ -5,7 +5,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.synthesizer.source.rawg.data.Resource
 import com.synthesizer.source.rawg.data.domain.GameListItem
-import com.synthesizer.source.rawg.repository.HomeRepository
+import com.synthesizer.source.rawg.data.usecase.FetchGameListUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.delay
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class GameListViewModel @AssistedInject constructor(
-    private val repository: HomeRepository,
+    private val fetchGameListUseCase: FetchGameListUseCase,
     @Assisted("search") private val search: String,
     @Assisted("ordering") private val ordering: String,
     @Assisted("dates") private val dates: String
@@ -54,7 +54,7 @@ class GameListViewModel @AssistedInject constructor(
     }
 
     private fun fetchGames() = viewModelScope.launch {
-        repository.fetchGames(
+        fetchGameListUseCase(
             search = search,
             ordering = ordering,
             dates = dates

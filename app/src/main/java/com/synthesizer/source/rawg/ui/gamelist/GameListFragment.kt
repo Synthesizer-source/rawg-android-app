@@ -39,7 +39,7 @@ class GameListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentGameListBinding.inflate(inflater, container, false)
         return binding.root
     }

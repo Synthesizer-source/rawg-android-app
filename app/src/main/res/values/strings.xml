@@ -13,4 +13,7 @@
     <string name="rawg_description">The Largest\nVideo Game Database</string>
     <string name="rawg">RAWG</string>
     <string name="screenshots">Screenshots</string>
+    <string name="metascore">Metascore</string>
+    <string name="genre">Genre</string>
+    <string name="games">Games</string>
 </resources>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fillViewport="true"
@@ -178,7 +177,7 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_24sdp"
             android:fontFamily="@font/impact"
-            android:text="Games"
+            android:text="@string/games"
             android:textColor="@color/gray_light"
             android:textSize="@dimen/_24sdp"
             app:layout_constraintEnd_toEndOf="@id/guidelineCenter"

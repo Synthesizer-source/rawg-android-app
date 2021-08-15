@@ -1,7 +1,6 @@
 package com.synthesizer.source.rawg.data.mapper
 
 import com.synthesizer.source.rawg.data.domain.GameDetail
-import com.synthesizer.source.rawg.data.domain.HomeGameItem
 import com.synthesizer.source.rawg.data.remote.GameDetailResponse
 
 fun GameDetailResponse.toDomain(): GameDetail {
@@ -17,8 +16,4 @@ fun GameDetailResponse.toDomain(): GameDetail {
         description = description_raw,
         platforms = parent_platforms.map { it.platform.slug }
     )
-}
-
-fun GameDetailResponse.toHomeScreenItem(): HomeGameItem {
-    return HomeGameItem(id = id, imageUrl = background_image)
 }

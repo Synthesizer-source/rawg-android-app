@@ -46,7 +46,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         inputMethodManager =
             requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

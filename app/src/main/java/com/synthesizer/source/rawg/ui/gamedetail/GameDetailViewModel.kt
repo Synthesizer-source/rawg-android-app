@@ -5,15 +5,17 @@ import androidx.lifecycle.*
 import com.synthesizer.source.rawg.R
 import com.synthesizer.source.rawg.data.Resource
 import com.synthesizer.source.rawg.data.domain.GameDetail
-import com.synthesizer.source.rawg.data.remote.ShortScreenshotResponse
-import com.synthesizer.source.rawg.repository.GameDetailRepository
+import com.synthesizer.source.rawg.data.domain.GameImage
+import com.synthesizer.source.rawg.data.usecase.FetchGameDetailUseCase
+import com.synthesizer.source.rawg.data.usecase.FetchGameScreenshotsUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class GameDetailViewModel @AssistedInject constructor(
-    private val repository: GameDetailRepository,
+    private val fetchGameDetailUseCase: FetchGameDetailUseCase,
+    private val fetchGameScreenshotsUseCase: FetchGameScreenshotsUseCase,
     @Assisted private val gameId: Int
 ) : ViewModel() {
 
@@ -23,8 +25,8 @@ class GameDetailViewModel @AssistedInject constructor(
     private var _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private var _screenshots = MutableLiveData<List<ShortScreenshotResponse>>()
-    val screenshots: LiveData<List<ShortScreenshotResponse>> = _screenshots
+    private var _screenshots = MutableLiveData<List<GameImage>>()
+    val screenshots: LiveData<List<GameImage>> = _screenshots
 
     private var _screenshotsVisibility = MutableLiveData<Boolean>()
     val screenshotsVisibility: LiveData<Boolean> = _screenshotsVisibility
@@ -56,7 +58,7 @@ class GameDetailViewModel @AssistedInject constructor(
     }
 
     private fun fetchGameDetail() = viewModelScope.launch {
-        repository.fetchGameDetail(gameId).collect {
+        fetchGameDetailUseCase(gameId).collect {
             when (it) {
                 is Resource.Loading -> onLoading()
                 is Resource.Success -> onSuccess(it.data)
@@ -66,7 +68,7 @@ class GameDetailViewModel @AssistedInject constructor(
     }
 
     private fun fetchGameScreenshots() = viewModelScope.launch {
-        repository.fetchGameScreenshots(gameId).collect {
+        fetchGameScreenshotsUseCase(gameId).collect {
             when (it) {
                 is Resource.Loading -> onScreenshotLoading()
                 is Resource.Success -> onScreenshotSuccess(it.data)
@@ -75,7 +77,7 @@ class GameDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun onScreenshotSuccess(data: List<ShortScreenshotResponse>) {
+    private fun onScreenshotSuccess(data: List<GameImage>) {
         if (!data.isNullOrEmpty() && data.isNotEmpty()) {
             _screenshots.value = data
             _screenshotsVisibility.value = true
