@@ -1,11 +1,9 @@
 package com.synthesizer.source.rawg.ui.home
 
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.view.KeyEvent
@@ -16,9 +14,9 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.annotation.RequiresApi
 import androidx.core.animation.doOnEnd
 import androidx.core.view.get
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -35,13 +33,11 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private var isExpand = true
     private var inputMethodManager: InputMethodManager? = null
 
     private val viewModel: HomeViewModel by viewModels()
     private val adapter = HomeGamesAdapter()
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,7 +46,6 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         inputMethodManager =
             requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        hideKeyboard()
         registerListeners()
         return binding.root
     }
@@ -70,8 +65,8 @@ class HomeFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
+        viewModel.setState(false)
         binding.searchEditText.clearFocus()
-        hideKeyboard()
     }
 
     override fun onDestroyView() {
@@ -79,8 +74,6 @@ class HomeFragment : Fragment() {
         inputMethodManager = null
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    @SuppressLint("ClickableViewAccessibility")
     private fun registerListeners() {
 
         binding.homeScreenGames.registerOnPageChangeCallback(object :
@@ -93,7 +86,7 @@ class HomeFragment : Fragment() {
         })
 
         KeyboardVisibilityEvent.setEventListener(requireActivity(), viewLifecycleOwner, {
-            if (!it && !isExpand) transitionToStart()
+            if (!it) viewModel.setState(false)
         })
 
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -101,7 +94,7 @@ class HomeFragment : Fragment() {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     this.remove()
-                    if (isExpand) {
+                    if (!viewModel.searchViewState.value!!) {
                         requireActivity().onBackPressed()
                     } else {
                         transitionToStart()
@@ -111,20 +104,30 @@ class HomeFragment : Fragment() {
         )
 
         binding.searchEditText.setOnFocusChangeListener { view, isFocused ->
-            if (view.isInTouchMode && isFocused) {
-                view.performClick()
-            }
+            if (view.isInTouchMode && isFocused) view.performClick()
         }
 
         binding.searchEditText.setOnClickListener {
-            if (binding.root.scrollY != 0) {
-                hideKeyboard()
-                scrollToTop()
-            } else {
-                transitionToEnd()
-                showKeyboard()
-            }
+            if (viewModel.searchViewState.value == false) viewModel.setState(true)
+            else if (viewModel.searchViewState.value == true) viewModel.setState(false)
         }
+
+        viewModel.searchViewState.observe(viewLifecycleOwner, {
+            if (it) {
+                if (binding.root.scrollY != 0) {
+                    hideKeyboard()
+                    scrollToTop()
+                } else {
+                    transitionToEnd()
+                }
+            } else {
+                transitionToStart()
+            }
+
+            binding.visitWebSiteButton.isEnabled = !it
+            binding.popularGamesButton.isEnabled = !it
+            binding.bestOfTheYearGamesButton.isEnabled = !it
+        })
 
         binding.visitWebSiteButton.setOnClickListener {
             goToRAWGWebsite()
@@ -173,25 +176,21 @@ class HomeFragment : Fragment() {
     }
 
     private fun transitionToStart() {
-        binding.visitWebSiteButton.isEnabled = true
         binding.homeMotionLayout.transitionToStart()
-        isExpand = true
     }
 
     private fun transitionToEnd() {
-        binding.visitWebSiteButton.isEnabled = false
         binding.homeMotionLayout.transitionToEnd()
-        isExpand = false
     }
 
     private fun showKeyboard() {
         binding.searchEditText.inputType = InputType.TYPE_CLASS_TEXT
         binding.searchEditText.requestFocus()
-        inputMethodManager!!.showSoftInput(binding.searchEditText, InputMethodManager.SHOW_FORCED)
+        inputMethodManager?.showSoftInput(binding.searchEditText, InputMethodManager.SHOW_FORCED)
     }
 
     private fun hideKeyboard() {
-        inputMethodManager!!.hideSoftInputFromWindow(binding.root.windowToken, 0)
+        inputMethodManager?.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 
     private fun goToRAWGWebsite() {
@@ -215,14 +214,11 @@ class HomeFragment : Fragment() {
     }
 
 
-    @SuppressLint("SimpleDateFormat")
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun navigateToBestOfTheYear() {
-        val action =
-            HomeFragmentDirections.showGames(
-                ordering = "-added",
-                dates = "2021-01-01,2021-12-31"
-            )
+        val action = HomeFragmentDirections.showGames(
+            ordering = "-added",
+            dates = "2021-01-01,2021-12-31"
+        )
 
         findNavController().navigate(action)
     }

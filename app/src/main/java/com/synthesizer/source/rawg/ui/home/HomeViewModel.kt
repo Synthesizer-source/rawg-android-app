@@ -19,6 +19,9 @@ class HomeViewModel @Inject constructor(private val fetchGamesBackgroundImagesUs
     private var _games = MutableLiveData<List<GameImage>>()
     val games: LiveData<List<GameImage>> = _games
 
+    private var _searchViewState = MutableLiveData<Boolean>(false) // 0 : Off , 1 : On
+    val searchViewState: LiveData<Boolean> = _searchViewState
+
     private val gameIds = listOf(
         28,
         30899,
@@ -63,4 +66,8 @@ class HomeViewModel @Inject constructor(private val fetchGamesBackgroundImagesUs
     }
 
     private fun onFailure() {}
+
+    fun setState(state: Boolean) {
+        _searchViewState.value = state
+    }
 }
