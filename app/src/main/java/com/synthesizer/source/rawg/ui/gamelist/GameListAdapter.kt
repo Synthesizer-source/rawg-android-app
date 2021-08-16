@@ -40,7 +40,7 @@ class GameListAdapter : PagingDataAdapter<GameListItem, GameListViewHolder>(DIFF
 
         fun bind(item: GameListItem) {
 
-            with(itemBinding) {
+            itemBinding.apply {
 
                 name.text = item.name
                 background.loadImage(item.imageUrl)

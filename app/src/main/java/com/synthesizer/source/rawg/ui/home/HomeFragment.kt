@@ -221,7 +221,7 @@ class HomeFragment : Fragment() {
         val action =
             HomeFragmentDirections.showGames(
                 ordering = "-added",
-                dates = "${viewModel.startDate},${viewModel.currentDate}"
+                dates = "2021-01-01,2021-12-31"
             )
 
         findNavController().navigate(action)
