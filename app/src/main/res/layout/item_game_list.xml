@@ -35,7 +35,8 @@
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/name"
             app:layout_constraintStart_toStartOf="@id/name"
-            tools:visibility="visible" />
+            tools:visibility="visible"
+            tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/psPlatformIcon"
@@ -48,7 +49,8 @@
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/name"
             app:layout_constraintStart_toEndOf="@id/pcPlatformIcon"
-            tools:visibility="visible" />
+            tools:visibility="visible"
+            tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/xboxPlatformIcon"
@@ -61,7 +63,8 @@
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/name"
             app:layout_constraintStart_toEndOf="@id/psPlatformIcon"
-            tools:visibility="visible" />
+            tools:visibility="visible"
+            tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/nintendoPlatformIcon"
@@ -74,7 +77,8 @@
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/name"
             app:layout_constraintStart_toEndOf="@id/xboxPlatformIcon"
-            tools:visibility="visible" />
+            tools:visibility="visible"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/name"

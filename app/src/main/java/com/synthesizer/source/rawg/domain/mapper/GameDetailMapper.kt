@@ -1,7 +1,7 @@
-package com.synthesizer.source.rawg.data.mapper
+package com.synthesizer.source.rawg.domain.mapper
 
-import com.synthesizer.source.rawg.data.domain.GameDetail
 import com.synthesizer.source.rawg.data.remote.GameDetailResponse
+import com.synthesizer.source.rawg.domain.model.GameDetail
 
 fun GameDetailResponse.toDomain(): GameDetail {
     return GameDetail(

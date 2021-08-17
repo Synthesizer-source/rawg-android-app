@@ -7,8 +7,8 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.synthesizer.source.rawg.data.domain.GameListItem
 import com.synthesizer.source.rawg.databinding.ItemGameListBinding
+import com.synthesizer.source.rawg.domain.model.GameListItem
 import com.synthesizer.source.rawg.ui.gamelist.GameListAdapter.GameListViewHolder
 import com.synthesizer.source.rawg.utils.loadImage
 import com.synthesizer.source.rawg.utils.setVisibility

@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.synthesizer.source.rawg.data.Resource
-import com.synthesizer.source.rawg.data.domain.GameImage
-import com.synthesizer.source.rawg.data.usecase.FetchGamesBackgroundImagesUseCase
+import com.synthesizer.source.rawg.domain.model.GameImage
+import com.synthesizer.source.rawg.domain.usecase.FetchGamesBackgroundImagesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -19,7 +19,7 @@ class HomeViewModel @Inject constructor(private val fetchGamesBackgroundImagesUs
     private var _games = MutableLiveData<List<GameImage>>()
     val games: LiveData<List<GameImage>> = _games
 
-    private var _searchViewState = MutableLiveData<Boolean>(false) // 0 : Off , 1 : On
+    private var _searchViewState = MutableLiveData(false) // 0 : Off , 1 : On
     val searchViewState: LiveData<Boolean> = _searchViewState
 
     private val gameIds = listOf(

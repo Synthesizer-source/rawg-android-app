@@ -1,8 +1,8 @@
-package com.synthesizer.source.rawg.data.usecase
+package com.synthesizer.source.rawg.domain.usecase
 
 import com.synthesizer.source.rawg.data.Resource
-import com.synthesizer.source.rawg.data.mapper.toDomain
 import com.synthesizer.source.rawg.data.repository.GameDetailRepository
+import com.synthesizer.source.rawg.domain.mapper.toDomain
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 

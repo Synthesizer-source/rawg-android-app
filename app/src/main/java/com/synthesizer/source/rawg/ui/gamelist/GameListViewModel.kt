@@ -4,8 +4,8 @@ import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.synthesizer.source.rawg.data.Resource
-import com.synthesizer.source.rawg.data.domain.GameListItem
-import com.synthesizer.source.rawg.data.usecase.FetchGameListUseCase
+import com.synthesizer.source.rawg.domain.model.GameListItem
+import com.synthesizer.source.rawg.domain.usecase.FetchGameListUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.delay

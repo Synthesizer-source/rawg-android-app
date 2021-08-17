@@ -4,10 +4,10 @@ import androidx.annotation.ColorRes
 import androidx.lifecycle.*
 import com.synthesizer.source.rawg.R
 import com.synthesizer.source.rawg.data.Resource
-import com.synthesizer.source.rawg.data.domain.GameDetail
-import com.synthesizer.source.rawg.data.domain.GameImage
-import com.synthesizer.source.rawg.data.usecase.FetchGameDetailUseCase
-import com.synthesizer.source.rawg.data.usecase.FetchGameScreenshotsUseCase
+import com.synthesizer.source.rawg.domain.model.GameDetail
+import com.synthesizer.source.rawg.domain.model.GameImage
+import com.synthesizer.source.rawg.domain.usecase.FetchGameDetailUseCase
+import com.synthesizer.source.rawg.domain.usecase.FetchGameScreenshotsUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.collect

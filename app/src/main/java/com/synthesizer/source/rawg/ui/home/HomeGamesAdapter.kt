@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.synthesizer.source.rawg.data.domain.GameImage
 import com.synthesizer.source.rawg.databinding.ItemHomeGameListBinding
+import com.synthesizer.source.rawg.domain.model.GameImage
 import com.synthesizer.source.rawg.ui.home.HomeGamesAdapter.HomeScreenItemViewHolder
 import com.synthesizer.source.rawg.utils.loadImage
 

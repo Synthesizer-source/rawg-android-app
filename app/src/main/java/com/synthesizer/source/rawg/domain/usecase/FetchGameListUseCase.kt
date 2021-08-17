@@ -1,13 +1,13 @@
-package com.synthesizer.source.rawg.data.usecase
+package com.synthesizer.source.rawg.domain.usecase
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.filter
 import androidx.paging.map
 import com.synthesizer.source.rawg.data.Resource
-import com.synthesizer.source.rawg.data.mapper.toDomain
-import com.synthesizer.source.rawg.data.source.GamesPagingSource
 import com.synthesizer.source.rawg.data.repository.GameListRepository
+import com.synthesizer.source.rawg.data.source.GamesPagingSource
+import com.synthesizer.source.rawg.domain.mapper.toDomain
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

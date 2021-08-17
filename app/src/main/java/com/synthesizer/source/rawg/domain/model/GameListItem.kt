@@ -1,4 +1,4 @@
-package com.synthesizer.source.rawg.data.domain
+package com.synthesizer.source.rawg.domain.model
 
 data class GameListItem(
     val id: Int,

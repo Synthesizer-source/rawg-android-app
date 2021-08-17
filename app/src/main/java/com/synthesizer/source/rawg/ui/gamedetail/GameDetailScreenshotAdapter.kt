@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.synthesizer.source.rawg.data.domain.GameImage
 import com.synthesizer.source.rawg.databinding.ItemGameDetailScreenshotBinding
+import com.synthesizer.source.rawg.domain.model.GameImage
 import com.synthesizer.source.rawg.ui.gamedetail.GameDetailScreenshotAdapter.GameDetailScreenshotViewHolder
 import com.synthesizer.source.rawg.utils.loadImage
 

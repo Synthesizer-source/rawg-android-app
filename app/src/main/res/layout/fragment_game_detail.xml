@@ -161,7 +161,8 @@
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="@id/guidelineCenter"
             app:layout_constraintTop_toTopOf="@id/publisherNameLabel"
-            tools:visibility="visible" />
+            tools:visibility="visible"
+            tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/psPlatformIcon"
@@ -173,7 +174,8 @@
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@id/pcPlatformIcon"
             app:layout_constraintTop_toTopOf="@id/pcPlatformIcon"
-            tools:visibility="visible" />
+            tools:visibility="visible"
+            tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/xboxPlatformIcon"
@@ -185,7 +187,8 @@
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@id/psPlatformIcon"
             app:layout_constraintTop_toTopOf="@id/pcPlatformIcon"
-            tools:visibility="visible" />
+            tools:visibility="visible"
+            tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/nintendoPlatformIcon"
@@ -197,7 +200,8 @@
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@id/xboxPlatformIcon"
             app:layout_constraintTop_toTopOf="@id/pcPlatformIcon"
-            tools:visibility="visible" />
+            tools:visibility="visible"
+            tools:ignore="ContentDescription" />
 
         <androidx.constraintlayout.helper.widget.Layer
             android:id="@+id/infoLayer"

@@ -1,8 +1,8 @@
 package com.synthesizer.source.rawg.data.api
 
 import com.synthesizer.source.rawg.data.remote.GameDetailResponse
-import com.synthesizer.source.rawg.data.remote.GameScreenshotResponse
 import com.synthesizer.source.rawg.data.remote.GameListResponse
+import com.synthesizer.source.rawg.data.remote.GameScreenshotResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
