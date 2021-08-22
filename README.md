@@ -17,3 +17,7 @@
 - [Lottie](https://lottiefiles.com/) animation library
 - [Keyboard Events Library](https://github.com/yshrsmz/KeyboardVisibilityEvent) for adding callbacks when keyboard show/hide events
 - [Scalable Dp Library](https://github.com/intuit/sdp) scalable unit size for different screen sizes 
+
+
+## Architecture
+<p align="center"><img alt="architecture" src="/images/architecture.png" width="35%"></img></p>
