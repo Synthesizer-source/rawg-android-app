@@ -1,6 +1,15 @@
 <h1 align="center">RAWG Android App</h1>
 <p align="center">RAWG is the largest video game database and game discovery service. This Android application developed with RAWG API.</p>
 
+## Prerequisites
+
+1. Obtain an API key from [RAWG](https://rawg.io/apidocs)
+2. Modify `api_key` attribute in `gradle.properties`
+
+```
+api_key="<<your_api_key>>"
+```
+
 ## Tech stack & Open-source libraries
 - Minimum SDK level 21
 - [MVVM](https://developer.android.com/jetpack/guide) Architecture
