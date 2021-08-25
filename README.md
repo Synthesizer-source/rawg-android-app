@@ -29,4 +29,7 @@ api_key="<<your_api_key>>"
 
 
 ## Architecture
-<p align="center"><img alt="architecture" src="/images/architecture.png" width="35%"></img></p>
+<p align="center"><img alt="architecture" src="/images/architecture.png" width="35%" /></p>
+
+## Screenshots
+<p align="center"><img alt="home" src="/images/image_0.png" width="25%" />&nbsp;&nbsp;&nbsp;<img alt="list" src="/images/image_1.png" width="25%" />&nbsp;&nbsp;&nbsp;<img alt="detail" src="/images/image_2.png" width="25%" /></p>
