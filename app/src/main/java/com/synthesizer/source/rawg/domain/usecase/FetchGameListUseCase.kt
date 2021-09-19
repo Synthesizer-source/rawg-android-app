@@ -1,15 +1,15 @@
 package com.synthesizer.source.rawg.domain.usecase
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.filter
-import androidx.paging.map
+import androidx.paging.*
 import com.synthesizer.source.rawg.data.Resource
 import com.synthesizer.source.rawg.data.repository.GameListRepository
 import com.synthesizer.source.rawg.data.source.GamesPagingSource
 import com.synthesizer.source.rawg.domain.mapper.toDomain
+import com.synthesizer.source.rawg.domain.model.GameListItem
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 class FetchGameListUseCase @Inject constructor(private val repository: GameListRepository) {
@@ -18,8 +18,8 @@ class FetchGameListUseCase @Inject constructor(private val repository: GameListR
         search: String,
         ordering: String,
         dates: String
-    ) = flow {
-        emit(Resource.Loading())
+    ) = flow<Resource<Flow<PagingData<GameListItem>>>> {
+
         try {
             val data = (Pager(
                 config = PagingConfig(
@@ -44,5 +44,5 @@ class FetchGameListUseCase @Inject constructor(private val repository: GameListR
             emit(Resource.Success(data))
         } catch (exception: Exception) {
         }
-    }
+    }.onStart { emit(Resource.Loading()) }
 }

@@ -4,17 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.synthesizer.source.rawg.databinding.FragmentGameListBinding
+import com.synthesizer.source.rawg.ui.BaseFragment
+import com.synthesizer.source.rawg.utils.EventObserver
 import com.synthesizer.source.rawg.utils.setVisibility
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class GameListFragment : Fragment() {
+class GameListFragment : BaseFragment() {
 
     @Inject
     lateinit var gameListViewModelFactory: GameListViewModel.AssistedFactory
@@ -24,7 +28,7 @@ class GameListFragment : Fragment() {
 
     private val args: GameListFragmentArgs by navArgs()
 
-    private val viewModel: GameListViewModel by viewModels {
+    override val viewModel: GameListViewModel by viewModels {
         GameListViewModel.provideFactory(
             assistedFactory = gameListViewModelFactory,
             search = args.search,
@@ -51,14 +55,19 @@ class GameListFragment : Fragment() {
             navigateToGameDetail(it)
         }
 
-        viewModel.isLoading.observe(viewLifecycleOwner, {
+        viewModel.isLoading.observe(viewLifecycleOwner, EventObserver {
             binding.loadingIcon.setVisibility(it)
             binding.gameList.setVisibility(!it)
         })
-
         viewModel.games.observe(viewLifecycleOwner, {
             adapter.submitData(lifecycle, it)
         })
+
+        lifecycleScope.launch {
+            adapter.loadStateFlow.collectLatest { loadStates ->
+                viewModel.loadStates(loadStates)
+            }
+        }
     }
 
     private fun navigateToGameDetail(id: Int) {

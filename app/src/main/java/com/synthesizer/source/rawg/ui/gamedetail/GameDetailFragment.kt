@@ -6,11 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.chip.Chip
 import com.synthesizer.source.rawg.databinding.FragmentGameDetailBinding
+import com.synthesizer.source.rawg.ui.BaseFragment
+import com.synthesizer.source.rawg.utils.EventObserver
 import com.synthesizer.source.rawg.utils.convertToDate
 import com.synthesizer.source.rawg.utils.loadImage
 import com.synthesizer.source.rawg.utils.setVisibility
@@ -19,7 +20,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class GameDetailFragment : Fragment() {
+class GameDetailFragment : BaseFragment() {
 
     @Inject
     lateinit var gameDetailViewModelFactory: GameDetailViewModel.AssistedFactory
@@ -29,7 +30,7 @@ class GameDetailFragment : Fragment() {
     private var _binding: FragmentGameDetailBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: GameDetailViewModel by viewModels {
+    override val viewModel: GameDetailViewModel by viewModels {
         GameDetailViewModel.provideFactory(gameDetailViewModelFactory, args.gameId)
     }
 
@@ -72,7 +73,7 @@ class GameDetailFragment : Fragment() {
     private fun observe() {
         binding.screenshots.adapter = adapter
 
-        viewModel.isLoading.observe(viewLifecycleOwner, {
+        viewModel.isLoading.observe(viewLifecycleOwner, EventObserver {
             binding.apply {
                 val state = if (it) View.INVISIBLE else View.VISIBLE
                 val loadingIconState = if (it) View.VISIBLE else View.GONE
@@ -89,7 +90,7 @@ class GameDetailFragment : Fragment() {
             }
         })
 
-        viewModel.screenshotsVisibility.observe(viewLifecycleOwner, {
+        viewModel.screenshotsVisibility.observe(viewLifecycleOwner, EventObserver {
             binding.screenshotsLabel.setVisibility(it)
             binding.screenshots.setVisibility(it)
         })

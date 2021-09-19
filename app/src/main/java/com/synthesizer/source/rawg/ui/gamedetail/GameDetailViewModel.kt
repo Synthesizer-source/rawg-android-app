@@ -8,8 +8,12 @@ import com.synthesizer.source.rawg.domain.model.GameDetail
 import com.synthesizer.source.rawg.domain.model.GameImage
 import com.synthesizer.source.rawg.domain.usecase.FetchGameDetailUseCase
 import com.synthesizer.source.rawg.domain.usecase.FetchGameScreenshotsUseCase
+import com.synthesizer.source.rawg.ui.BaseViewModel
+import com.synthesizer.source.rawg.utils.Event
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -17,19 +21,19 @@ class GameDetailViewModel @AssistedInject constructor(
     private val fetchGameDetailUseCase: FetchGameDetailUseCase,
     private val fetchGameScreenshotsUseCase: FetchGameScreenshotsUseCase,
     @Assisted private val gameId: Int
-) : ViewModel() {
+) : BaseViewModel() {
 
     private var _gameDetail = MutableLiveData<GameDetail>()
     val gameDetail: LiveData<GameDetail> = _gameDetail
 
-    private var _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
+    private var _isLoading = MutableLiveData<Event<Boolean>>()
+    val isLoading: LiveData<Event<Boolean>> = _isLoading
 
     private var _screenshots = MutableLiveData<List<GameImage>>()
     val screenshots: LiveData<List<GameImage>> = _screenshots
 
-    private var _screenshotsVisibility = MutableLiveData<Boolean>()
-    val screenshotsVisibility: LiveData<Boolean> = _screenshotsVisibility
+    private var _screenshotsVisibility = MutableLiveData<Event<Boolean>>()
+    val screenshotsVisibility: LiveData<Event<Boolean>> = _screenshotsVisibility
 
     @ColorRes
     private var _metascoreColor: Int? = null
@@ -53,8 +57,13 @@ class GameDetailViewModel @AssistedInject constructor(
     }
 
     init {
-        fetchGameDetail()
-        fetchGameScreenshots()
+        viewModelScope.launch {
+            val deffered = listOf(
+                async { fetchGameDetail() },
+                async { fetchGameScreenshots() }
+            )
+            deffered.awaitAll()
+        }
     }
 
     private fun fetchGameDetail() = viewModelScope.launch {
@@ -62,7 +71,8 @@ class GameDetailViewModel @AssistedInject constructor(
             when (it) {
                 is Resource.Loading -> onLoading()
                 is Resource.Success -> onSuccess(it.data)
-                else -> onFailure()
+                is Resource.Failure.Error -> error(it.errorCode, it.errorBody)
+                is Resource.Failure.Exception -> exception(it.throwable)
             }
         }
     }
@@ -72,7 +82,8 @@ class GameDetailViewModel @AssistedInject constructor(
             when (it) {
                 is Resource.Loading -> onScreenshotLoading()
                 is Resource.Success -> onScreenshotSuccess(it.data)
-                else -> onFailure()
+                is Resource.Failure.Error -> error(it.errorCode, it.errorBody)
+                is Resource.Failure.Exception -> super.exception(it.throwable)
             }
         }
     }
@@ -80,12 +91,12 @@ class GameDetailViewModel @AssistedInject constructor(
     private fun onScreenshotSuccess(data: List<GameImage>) {
         if (!data.isNullOrEmpty() && data.isNotEmpty()) {
             _screenshots.value = data
-            _screenshotsVisibility.value = true
+            _screenshotsVisibility.value = Event(true)
         }
     }
 
     private fun onScreenshotLoading() {
-        _screenshotsVisibility.value = false
+        _screenshotsVisibility.value = Event(false)
     }
 
     private fun onSuccess(data: GameDetail) {
@@ -95,14 +106,10 @@ class GameDetailViewModel @AssistedInject constructor(
             else -> R.color.red_dark
         }
         _gameDetail.value = data
-        _isLoading.value = false
-    }
-
-    private fun onFailure() {
-
+        _isLoading.value = Event(false)
     }
 
     private fun onLoading() {
-        _isLoading.value = true
+        _isLoading.value = Event(true)
     }
 }

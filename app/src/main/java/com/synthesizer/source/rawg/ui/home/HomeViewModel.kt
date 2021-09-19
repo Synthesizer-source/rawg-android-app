@@ -2,11 +2,11 @@ package com.synthesizer.source.rawg.ui.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.synthesizer.source.rawg.data.Resource
 import com.synthesizer.source.rawg.domain.model.GameImage
 import com.synthesizer.source.rawg.domain.usecase.FetchGamesBackgroundImagesUseCase
+import com.synthesizer.source.rawg.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val fetchGamesBackgroundImagesUseCase: FetchGamesBackgroundImagesUseCase) :
-    ViewModel() {
+    BaseViewModel() {
 
     private var _games = MutableLiveData<List<GameImage>>()
     val games: LiveData<List<GameImage>> = _games
@@ -48,7 +48,11 @@ class HomeViewModel @Inject constructor(private val fetchGamesBackgroundImagesUs
             when (it) {
                 is Resource.Loading -> onLoading()
                 is Resource.Success -> onSuccess(it.data)
-                else -> onFailure()
+                is Resource.Failure.Error -> error(
+                    errorCode = it.errorCode,
+                    errorBody = it.errorBody
+                )
+                is Resource.Failure.Exception -> exception(it.throwable)
             }
         }
     }
@@ -64,8 +68,6 @@ class HomeViewModel @Inject constructor(private val fetchGamesBackgroundImagesUs
             _games.value = gameList.distinctBy { it.id }
         }
     }
-
-    private fun onFailure() {}
 
     fun setState(state: Boolean) {
         _searchViewState.value = state

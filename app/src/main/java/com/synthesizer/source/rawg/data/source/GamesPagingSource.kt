@@ -4,6 +4,8 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.synthesizer.source.rawg.data.remote.GameListItemResponse
 import com.synthesizer.source.rawg.data.repository.GameListRepository
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 class GamesPagingSource @Inject constructor(
@@ -33,7 +35,9 @@ class GamesPagingSource @Inject constructor(
                 prevKey = prevKey,
                 nextKey = pageIndex + 1
             )
-        } catch (exception: Exception) {
+        } catch (exception: IOException) {
+            LoadResult.Error(exception)
+        } catch (exception: HttpException) {
             LoadResult.Error(exception)
         }
     }

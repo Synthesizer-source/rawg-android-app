@@ -16,4 +16,14 @@
     <string name="metascore">Metascore</string>
     <string name="genre">Genre</string>
     <string name="games">Games</string>
+
+    <!--  exceptions   -->
+    <string name="check_your_connection">Check your connection</string>
+    <string name="invalid_api_key">Invalid API key</string>
+    <string name="unexpected_error">Unexpected Error</string>
+    <string name="not_found">Not Found</string>
+    <string name="request_timeout">Request Timeout</string>
+    <string name="the_server_is_unreachable">The server is unreachable</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="bad_request">Bad Request</string>
 </resources>
