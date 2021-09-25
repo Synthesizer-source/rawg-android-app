@@ -40,6 +40,9 @@ class HomeViewModel @Inject constructor(private val fetchGamesBackgroundImagesUs
     )
 
     init {
+        setRetryRequest {
+            fetchGames()
+        }
         fetchGames()
     }
 

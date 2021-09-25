@@ -31,6 +31,9 @@ class GameListViewModel @AssistedInject constructor(
     val isLoading: LiveData<Event<Boolean>> = _isLoading
 
     init {
+        setRetryRequest {
+            fetchGames()
+        }
         fetchGames()
     }
 

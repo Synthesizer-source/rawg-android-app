@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
-import com.google.android.material.snackbar.Snackbar
+import androidx.navigation.fragment.findNavController
 import com.synthesizer.source.rawg.R
+import com.synthesizer.source.rawg.ui.error.ErrorDialogListener
+import com.synthesizer.source.rawg.ui.error.RetryableErrorDialog
+import com.synthesizer.source.rawg.ui.error.RetryableErrorDialogListener
+import com.synthesizer.source.rawg.ui.error.SingleOptionErrorDialog
 import com.synthesizer.source.rawg.utils.EventObserver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.system.exitProcess
@@ -15,8 +18,6 @@ import kotlin.system.exitProcess
 abstract class BaseFragment : Fragment() {
 
     abstract val viewModel: BaseViewModel
-
-    private var _snackbar: Snackbar? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,7 +35,7 @@ abstract class BaseFragment : Fragment() {
         })
 
         viewModel.unknownError.observe(viewLifecycleOwner, EventObserver {
-            onUnknownError()
+            onUnexpectedError()
         })
 
         viewModel.notFoundError.observe(viewLifecycleOwner, EventObserver {
@@ -54,54 +55,92 @@ abstract class BaseFragment : Fragment() {
         })
     }
 
-    open fun onNoConnectionError() {
-        _snackbar = Snackbar.make(
-            requireView(),
-            getString(R.string.check_your_connection),
-            LENGTH_INDEFINITE
-        )
-            .setAction(
-                "Exit"
-            ) {
-                ActivityCompat.finishAffinity(requireActivity())
-                exitProcess(0)
-            }
+    private fun navigateBack() {
+        if (findNavController().previousBackStackEntry == null) {
+            exitApplication()
+        } else findNavController().popBackStack()
+    }
 
-        _snackbar?.show()
+    private fun exitApplication() {
+        ActivityCompat.finishAffinity(requireActivity())
+        exitProcess(0)
+    }
+
+    open fun onNoConnectionError() {
+        RetryableErrorDialog(R.string.check_your_connection,
+            object : RetryableErrorDialogListener {
+                override fun retry() {
+                    viewModel.retry()
+                }
+
+                override fun cancel() {
+                    exitApplication()
+                }
+
+            }).show(childFragmentManager, "noConnectionError")
     }
 
     open fun onNotFoundError() {
-        showSnackbar(getString(R.string.not_found))
+        SingleOptionErrorDialog(R.string.not_found, object : ErrorDialogListener {
+            override fun cancel() {
+                navigateBack()
+            }
+
+        }).show(childFragmentManager, "notFoundError")
     }
 
     open fun onRequestTimeoutError() {
-        showSnackbar(getString(R.string.request_timeout))
+        RetryableErrorDialog(R.string.request_timeout,
+            object : RetryableErrorDialogListener {
+                override fun retry() {
+                    viewModel.retry()
+                }
+
+                override fun cancel() {
+                    exitApplication()
+                }
+
+            }).show(childFragmentManager, "requestTimeOutError")
     }
 
     open fun onServerError() {
-        showSnackbar(getString(R.string.the_server_is_unreachable))
+        SingleOptionErrorDialog(R.string.the_server_is_unreachable, object : ErrorDialogListener {
+            override fun cancel() {
+                exitApplication()
+            }
+
+        }).show(childFragmentManager, "serverError")
     }
 
     open fun onUnAuthorizedError() {
-        showSnackbar(getString(R.string.invalid_api_key))
+        SingleOptionErrorDialog(R.string.invalid_api_key, object : ErrorDialogListener {
+            override fun cancel() {
+                exitApplication()
+            }
+
+        }).show(childFragmentManager, "unauthorizedError")
     }
 
-    open fun onUnknownError() {
-        showSnackbar(getString(R.string.something_went_wrong))
+    open fun onUnexpectedError() {
+        RetryableErrorDialog(R.string.unexpected_error,
+            object : RetryableErrorDialogListener {
+                override fun retry() {
+                    viewModel.retry()
+                }
+
+                override fun cancel() {
+                    navigateBack()
+                }
+
+            }).show(childFragmentManager, "unexpectedError")
     }
 
     open fun onBadRequestError() {
-        showSnackbar(getString(R.string.bad_request))
-    }
+        SingleOptionErrorDialog(R.string.bad_request, object : ErrorDialogListener {
+            override fun cancel() {
+                navigateBack()
+            }
 
-    private fun showSnackbar(text: String) {
-        _snackbar = Snackbar.make(requireView(), text, Snackbar.LENGTH_LONG)
-        _snackbar?.show()
-    }
-
-    override fun onDestroyView() {
-        _snackbar?.dismiss()
-        _snackbar = null
-        super.onDestroyView()
+        }).show(childFragmentManager, "badRequestError")
     }
 }

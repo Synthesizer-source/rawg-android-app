@@ -57,13 +57,18 @@ class GameDetailViewModel @AssistedInject constructor(
     }
 
     init {
-        viewModelScope.launch {
-            val deffered = listOf(
-                async { fetchGameDetail() },
-                async { fetchGameScreenshots() }
-            )
-            deffered.awaitAll()
+        setRetryRequest {
+            loadDetailData()
         }
+        loadDetailData()
+    }
+
+    private fun loadDetailData() = viewModelScope.launch {
+        val deffered = listOf(
+            async { fetchGameDetail() },
+            async { fetchGameScreenshots() }
+        )
+        deffered.awaitAll()
     }
 
     private fun fetchGameDetail() = viewModelScope.launch {

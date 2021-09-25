@@ -14,4 +14,10 @@
         <item name="ensureMinTouchTargetSize">false</item>
         <item name="rippleColor">@color/button_ripple_color</item>
     </style>
+
+    <style name="styleErrorDialog" parent="Base.Theme.AppCompat.Dialog">
+        <item name="android:windowMinWidthMajor">85%</item>
+        <item name="android:windowMinWidthMinor">85%</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 </resources>

@@ -19,4 +19,5 @@
     <color name="green_dark">#388E3C</color>
 
     <color name="button_ripple_color">#A1A1A1</color>
+    <color name="retry_button_ripple_color">#5AD25A</color>
 </resources>

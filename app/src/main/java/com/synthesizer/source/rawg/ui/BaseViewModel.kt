@@ -3,8 +3,10 @@ package com.synthesizer.source.rawg.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.synthesizer.source.rawg.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import retrofit2.HttpException
 import java.net.SocketTimeoutException
@@ -15,6 +17,11 @@ import javax.inject.Inject
 open class BaseViewModel @Inject constructor() : ViewModel() {
 
     data class ResourceError(val errorCode: Int, val errorBody: ResponseBody?)
+
+    private var retryRequest: suspend () -> Unit = {}
+
+    var hasError: Boolean = false
+        private set
 
     // Error
 
@@ -42,6 +49,8 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
     val serverException: LiveData<Event<Throwable>> = _serverException
 
     protected fun error(errorCode: Int, errorBody: ResponseBody?) {
+        if (hasError) return
+        hasError = true
         val error = Event(ResourceError(errorCode, errorBody))
         when (errorCode) {
             400 -> _badRequestError.value = error
@@ -53,12 +62,27 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
     }
 
     protected fun exception(throwable: Throwable) {
+        if (hasError) return
+        hasError = true
         val exception = Event(throwable)
         when (throwable) {
             is SocketTimeoutException -> _timeoutException.value = exception
             is UnknownHostException -> _unknownHostException.value = exception
             is HttpException -> error(throwable.code(), throwable.response()?.errorBody())
             else -> _serverException.value = exception
+        }
+    }
+
+    internal inline fun setRetryRequest(crossinline currRequest: suspend () -> Unit) {
+        retryRequest = {
+            currRequest()
+        }
+    }
+
+    fun retry() {
+        hasError = false
+        viewModelScope.launch {
+            retryRequest()
         }
     }
 }

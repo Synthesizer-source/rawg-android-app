@@ -26,4 +26,8 @@
     <string name="the_server_is_unreachable">The server is unreachable</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="bad_request">Bad Request</string>
+    <string name="exit">EXIT</string>
+    <string name="back">back</string>
+    <string name="retry">retry</string>
+    <string name="close">close</string>
 </resources>
