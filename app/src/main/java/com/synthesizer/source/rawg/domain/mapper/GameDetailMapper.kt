@@ -2,15 +2,16 @@ package com.synthesizer.source.rawg.domain.mapper
 
 import com.synthesizer.source.rawg.data.remote.GameDetailResponse
 import com.synthesizer.source.rawg.domain.model.GameDetail
+import com.synthesizer.source.rawg.utils.convertToDate
 
 fun GameDetailResponse.toDomain(): GameDetail {
     return GameDetail(
         id = id,
         name = name,
         backgroundImage = background_image,
-        releaseDate = released,
+        releaseDate = released.convertToDate(),
         publisher = if (!publishers.isNullOrEmpty()) publishers[0].name else developers[0].name,
-        rating = rating,
+        rating = rating.toFloat(),
         metascore = metacritic,
         genres = genres.map { it.name }.sortedBy { it.length },
         description = description_raw,

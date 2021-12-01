@@ -6,7 +6,7 @@ data class GameDetail(
     val backgroundImage: String,
     val releaseDate: String,
     val publisher: String,
-    val rating: Double,
+    val rating: Float,
     val metascore: Int,
     val genres: List<String>,
     val description: String,

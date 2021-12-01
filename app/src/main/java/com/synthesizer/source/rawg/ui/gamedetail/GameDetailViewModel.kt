@@ -1,7 +1,11 @@
 package com.synthesizer.source.rawg.ui.gamedetail
 
 import androidx.annotation.ColorRes
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.synthesizer.source.rawg.R
 import com.synthesizer.source.rawg.data.Resource
 import com.synthesizer.source.rawg.domain.model.GameDetail
@@ -31,9 +35,6 @@ class GameDetailViewModel @AssistedInject constructor(
 
     private var _screenshots = MutableLiveData<List<GameImage>>()
     val screenshots: LiveData<List<GameImage>> = _screenshots
-
-    private var _screenshotsVisibility = MutableLiveData<Event<Boolean>>()
-    val screenshotsVisibility: LiveData<Event<Boolean>> = _screenshotsVisibility
 
     @ColorRes
     private var _metascoreColor: Int? = null
@@ -68,10 +69,13 @@ class GameDetailViewModel @AssistedInject constructor(
             async { fetchGameDetail() },
             async { fetchGameScreenshots() }
         )
-        deffered.awaitAll()
+
+        deffered.awaitAll().also {
+            if (!hasError) _isLoading.value = Event(false)
+        }
     }
 
-    private fun fetchGameDetail() = viewModelScope.launch {
+    private suspend fun fetchGameDetail() {
         fetchGameDetailUseCase(gameId).collect {
             when (it) {
                 is Resource.Loading -> onLoading()
@@ -82,26 +86,21 @@ class GameDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun fetchGameScreenshots() = viewModelScope.launch {
+    private suspend fun fetchGameScreenshots() {
         fetchGameScreenshotsUseCase(gameId).collect {
             when (it) {
-                is Resource.Loading -> onScreenshotLoading()
+                is Resource.Loading -> onLoading()
                 is Resource.Success -> onScreenshotSuccess(it.data)
                 is Resource.Failure.Error -> error(it.errorCode, it.errorBody)
-                is Resource.Failure.Exception -> super.exception(it.throwable)
+                is Resource.Failure.Exception -> exception(it.throwable)
             }
         }
     }
 
     private fun onScreenshotSuccess(data: List<GameImage>) {
-        if (!data.isNullOrEmpty() && data.isNotEmpty()) {
+        if (!data.isNullOrEmpty()) {
             _screenshots.value = data
-            _screenshotsVisibility.value = Event(true)
         }
-    }
-
-    private fun onScreenshotLoading() {
-        _screenshotsVisibility.value = Event(false)
     }
 
     private fun onSuccess(data: GameDetail) {
@@ -111,10 +110,22 @@ class GameDetailViewModel @AssistedInject constructor(
             else -> R.color.red_dark
         }
         _gameDetail.value = data
-        _isLoading.value = Event(false)
     }
 
     private fun onLoading() {
-        _isLoading.value = Event(true)
+        if (_isLoading.value == null) _isLoading.value = Event(true)
+    }
+
+    fun getPlatformIcons(): IntArray {
+        val icons = mutableListOf<Int>()
+        gameDetail.value?.platforms?.forEach {
+            when (it) {
+                "pc" -> icons.add(R.drawable.ic_windows)
+                "playstation" -> icons.add(R.drawable.ic_playstation)
+                "xbox" -> icons.add(R.drawable.ic_xbox)
+                "nintendo" -> icons.add(R.drawable.ic_nintendo)
+            }
+        }
+        return icons.distinctBy { it }.toIntArray()
     }
 }

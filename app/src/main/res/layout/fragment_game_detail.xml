@@ -9,6 +9,7 @@
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -132,7 +133,7 @@
             app:layout_constraintStart_toStartOf="@id/guidelineCenter"
             app:layout_constraintTop_toTopOf="@id/releaseDateLabel" />
 
-        <RatingBar
+        <com.synthesizer.source.rawg.ui.custom.AnimatedRatingBar
             android:id="@+id/rating"
             style="?android:attr/ratingBarStyle"
             android:layout_width="wrap_content"
@@ -150,66 +151,14 @@
             app:layout_constraintStart_toStartOf="@id/ratingLabel"
             app:layout_constraintTop_toBottomOf="@id/ratingLabel" />
 
-        <ImageView
-            android:id="@+id/pcPlatformIcon"
+        <LinearLayout
+            android:id="@+id/platforms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_12sdp"
-            android:scaleX="0.65"
-            android:scaleY="0.65"
-            android:src="@drawable/ic_windows"
-            android:visibility="gone"
+            android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="@id/guidelineCenter"
-            app:layout_constraintTop_toTopOf="@id/publisherNameLabel"
-            tools:visibility="visible"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
-            android:id="@+id/psPlatformIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleX="0.65"
-            android:scaleY="0.65"
-            android:src="@drawable/ic_playstation"
-            android:visibility="gone"
-            app:layout_constraintStart_toEndOf="@id/pcPlatformIcon"
-            app:layout_constraintTop_toTopOf="@id/pcPlatformIcon"
-            tools:visibility="visible"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
-            android:id="@+id/xboxPlatformIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleX="0.65"
-            android:scaleY="0.65"
-            android:src="@drawable/ic_xbox"
-            android:visibility="gone"
-            app:layout_constraintStart_toEndOf="@id/psPlatformIcon"
-            app:layout_constraintTop_toTopOf="@id/pcPlatformIcon"
-            tools:visibility="visible"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
-            android:id="@+id/nintendoPlatformIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleX="0.65"
-            android:scaleY="0.65"
-            android:src="@drawable/ic_nintendo"
-            android:visibility="gone"
-            app:layout_constraintStart_toEndOf="@id/xboxPlatformIcon"
-            app:layout_constraintTop_toTopOf="@id/pcPlatformIcon"
-            tools:visibility="visible"
-            tools:ignore="ContentDescription" />
-
-        <androidx.constraintlayout.helper.widget.Layer
-            android:id="@+id/infoLayer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:constraint_referenced_ids="name, releaseDateLabel, releaseDate, ratingLabel, publisherNameLabel, publisherName,metascoreLabel, metascore, genreLabel, genreChipGroup"
-            app:layout_constraintStart_toStartOf="@id/name"
-            app:layout_constraintTop_toTopOf="@id/name" />
+            app:layout_constraintTop_toTopOf="@id/publisherNameLabel" />
 
         <TextView
             android:id="@+id/metascoreLabel"
@@ -261,6 +210,13 @@
             app:layout_constraintStart_toStartOf="@id/genreLabel"
             app:layout_constraintTop_toTopOf="@id/metascore" />
 
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="metascore, genreChipGroup" />
+
         <TextView
             android:id="@+id/descriptionLabel"
             android:layout_width="wrap_content"
@@ -270,7 +226,7 @@
             android:textSize="@dimen/_14sdp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/genreChipGroup" />
+            app:layout_constraintTop_toBottomOf="@id/barrier" />
 
         <com.synthesizer.source.rawg.ui.custom.ShowHideLayout
             android:id="@+id/description"
