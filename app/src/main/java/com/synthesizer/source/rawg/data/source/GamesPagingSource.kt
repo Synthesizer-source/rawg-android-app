@@ -2,14 +2,14 @@ package com.synthesizer.source.rawg.data.source
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.synthesizer.source.rawg.data.api.RawgService
 import com.synthesizer.source.rawg.data.remote.GameListItemResponse
-import com.synthesizer.source.rawg.data.repository.GameListRepository
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
 class GamesPagingSource @Inject constructor(
-    private val repository: GameListRepository,
+    private val service: RawgService,
     private val search: String,
     private val ordering: String,
     private val dates: String
@@ -19,7 +19,7 @@ class GamesPagingSource @Inject constructor(
         val pageIndex = params.key ?: 1
         return try {
             val response =
-                repository.fetchGames(
+                service.getGames(
                     page = pageIndex,
                     search = search,
                     ordering = ordering,

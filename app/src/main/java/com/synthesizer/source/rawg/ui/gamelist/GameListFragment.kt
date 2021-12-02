@@ -44,7 +44,7 @@ class GameListFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentGameListBinding.inflate(inflater, container, false)
+        _binding = _binding ?: FragmentGameListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -53,6 +53,9 @@ class GameListFragment : BaseFragment() {
         binding.gameList.adapter = adapter
         adapter.itemClickListener = {
             navigateToGameDetail(it)
+        }
+        adapter.firstItemLoadedListener = {
+            binding.loadingIcon.visibility = View.GONE
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner, EventObserver {

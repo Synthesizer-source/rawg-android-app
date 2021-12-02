@@ -1,19 +1,20 @@
 package com.synthesizer.source.rawg.ui.gamelist
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.synthesizer.source.rawg.data.Resource
 import com.synthesizer.source.rawg.domain.model.GameListItem
 import com.synthesizer.source.rawg.domain.usecase.FetchGameListUseCase
 import com.synthesizer.source.rawg.ui.BaseViewModel
 import com.synthesizer.source.rawg.utils.Event
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -65,36 +66,22 @@ class GameListViewModel @AssistedInject constructor(
             search = search,
             ordering = ordering,
             dates = dates
-        ).collectLatest {
-            when (it) {
-                is Resource.Failure.Error -> error(it.errorCode, it.errorBody)
-                is Resource.Failure.Exception -> {
-                    exception(it.throwable)
-                }
-                is Resource.Loading -> onLoading()
-                is Resource.Success -> onSuccess(it)
-            }
+        ).cachedIn(this).collectLatest {
+            _games.value = it
         }
-    }
-
-    private suspend fun onSuccess(resource: Resource.Success<Flow<PagingData<GameListItem>>>) {
-        resource.data.cachedIn(viewModelScope).collectLatest { data ->
-            _games.value = data
-            delay(1500)
-            _isLoading.value = Event(false)
-        }
-    }
-
-    private fun onLoading() {
-        _isLoading.value = Event(true)
     }
 
     fun loadStates(loadStates: CombinedLoadStates) {
-
-        if (loadStates.refresh is LoadState.Error) {
-            exception((loadStates.refresh as LoadState.Error).error)
-        } else if (loadStates.append is LoadState.Error) {
-            exception((loadStates.append as LoadState.Error).error)
+        when {
+            loadStates.refresh is LoadState.Error -> {
+                exception((loadStates.refresh as LoadState.Error).error)
+            }
+            loadStates.append is LoadState.Error -> {
+                exception((loadStates.append as LoadState.Error).error)
+            }
+            loadStates.prepend is LoadState.Error -> {
+                exception((loadStates.prepend as LoadState.Error).error)
+            }
         }
     }
 }
