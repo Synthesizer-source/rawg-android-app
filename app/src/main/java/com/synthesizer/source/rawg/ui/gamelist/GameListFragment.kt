@@ -5,37 +5,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
+import androidx.paging.LoadState
+import com.synthesizer.source.rawg.core.UIState
 import com.synthesizer.source.rawg.databinding.FragmentGameListBinding
 import com.synthesizer.source.rawg.ui.BaseFragment
-import com.synthesizer.source.rawg.utils.EventObserver
-import com.synthesizer.source.rawg.utils.setVisibility
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class GameListFragment : BaseFragment() {
 
-    @Inject
-    lateinit var gameListViewModelFactory: GameListViewModel.AssistedFactory
-
     private var _binding: FragmentGameListBinding? = null
     private val binding get() = _binding!!
 
-    private val args: GameListFragmentArgs by navArgs()
-
-    override val viewModel: GameListViewModel by viewModels {
-        GameListViewModel.provideFactory(
-            assistedFactory = gameListViewModelFactory,
-            search = args.search,
-            ordering = args.ordering,
-            dates = args.dates
-        )
-    }
+    override val viewModel: GameListViewModel by viewModels()
 
     private val adapter = GameListAdapter()
 
@@ -58,19 +48,46 @@ class GameListFragment : BaseFragment() {
             binding.loadingIcon.visibility = View.GONE
         }
 
-        viewModel.isLoading.observe(viewLifecycleOwner, EventObserver {
-            binding.loadingIcon.setVisibility(it)
-            binding.gameList.setVisibility(!it)
-        })
-        viewModel.games.observe(viewLifecycleOwner, {
-            adapter.submitData(lifecycle, it)
-        })
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.uiState.filterNotNull().collect {
+                        when (it) {
+                            is UIState.Error -> onServerError()
+                            UIState.Loading -> {
+                                binding.loadingIcon.visibility = View.VISIBLE
+                                binding.gameList.visibility = View.INVISIBLE
+                            }
+                            is UIState.Success -> {
 
-        lifecycleScope.launch {
-            adapter.loadStateFlow.collectLatest { loadStates ->
-                viewModel.loadStates(loadStates)
+                                adapter.submitData(lifecycle, it.data)
+                            }
+                        }
+                    }
+                }
+
+                launch {
+                    adapter.loadStateFlow.collectLatest { state ->
+                        if (state.refresh is LoadState.Error) {
+                            val throwable = (state.refresh as LoadState.Error).error
+                            onServerError()
+                        } else if (state.append is LoadState.Loading) {
+                            onLoaded()
+                        } else if (state.append is LoadState.NotLoading
+                            && state.append.endOfPaginationReached
+                            && adapter.itemCount == 0
+                        ) {
+//                            onEmpty()
+                        }
+                    }
+                }
             }
         }
+    }
+
+    private fun onLoaded() {
+        binding.loadingIcon.visibility = View.GONE
+        binding.gameList.visibility = View.VISIBLE
     }
 
     private fun navigateToGameDetail(id: Int) {

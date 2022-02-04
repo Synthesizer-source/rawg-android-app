@@ -1,35 +1,32 @@
 package com.synthesizer.source.rawg.ui.gamelist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.paging.CombinedLoadStates
-import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.synthesizer.source.rawg.core.UIState
 import com.synthesizer.source.rawg.domain.model.GameListItem
 import com.synthesizer.source.rawg.domain.usecase.FetchGameListUseCase
 import com.synthesizer.source.rawg.ui.BaseViewModel
-import com.synthesizer.source.rawg.utils.Event
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.collectLatest
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
-class GameListViewModel @AssistedInject constructor(
+@HiltViewModel
+class GameListViewModel @Inject constructor(
     private val fetchGameListUseCase: FetchGameListUseCase,
-    @Assisted("search") private val search: String,
-    @Assisted("ordering") private val ordering: String,
-    @Assisted("dates") private val dates: String
+    private val savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
 
-    private var _games = MutableLiveData<PagingData<GameListItem>>()
-    val games: LiveData<PagingData<GameListItem>> = _games
-
-    private var _isLoading = MutableLiveData<Event<Boolean>>()
-    val isLoading: LiveData<Event<Boolean>> = _isLoading
+    private var _uiState: MutableStateFlow<UIState<PagingData<GameListItem>>?> =
+        MutableStateFlow(null)
+    val uiState: StateFlow<UIState<PagingData<GameListItem>>?> = _uiState.asStateFlow()
 
     init {
         setRetryRequest {
@@ -38,50 +35,17 @@ class GameListViewModel @AssistedInject constructor(
         fetchGames()
     }
 
-    @dagger.assisted.AssistedFactory
-    interface AssistedFactory {
-        fun create(
-            @Assisted("search") search: String,
-            @Assisted("ordering") ordering: String,
-            @Assisted("dates") dates: String
-        ): GameListViewModel
-    }
-
-    companion object {
-        fun provideFactory(
-            assistedFactory: AssistedFactory,
-            search: String,
-            ordering: String,
-            dates: String
-        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return assistedFactory.create(search, ordering, dates) as T
-            }
-        }
-    }
-
     private fun fetchGames() = viewModelScope.launch {
+        val search = savedStateHandle.get<String>("search").orEmpty()
+        val ordering = savedStateHandle.get<String>("ordering").orEmpty()
+        val dates = savedStateHandle.get<String>("dates").orEmpty()
         fetchGameListUseCase(
             search = search,
             ordering = ordering,
             dates = dates
-        ).cachedIn(this).collectLatest {
-            _games.value = it
-        }
-    }
-
-    fun loadStates(loadStates: CombinedLoadStates) {
-        when {
-            loadStates.refresh is LoadState.Error -> {
-                exception((loadStates.refresh as LoadState.Error).error)
-            }
-            loadStates.append is LoadState.Error -> {
-                exception((loadStates.append as LoadState.Error).error)
-            }
-            loadStates.prepend is LoadState.Error -> {
-                exception((loadStates.prepend as LoadState.Error).error)
-            }
-        }
+        ).cachedIn(viewModelScope)
+            .onStart { _uiState.emit(UIState.Loading) }
+            .catch { _uiState.emit(UIState.Error(it.message.orEmpty())) }
+            .collect { _uiState.emit(UIState.Success(it)) }
     }
 }
