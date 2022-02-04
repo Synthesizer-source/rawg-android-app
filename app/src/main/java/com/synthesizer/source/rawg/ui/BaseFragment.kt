@@ -2,17 +2,24 @@ package com.synthesizer.source.rawg.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.synthesizer.source.rawg.R
+import com.synthesizer.source.rawg.core.domain.ErrorType
 import com.synthesizer.source.rawg.ui.error.ErrorDialogListener
 import com.synthesizer.source.rawg.ui.error.RetryableErrorDialog
 import com.synthesizer.source.rawg.ui.error.RetryableErrorDialogListener
 import com.synthesizer.source.rawg.ui.error.SingleOptionErrorDialog
-import com.synthesizer.source.rawg.utils.EventObserver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.system.exitProcess
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 abstract class BaseFragment : Fragment() {
@@ -25,34 +32,41 @@ abstract class BaseFragment : Fragment() {
     }
 
     private fun observe() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.error.filterNotNull().distinctUntilChanged().collectLatest {
+                        when (it.errorType) {
+                            ErrorType.RETRY -> createRetryableErrorDialog(it.messageRes)
+                            ErrorType.NONE -> createSingleOptionErrorDialog(it.messageRes)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-        viewModel.badRequestError.observe(viewLifecycleOwner, EventObserver {
-            onBadRequestError()
-        })
+    private fun createRetryableErrorDialog(@StringRes message: Int) {
+        RetryableErrorDialog(message,
+            object : RetryableErrorDialogListener {
+                override fun retry() {
+                    viewModel.retry()
+                }
 
-        viewModel.unauthorizedError.observe(viewLifecycleOwner, EventObserver {
-            onUnAuthorizedError()
-        })
+                override fun cancel() {
+                    navigateBack()
+                }
 
-        viewModel.unknownError.observe(viewLifecycleOwner, EventObserver {
-            onUnexpectedError()
-        })
+            }).show(childFragmentManager, "dialogError")
+    }
 
-        viewModel.notFoundError.observe(viewLifecycleOwner, EventObserver {
-            onNotFoundError()
-        })
+    private fun createSingleOptionErrorDialog(@StringRes message: Int) {
+        SingleOptionErrorDialog(message, object : ErrorDialogListener {
+            override fun cancel() {
+                navigateBack()
+            }
 
-        viewModel.timeoutException.observe(viewLifecycleOwner, EventObserver {
-            onRequestTimeoutError()
-        })
-
-        viewModel.unknownHostException.observe(viewLifecycleOwner, EventObserver {
-            onNoConnectionError()
-        })
-
-        viewModel.serverException.observe(viewLifecycleOwner, EventObserver {
-            onServerError()
-        })
+        }).show(childFragmentManager, "dialogError")
     }
 
     private fun navigateBack() {
@@ -64,83 +78,5 @@ abstract class BaseFragment : Fragment() {
     private fun exitApplication() {
         ActivityCompat.finishAffinity(requireActivity())
         exitProcess(0)
-    }
-
-    open fun onNoConnectionError() {
-        RetryableErrorDialog(R.string.check_your_connection,
-            object : RetryableErrorDialogListener {
-                override fun retry() {
-                    viewModel.retry()
-                }
-
-                override fun cancel() {
-                    exitApplication()
-                }
-
-            }).show(childFragmentManager, "noConnectionError")
-    }
-
-    open fun onNotFoundError() {
-        SingleOptionErrorDialog(R.string.not_found, object : ErrorDialogListener {
-            override fun cancel() {
-                navigateBack()
-            }
-
-        }).show(childFragmentManager, "notFoundError")
-    }
-
-    open fun onRequestTimeoutError() {
-        RetryableErrorDialog(R.string.request_timeout,
-            object : RetryableErrorDialogListener {
-                override fun retry() {
-                    viewModel.retry()
-                }
-
-                override fun cancel() {
-                    exitApplication()
-                }
-
-            }).show(childFragmentManager, "requestTimeOutError")
-    }
-
-    open fun onServerError() {
-        SingleOptionErrorDialog(R.string.the_server_is_unreachable, object : ErrorDialogListener {
-            override fun cancel() {
-                exitApplication()
-            }
-
-        }).show(childFragmentManager, "serverError")
-    }
-
-    open fun onUnAuthorizedError() {
-        SingleOptionErrorDialog(R.string.invalid_api_key, object : ErrorDialogListener {
-            override fun cancel() {
-                exitApplication()
-            }
-
-        }).show(childFragmentManager, "unauthorizedError")
-    }
-
-    open fun onUnexpectedError() {
-        RetryableErrorDialog(R.string.unexpected_error,
-            object : RetryableErrorDialogListener {
-                override fun retry() {
-                    viewModel.retry()
-                }
-
-                override fun cancel() {
-                    navigateBack()
-                }
-
-            }).show(childFragmentManager, "unexpectedError")
-    }
-
-    open fun onBadRequestError() {
-        SingleOptionErrorDialog(R.string.bad_request, object : ErrorDialogListener {
-            override fun cancel() {
-                navigateBack()
-            }
-
-        }).show(childFragmentManager, "badRequestError")
     }
 }

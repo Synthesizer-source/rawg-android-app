@@ -71,7 +71,7 @@ class GameDetailViewModel @AssistedInject constructor(
         )
 
         deffered.awaitAll().also {
-            if (!hasError) _isLoading.value = Event(false)
+            _isLoading.value = Event(false)
         }
     }
 
@@ -80,8 +80,7 @@ class GameDetailViewModel @AssistedInject constructor(
             when (it) {
                 is Resource.Loading -> onLoading()
                 is Resource.Success -> onSuccess(it.data)
-                is Resource.Failure.Error -> error(it.errorCode, it.errorBody)
-                is Resource.Failure.Exception -> exception(it.throwable)
+                is Resource.Error -> error(it.throwable)
             }
         }
     }
@@ -91,8 +90,7 @@ class GameDetailViewModel @AssistedInject constructor(
             when (it) {
                 is Resource.Loading -> onLoading()
                 is Resource.Success -> onScreenshotSuccess(it.data)
-                is Resource.Failure.Error -> error(it.errorCode, it.errorBody)
-                is Resource.Failure.Exception -> exception(it.throwable)
+                is Resource.Error -> error(it.throwable)
             }
         }
     }

@@ -45,7 +45,7 @@ class GameListViewModel @Inject constructor(
             dates = dates
         ).cachedIn(viewModelScope)
             .onStart { _uiState.emit(UIState.Loading) }
-            .catch { _uiState.emit(UIState.Error(it.message.orEmpty())) }
+            .catch { _uiState.emit(UIState.Error(it)) }
             .collect { _uiState.emit(UIState.Success(it)) }
     }
 }

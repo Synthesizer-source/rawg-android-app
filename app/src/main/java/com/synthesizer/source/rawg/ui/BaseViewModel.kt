@@ -1,77 +1,24 @@
 package com.synthesizer.source.rawg.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.synthesizer.source.rawg.utils.Event
+import com.synthesizer.source.rawg.R
+import com.synthesizer.source.rawg.core.domain.Error
+import com.synthesizer.source.rawg.core.domain.ErrorType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import okhttp3.ResponseBody
-import retrofit2.HttpException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 @HiltViewModel
 open class BaseViewModel @Inject constructor() : ViewModel() {
 
-    data class ResourceError(val errorCode: Int, val errorBody: ResponseBody?)
-
     private var retryRequest: suspend () -> Unit = {}
-
-    var hasError: Boolean = false
-        private set
-
-    // Error
-
-    private var _badRequestError = MutableLiveData<Event<ResourceError>>()
-    val badRequestError: LiveData<Event<ResourceError>> = _badRequestError
-
-    private var _unauthorizedError = MutableLiveData<Event<ResourceError>>()
-    val unauthorizedError: LiveData<Event<ResourceError>> = _unauthorizedError
-
-    private var _notFoundError = MutableLiveData<Event<ResourceError>>()
-    val notFoundError: LiveData<Event<ResourceError>> = _notFoundError
-
-    private var _unknownError = MutableLiveData<Event<ResourceError>>()
-    val unknownError: LiveData<Event<ResourceError>> = _unknownError
-
-    // Exceptions
-
-    private var _timeoutException = MutableLiveData<Event<Throwable>>()
-    val timeoutException: LiveData<Event<Throwable>> = _timeoutException
-
-    private var _unknownHostException = MutableLiveData<Event<Throwable>>()
-    val unknownHostException: LiveData<Event<Throwable>> = _unknownHostException
-
-    private var _serverException = MutableLiveData<Event<Throwable>>()
-    val serverException: LiveData<Event<Throwable>> = _serverException
-
-    protected fun error(errorCode: Int, errorBody: ResponseBody?) {
-        if (hasError) return
-        hasError = true
-        val error = Event(ResourceError(errorCode, errorBody))
-        when (errorCode) {
-            400 -> _badRequestError.value = error
-            401 -> _unauthorizedError.value = error
-            403 -> _unauthorizedError.value = error
-            404 -> _notFoundError.value = error
-            else -> _unknownError.value = error
-        }
-    }
-
-    protected fun exception(throwable: Throwable) {
-        if (hasError) return
-        hasError = true
-        val exception = Event(throwable)
-        when (throwable) {
-            is SocketTimeoutException -> _timeoutException.value = exception
-            is UnknownHostException -> _unknownHostException.value = exception
-            is HttpException -> error(throwable.code(), throwable.response()?.errorBody())
-            else -> _serverException.value = exception
-        }
-    }
 
     internal inline fun setRetryRequest(crossinline currRequest: suspend () -> Unit) {
         retryRequest = {
@@ -80,9 +27,34 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
     }
 
     fun retry() {
-        hasError = false
         viewModelScope.launch {
             retryRequest()
         }
+    }
+
+    private val _error: MutableStateFlow<Error?> = MutableStateFlow(null)
+    val error: StateFlow<Error?> = _error.asStateFlow()
+
+    fun error(throwable: Throwable) {
+        println(throwable)
+        val error = when (throwable) {
+            is SocketTimeoutException -> Error(ErrorType.RETRY, R.string.request_timeout)
+            is UnknownHostException -> Error(ErrorType.RETRY, R.string.check_your_connection)
+            is HttpException -> {
+                when (throwable.code()) {
+                    400 -> Error(ErrorType.NONE, R.string.bad_request)
+                    401 -> Error(ErrorType.NONE, R.string.invalid_api_key)
+                    403 -> Error(ErrorType.NONE, R.string.bad_request)
+                    404 -> Error(ErrorType.RETRY, R.string.not_found)
+                    else -> Error(ErrorType.RETRY, R.string.unexpected_error)
+                }
+            }
+            else -> Error(ErrorType.NONE, R.string.the_server_is_unreachable)
+        }
+
+        viewModelScope.launch {
+            _error.emit(error)
+        }
+
     }
 }

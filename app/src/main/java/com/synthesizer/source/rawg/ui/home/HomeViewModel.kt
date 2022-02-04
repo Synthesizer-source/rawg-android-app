@@ -8,9 +8,9 @@ import com.synthesizer.source.rawg.domain.model.GameImage
 import com.synthesizer.source.rawg.domain.usecase.FetchGamesBackgroundImagesUseCase
 import com.synthesizer.source.rawg.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val fetchGamesBackgroundImagesUseCase: FetchGamesBackgroundImagesUseCase) :
@@ -51,11 +51,7 @@ class HomeViewModel @Inject constructor(private val fetchGamesBackgroundImagesUs
             when (it) {
                 is Resource.Loading -> onLoading()
                 is Resource.Success -> onSuccess(it.data)
-                is Resource.Failure.Error -> error(
-                    errorCode = it.errorCode,
-                    errorBody = it.errorBody
-                )
-                is Resource.Failure.Exception -> exception(it.throwable)
+                is Resource.Error -> error(it.throwable)
             }
         }
     }
