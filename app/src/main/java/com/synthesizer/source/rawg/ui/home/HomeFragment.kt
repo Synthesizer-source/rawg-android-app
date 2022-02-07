@@ -17,6 +17,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.animation.doOnEnd
 import androidx.core.view.get
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -24,6 +27,8 @@ import com.synthesizer.source.rawg.databinding.FragmentHomeBinding
 import com.synthesizer.source.rawg.ui.BaseFragment
 import com.synthesizer.source.rawg.utils.loadImage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
 
 
@@ -56,9 +61,35 @@ class HomeFragment : BaseFragment() {
             (homeScreenGames[0] as RecyclerView).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
             homeScreenGames.setPageTransformer(OffsetPageTransformer(24, 24))
             homeScreenGames.adapter = adapter
-            viewModel.games.observe(viewLifecycleOwner, {
-                adapter.loadDataSet(it)
-            })
+            viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    launch {
+                        viewModel.gamesImages.collect {
+                            homeScreenGames.post {
+                                adapter.addItem(it)
+                            }
+                        }
+                    }
+                    launch {
+                        viewModel.searchViewState.collect {
+                            if (it) {
+                                if (binding.root.scrollY != 0) {
+                                    hideKeyboard()
+                                    scrollToTop()
+                                } else {
+                                    transitionToEnd()
+                                }
+                            } else {
+                                transitionToStart()
+                            }
+
+                            binding.visitWebSiteButton.isEnabled = !it
+                            binding.popularGamesButton.isEnabled = !it
+                            binding.bestOfTheYearGamesButton.isEnabled = !it
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -107,26 +138,8 @@ class HomeFragment : BaseFragment() {
         }
 
         binding.searchEditText.setOnClickListener {
-            if (viewModel.searchViewState.value == false) viewModel.setState(true)
-            else if (viewModel.searchViewState.value == true) viewModel.setState(false)
+            viewModel.switchSearchState()
         }
-
-        viewModel.searchViewState.observe(viewLifecycleOwner, {
-            if (it) {
-                if (binding.root.scrollY != 0) {
-                    hideKeyboard()
-                    scrollToTop()
-                } else {
-                    transitionToEnd()
-                }
-            } else {
-                transitionToStart()
-            }
-
-            binding.visitWebSiteButton.isEnabled = !it
-            binding.popularGamesButton.isEnabled = !it
-            binding.bestOfTheYearGamesButton.isEnabled = !it
-        })
 
         binding.visitWebSiteButton.setOnClickListener {
             goToRAWGWebsite()

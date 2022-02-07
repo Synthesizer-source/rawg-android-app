@@ -1,7 +1,5 @@
 package com.synthesizer.source.rawg.ui.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.synthesizer.source.rawg.data.Resource
 import com.synthesizer.source.rawg.domain.model.GameImage
@@ -9,18 +7,26 @@ import com.synthesizer.source.rawg.domain.usecase.FetchGamesBackgroundImagesUseC
 import com.synthesizer.source.rawg.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val fetchGamesBackgroundImagesUseCase: FetchGamesBackgroundImagesUseCase) :
-    BaseViewModel() {
+class HomeViewModel @Inject constructor(
+    private val fetchGamesBackgroundImagesUseCase: FetchGamesBackgroundImagesUseCase
+) : BaseViewModel() {
 
-    private var _games = MutableLiveData<List<GameImage>>()
-    val games: LiveData<List<GameImage>> = _games
+    private val _gameImages: MutableSharedFlow<GameImage> = MutableSharedFlow()
+    val gamesImages: SharedFlow<GameImage> = _gameImages.asSharedFlow()
 
-    private var _searchViewState = MutableLiveData(false) // 0 : Off , 1 : On
-    val searchViewState: LiveData<Boolean> = _searchViewState
+    // 0 : Off , 1 : On
+    private val _searchViewState: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val searchViewState: StateFlow<Boolean> = _searchViewState.asStateFlow()
 
     private val gameIds = listOf(
         28,
@@ -49,26 +55,22 @@ class HomeViewModel @Inject constructor(private val fetchGamesBackgroundImagesUs
     private fun fetchGames() = viewModelScope.launch {
         fetchGamesBackgroundImagesUseCase(gameIds).collect {
             when (it) {
-                is Resource.Loading -> onLoading()
-                is Resource.Success -> onSuccess(it.data)
+                is Resource.Loading -> {}
+                is Resource.Success -> _gameImages.emit(it.data)
                 is Resource.Error -> error(it.throwable)
             }
         }
     }
 
-    private fun onLoading() {}
-
-    private fun onSuccess(data: GameImage) {
-        if (_games.value.isNullOrEmpty()) _games.value = listOf(data)
-        else {
-            val gameList = _games.value!!
-                .toMutableList()
-            gameList.add(data)
-            _games.value = gameList.distinctBy { it.id }
+    fun setState(state: Boolean) {
+        viewModelScope.launch {
+            _searchViewState.emit(state)
         }
     }
 
-    fun setState(state: Boolean) {
-        _searchViewState.value = state
+    fun switchSearchState() {
+        viewModelScope.launch {
+            _searchViewState.emit(!_searchViewState.value)
+        }
     }
 }

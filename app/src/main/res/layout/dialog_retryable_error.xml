@@ -49,8 +49,6 @@
             android:layout_width="@dimen/_96sdp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_8sdp"
-            android:clickable="false"
-            android:enabled="false"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:text="@string/retry"

@@ -36,6 +36,7 @@ abstract class BaseFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.error.filterNotNull().distinctUntilChanged().collectLatest {
+                        println(it)
                         when (it.errorType) {
                             ErrorType.RETRY -> createRetryableErrorDialog(it.messageRes)
                             ErrorType.NONE -> createSingleOptionErrorDialog(it.messageRes)

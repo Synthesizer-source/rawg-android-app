@@ -11,7 +11,7 @@ import com.synthesizer.source.rawg.utils.loadImage
 
 class HomeGamesAdapter : RecyclerView.Adapter<HomeScreenItemViewHolder>() {
 
-    private var _items = listOf<GameImage>()
+    private var _items = mutableListOf<GameImage>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeScreenItemViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -28,9 +28,9 @@ class HomeGamesAdapter : RecyclerView.Adapter<HomeScreenItemViewHolder>() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun loadDataSet(items: List<GameImage>) {
-        _items = items
-        notifyItemChanged(_items.size - 1)
+    fun addItem(data: GameImage) {
+        _items.add(data)
+        notifyDataSetChanged()
     }
 
     fun getItem(position: Int) = _items[position]

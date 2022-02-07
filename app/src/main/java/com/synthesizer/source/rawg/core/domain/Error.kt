@@ -9,4 +9,5 @@ enum class ErrorType {
 data class Error(
     val errorType: ErrorType,
     @StringRes val messageRes: Int,
+    val callback: () -> Unit = {},
 )
