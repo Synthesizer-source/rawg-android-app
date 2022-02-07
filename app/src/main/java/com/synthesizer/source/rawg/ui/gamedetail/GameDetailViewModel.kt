@@ -16,6 +16,7 @@ import com.synthesizer.source.rawg.ui.BaseViewModel
 import com.synthesizer.source.rawg.utils.Event
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.collect
@@ -40,6 +41,8 @@ class GameDetailViewModel @AssistedInject constructor(
     private var _metascoreColor: Int? = null
     val metascoreColor get() = _metascoreColor!!
 
+    private var loadDataJob: Job? = null
+
     @dagger.assisted.AssistedFactory
     interface AssistedFactory {
         fun create(gameId: Int): GameDetailViewModel
@@ -58,20 +61,19 @@ class GameDetailViewModel @AssistedInject constructor(
     }
 
     init {
-        setRetryRequest {
-            loadDetailData()
-        }
         loadDetailData()
     }
 
-    private fun loadDetailData() = viewModelScope.launch {
-        val deffered = listOf(
-            async { fetchGameDetail() },
-            async { fetchGameScreenshots() }
-        )
+    private fun loadDetailData() {
+        loadDataJob = viewModelScope.launch {
+            val deffered = listOf(
+                async { fetchGameDetail() },
+                async { fetchGameScreenshots() }
+            )
 
-        deffered.awaitAll().also {
-            _isLoading.value = Event(false)
+            deffered.awaitAll().also {
+                _isLoading.value = Event(false)
+            }
         }
     }
 
@@ -80,7 +82,10 @@ class GameDetailViewModel @AssistedInject constructor(
             when (it) {
                 is Resource.Loading -> onLoading()
                 is Resource.Success -> onSuccess(it.data)
-                is Resource.Error -> error(it.throwable)
+                is Resource.Error -> error(it.throwable) {
+                    loadDataJob?.cancel()
+                    loadDetailData()
+                }
             }
         }
     }
@@ -90,7 +95,10 @@ class GameDetailViewModel @AssistedInject constructor(
             when (it) {
                 is Resource.Loading -> onLoading()
                 is Resource.Success -> onScreenshotSuccess(it.data)
-                is Resource.Error -> error(it.throwable)
+                is Resource.Error -> error(it.throwable) {
+                    loadDataJob?.cancel()
+                    loadDetailData()
+                }
             }
         }
     }
@@ -125,5 +133,10 @@ class GameDetailViewModel @AssistedInject constructor(
             }
         }
         return icons.distinctBy { it }.toIntArray()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        loadDataJob = null
     }
 }

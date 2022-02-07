@@ -38,7 +38,10 @@ abstract class BaseFragment : Fragment() {
                     viewModel.error.filterNotNull().distinctUntilChanged().collectLatest {
                         println(it)
                         when (it.errorType) {
-                            ErrorType.RETRY -> createRetryableErrorDialog(it.messageRes)
+                            ErrorType.RETRY -> createRetryableErrorDialog(
+                                message = it.messageRes,
+                                callback = it.callback
+                            )
                             ErrorType.NONE -> createSingleOptionErrorDialog(it.messageRes)
                         }
                     }
@@ -47,11 +50,11 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    private fun createRetryableErrorDialog(@StringRes message: Int) {
+    private fun createRetryableErrorDialog(@StringRes message: Int, callback: () -> Unit) {
         RetryableErrorDialog(message,
             object : RetryableErrorDialogListener {
                 override fun retry() {
-                    viewModel.retry()
+                    callback()
                 }
 
                 override fun cancel() {

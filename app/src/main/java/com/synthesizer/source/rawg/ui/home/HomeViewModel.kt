@@ -7,6 +7,7 @@ import com.synthesizer.source.rawg.domain.usecase.FetchGamesBackgroundImagesUseC
 import com.synthesizer.source.rawg.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -46,18 +47,20 @@ class HomeViewModel @Inject constructor(
     )
 
     init {
-        setRetryRequest {
-            fetchGames()
-        }
         fetchGames()
     }
 
-    private fun fetchGames() = viewModelScope.launch {
-        fetchGamesBackgroundImagesUseCase(gameIds).collect {
-            when (it) {
-                is Resource.Loading -> {}
-                is Resource.Success -> _gameImages.emit(it.data)
-                is Resource.Error -> error(it.throwable)
+    private fun fetchGames() {
+        viewModelScope.launch {
+            fetchGamesBackgroundImagesUseCase(gameIds).collect {
+                when (it) {
+                    is Resource.Loading -> {}
+                    is Resource.Success -> _gameImages.emit(it.data)
+                    is Resource.Error -> error(it.throwable) {
+                        cancel()
+                        fetchGames()
+                    }
+                }
             }
         }
     }

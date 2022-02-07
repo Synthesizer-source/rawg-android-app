@@ -53,7 +53,9 @@ class GameListFragment : BaseFragment() {
                 launch {
                     viewModel.uiState.filterNotNull().collect {
                         when (it) {
-                            is UIState.Error -> viewModel.error(it.throwable)
+                            is UIState.Error -> viewModel.error(it.throwable) {
+                                viewModel.fetchGames()
+                            }
                             UIState.Loading -> {
                                 binding.loadingIcon.visibility = View.VISIBLE
                                 binding.gameList.visibility = View.INVISIBLE
@@ -70,7 +72,9 @@ class GameListFragment : BaseFragment() {
                     adapter.loadStateFlow.collectLatest { state ->
                         if (state.refresh is LoadState.Error) {
                             val throwable = (state.refresh as LoadState.Error).error
-                            viewModel.error(throwable)
+                            viewModel.error(throwable) {
+                                viewModel.fetchGames()
+                            }
                         } else if (state.append is LoadState.Loading) {
                             onLoaded()
                         } else if (state.append is LoadState.NotLoading

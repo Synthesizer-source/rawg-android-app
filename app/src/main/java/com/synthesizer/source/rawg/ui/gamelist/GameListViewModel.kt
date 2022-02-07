@@ -29,13 +29,10 @@ class GameListViewModel @Inject constructor(
     val uiState: StateFlow<UIState<PagingData<GameListItem>>?> = _uiState.asStateFlow()
 
     init {
-        setRetryRequest {
-            fetchGames()
-        }
         fetchGames()
     }
 
-    private fun fetchGames() = viewModelScope.launch {
+    fun fetchGames() = viewModelScope.launch {
         val search = savedStateHandle.get<String>("search").orEmpty()
         val ordering = savedStateHandle.get<String>("ordering").orEmpty()
         val dates = savedStateHandle.get<String>("dates").orEmpty()

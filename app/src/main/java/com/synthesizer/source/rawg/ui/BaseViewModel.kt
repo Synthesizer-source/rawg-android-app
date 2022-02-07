@@ -18,42 +18,33 @@ import retrofit2.HttpException
 @HiltViewModel
 open class BaseViewModel @Inject constructor() : ViewModel() {
 
-    private var retryRequest: suspend () -> Unit = {}
-
-    internal inline fun setRetryRequest(crossinline currRequest: suspend () -> Unit) {
-        retryRequest = {
-            currRequest()
-        }
-    }
-
-    fun retry() {
-        viewModelScope.launch {
-            _error.emit(null)
-            retryRequest()
-        }
-    }
-
     private val _error: MutableStateFlow<Error?> = MutableStateFlow(null)
     val error: StateFlow<Error?> = _error.asStateFlow()
 
-    fun error(throwable: Throwable) {
-        if(_error.value != null) return
+    fun error(throwable: Throwable, callback: (() -> Unit)? = null) {
+        if (_error.value != null) return
+        val retryCallback = {
+            viewModelScope.launch {
+                _error.emit(null)
+                callback?.invoke()
+            }
+        }
         val error = when (throwable) {
             is SocketTimeoutException -> Error(
                 ErrorType.RETRY,
                 R.string.request_timeout
-            ) { retry() }
+            ) { retryCallback() }
             is UnknownHostException -> Error(
                 ErrorType.RETRY,
                 R.string.check_your_connection
-            ) { retry() }
+            ) { retryCallback() }
             is HttpException -> {
                 when (throwable.code()) {
                     400 -> Error(ErrorType.NONE, R.string.bad_request)
                     401 -> Error(ErrorType.NONE, R.string.invalid_api_key)
                     403 -> Error(ErrorType.NONE, R.string.bad_request)
-                    404 -> Error(ErrorType.RETRY, R.string.not_found) { retry() }
-                    else -> Error(ErrorType.RETRY, R.string.unexpected_error) { retry() }
+                    404 -> Error(ErrorType.RETRY, R.string.not_found) { retryCallback() }
+                    else -> Error(ErrorType.RETRY, R.string.unexpected_error) { retryCallback() }
                 }
             }
             else -> Error(ErrorType.NONE, R.string.the_server_is_unreachable)
@@ -62,6 +53,5 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch {
             _error.emit(error)
         }
-
     }
 }
