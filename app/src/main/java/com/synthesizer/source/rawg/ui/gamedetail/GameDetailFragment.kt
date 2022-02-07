@@ -5,10 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.synthesizer.source.rawg.databinding.FragmentGameDetailBinding
 import com.synthesizer.source.rawg.ui.BaseFragment
-import com.synthesizer.source.rawg.utils.EventObserver
 import com.synthesizer.source.rawg.utils.addPlatformIcons
 import com.synthesizer.source.rawg.utils.hideChildren
 import com.synthesizer.source.rawg.utils.load
@@ -17,23 +18,18 @@ import com.synthesizer.source.rawg.utils.setMetascore
 import com.synthesizer.source.rawg.utils.setVisibility
 import com.synthesizer.source.rawg.utils.showChildren
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
 class GameDetailFragment : BaseFragment() {
 
-    @Inject
-    lateinit var gameDetailViewModelFactory: GameDetailViewModel.AssistedFactory
-
-    private val args: GameDetailFragmentArgs by navArgs()
-
     private var _binding: FragmentGameDetailBinding? = null
     private val binding get() = _binding!!
 
-    override val viewModel: GameDetailViewModel by viewModels {
-        GameDetailViewModel.provideFactory(gameDetailViewModelFactory, args.gameId)
-    }
+    override val viewModel: GameDetailViewModel by viewModels()
 
     private val adapter by lazy { GameDetailScreenshotAdapter() }
 
@@ -58,27 +54,42 @@ class GameDetailFragment : BaseFragment() {
     }
 
     private fun observe() {
-        viewModel.isLoading.observe(viewLifecycleOwner, EventObserver {
-            binding.constraintLayout.apply { if (it) hideChildren() else showChildren() }
-            binding.loadingIcon.setVisibility(it)
-        })
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.isLoading.filterNotNull().collect {
+                        binding.apply {
+                            if (it) constraintLayout.hideChildren()
+                            else constraintLayout.showChildren()
+                            loadingIcon.setVisibility(it)
+                        }
+                    }
+                }
+                launch {
+                    viewModel.detail.filterNotNull().collect {
+                        binding.apply {
+                            background.loadImage(it.backgroundImage)
+                            name.text = it.name
+                            releaseDate.text = it.releaseDate
+                            publisherName.text = it.publisher
+                            platforms.addPlatformIcons(icons = viewModel.getPlatformIcons())
+                            metascore.setMetascore(
+                                it.metascore,
+                                viewModel.metascoreColor
+                            )
+                            genreChipGroup.load(it.genres)
+                            description.setBodyContent(it.description)
+                            rating.startAnimation(it.rating)
+                        }
+                    }
+                }
 
-        viewModel.screenshots.observe(viewLifecycleOwner, {
-            adapter.submitList(it)
-        })
-
-        viewModel.gameDetail.observe(viewLifecycleOwner, {
-            binding.apply {
-                background.loadImage(it.backgroundImage)
-                name.text = it.name
-                releaseDate.text = it.releaseDate
-                publisherName.text = it.publisher
-                platforms.addPlatformIcons(icons = viewModel.getPlatformIcons())
-                metascore.setMetascore(it.metascore, viewModel.metascoreColor)
-                genreChipGroup.load(it.genres)
-                description.setBodyContent(it.description)
-                rating.startAnimation(it.rating)
+                launch {
+                    viewModel.screenshots.filterNotNull().collect {
+                        adapter.submitList(it)
+                    }
+                }
             }
-        })
+        }
     }
 }

@@ -1,10 +1,7 @@
 package com.synthesizer.source.rawg.ui.gamedetail
 
 import androidx.annotation.ColorRes
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.synthesizer.source.rawg.R
 import com.synthesizer.source.rawg.data.Resource
@@ -13,52 +10,42 @@ import com.synthesizer.source.rawg.domain.model.GameImage
 import com.synthesizer.source.rawg.domain.usecase.FetchGameDetailUseCase
 import com.synthesizer.source.rawg.domain.usecase.FetchGameScreenshotsUseCase
 import com.synthesizer.source.rawg.ui.BaseViewModel
-import com.synthesizer.source.rawg.utils.Event
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class GameDetailViewModel @AssistedInject constructor(
+@HiltViewModel
+class GameDetailViewModel @Inject constructor(
     private val fetchGameDetailUseCase: FetchGameDetailUseCase,
     private val fetchGameScreenshotsUseCase: FetchGameScreenshotsUseCase,
-    @Assisted private val gameId: Int
+    savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
 
-    private var _gameDetail = MutableLiveData<GameDetail>()
-    val gameDetail: LiveData<GameDetail> = _gameDetail
+    private val gameId = savedStateHandle.get<Int>("gameId") ?: 1
 
-    private var _isLoading = MutableLiveData<Event<Boolean>>()
-    val isLoading: LiveData<Event<Boolean>> = _isLoading
+    private var _isLoading = MutableStateFlow<Boolean?>(null)
+    val isLoading: StateFlow<Boolean?> = _isLoading.asStateFlow()
 
-    private var _screenshots = MutableLiveData<List<GameImage>>()
-    val screenshots: LiveData<List<GameImage>> = _screenshots
+    private var _detail = MutableStateFlow<GameDetail?>(null)
+    val detail: StateFlow<GameDetail?>
+        get() = _detail.asStateFlow()
+
+    private var _screenshots = MutableStateFlow<List<GameImage>?>(null)
+    val screenshots: StateFlow<List<GameImage>?>
+        get() = _screenshots.asStateFlow()
 
     @ColorRes
     private var _metascoreColor: Int? = null
     val metascoreColor get() = _metascoreColor!!
 
     private var loadDataJob: Job? = null
-
-    @dagger.assisted.AssistedFactory
-    interface AssistedFactory {
-        fun create(gameId: Int): GameDetailViewModel
-    }
-
-    companion object {
-        fun provideFactory(
-            assistedFactory: AssistedFactory,
-            gameId: Int
-        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return assistedFactory.create(gameId) as T
-            }
-        }
-    }
 
     init {
         loadDetailData()
@@ -72,7 +59,7 @@ class GameDetailViewModel @AssistedInject constructor(
             )
 
             deffered.awaitAll().also {
-                _isLoading.value = Event(false)
+                _isLoading.emit(false)
             }
         }
     }
@@ -105,7 +92,7 @@ class GameDetailViewModel @AssistedInject constructor(
 
     private fun onScreenshotSuccess(data: List<GameImage>) {
         if (!data.isNullOrEmpty()) {
-            _screenshots.value = data
+            viewModelScope.launch { _screenshots.emit(data) }
         }
     }
 
@@ -115,21 +102,25 @@ class GameDetailViewModel @AssistedInject constructor(
             in 51..69 -> R.color.yellow_dark
             else -> R.color.red_dark
         }
-        _gameDetail.value = data
+        viewModelScope.launch {
+            _detail.emit(data)
+        }
     }
 
     private fun onLoading() {
-        if (_isLoading.value == null) _isLoading.value = Event(true)
+        viewModelScope.launch { _isLoading.emit(true) }
     }
 
     fun getPlatformIcons(): IntArray {
         val icons = mutableListOf<Int>()
-        gameDetail.value?.platforms?.forEach {
-            when (it) {
-                "pc" -> icons.add(R.drawable.ic_windows)
-                "playstation" -> icons.add(R.drawable.ic_playstation)
-                "xbox" -> icons.add(R.drawable.ic_xbox)
-                "nintendo" -> icons.add(R.drawable.ic_nintendo)
+        detail.value?.let {
+            it.platforms.forEach { platform ->
+                when (platform) {
+                    "pc" -> icons.add(R.drawable.ic_windows)
+                    "playstation" -> icons.add(R.drawable.ic_playstation)
+                    "xbox" -> icons.add(R.drawable.ic_xbox)
+                    "nintendo" -> icons.add(R.drawable.ic_nintendo)
+                }
             }
         }
         return icons.distinctBy { it }.toIntArray()
