@@ -11,12 +11,13 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.synthesizer.source.rawg.databinding.FragmentGameDetailBinding
 import com.synthesizer.source.rawg.ui.BaseFragment
 import com.synthesizer.source.rawg.utils.addPlatformIcons
+import com.synthesizer.source.rawg.utils.gone
 import com.synthesizer.source.rawg.utils.hideChildren
 import com.synthesizer.source.rawg.utils.load
 import com.synthesizer.source.rawg.utils.loadImage
 import com.synthesizer.source.rawg.utils.setMetascore
-import com.synthesizer.source.rawg.utils.setVisibility
 import com.synthesizer.source.rawg.utils.showChildren
+import com.synthesizer.source.rawg.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
@@ -57,15 +58,6 @@ class GameDetailFragment : BaseFragment() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.isLoading.filterNotNull().collect {
-                        binding.apply {
-                            if (it) constraintLayout.hideChildren()
-                            else constraintLayout.showChildren()
-                            loadingIcon.setVisibility(it)
-                        }
-                    }
-                }
-                launch {
                     viewModel.detail.filterNotNull().collect {
                         binding.apply {
                             background.loadImage(it.backgroundImage)
@@ -90,6 +82,22 @@ class GameDetailFragment : BaseFragment() {
                     }
                 }
             }
+        }
+    }
+
+    override fun onLoading() {
+        super.onLoading()
+        binding.apply {
+            constraintLayout.hideChildren()
+            loadingIcon.visible()
+        }
+    }
+
+    override fun onLoaded() {
+        super.onLoaded()
+        binding.apply {
+            constraintLayout.showChildren()
+            loadingIcon.gone()
         }
     }
 }

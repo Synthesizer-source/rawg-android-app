@@ -54,12 +54,17 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             fetchGamesBackgroundImagesUseCase(gameIds).collect {
                 when (it) {
-                    is Resource.Loading -> {}
-                    is Resource.Success -> _gameImages.emit(it.data)
                     is Resource.Error -> error(it.throwable) {
                         cancel()
                         fetchGames()
                     }
+                    is Resource.Loading -> {
+                        /* no-op */
+                    }
+                    is Resource.Success -> {
+                        _gameImages.emit(it.data)
+                    }
+
                 }
             }
         }

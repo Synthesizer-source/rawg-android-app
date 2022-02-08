@@ -3,7 +3,6 @@ package com.synthesizer.source.rawg.ui.gamelist
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.LoadState
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -17,23 +16,6 @@ import com.synthesizer.source.rawg.utils.setVisibility
 class GameListAdapter : PagingDataAdapter<GameListItem, GameListViewHolder>(DIFF) {
 
     var itemClickListener: (id: Int) -> Unit = {}
-    var firstItemLoadedListener: () -> Unit = {}
-    private var isFirstItemLoaded = false
-
-    init {
-        addLoadStateListener {
-            if (it.refresh is LoadState.Loading) {
-                isFirstItemLoaded = false
-            } else {
-                if (it.append is LoadState.Loading) {
-                    if (!isFirstItemLoaded && itemCount > 0) {
-                        firstItemLoadedListener()
-                        isFirstItemLoaded = true
-                    }
-                }
-            }
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameListViewHolder {
         val itemView =

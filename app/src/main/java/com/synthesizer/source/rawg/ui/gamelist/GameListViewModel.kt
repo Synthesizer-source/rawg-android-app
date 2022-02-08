@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.synthesizer.source.rawg.core.UIState
 import com.synthesizer.source.rawg.domain.model.GameListItem
 import com.synthesizer.source.rawg.domain.usecase.FetchGameListUseCase
 import com.synthesizer.source.rawg.ui.BaseViewModel
@@ -24,25 +23,27 @@ class GameListViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
 
-    private var _uiState: MutableStateFlow<UIState<PagingData<GameListItem>>?> =
+    private var _games: MutableStateFlow<PagingData<GameListItem>?> =
         MutableStateFlow(null)
-    val uiState: StateFlow<UIState<PagingData<GameListItem>>?> = _uiState.asStateFlow()
+    val games: StateFlow<PagingData<GameListItem>?> = _games.asStateFlow()
 
     init {
         fetchGames()
     }
 
-    fun fetchGames() = viewModelScope.launch {
-        val search = savedStateHandle.get<String>("search").orEmpty()
-        val ordering = savedStateHandle.get<String>("ordering").orEmpty()
-        val dates = savedStateHandle.get<String>("dates").orEmpty()
-        fetchGameListUseCase(
-            search = search,
-            ordering = ordering,
-            dates = dates
-        ).cachedIn(viewModelScope)
-            .onStart { _uiState.emit(UIState.Loading) }
-            .catch { _uiState.emit(UIState.Error(it)) }
-            .collect { _uiState.emit(UIState.Success(it)) }
+    fun fetchGames() {
+        viewModelScope.launch {
+            val search = savedStateHandle.get<String>("search").orEmpty()
+            val ordering = savedStateHandle.get<String>("ordering").orEmpty()
+            val dates = savedStateHandle.get<String>("dates").orEmpty()
+            fetchGameListUseCase(
+                search = search,
+                ordering = ordering,
+                dates = dates
+            ).cachedIn(viewModelScope)
+                .onStart { loading() }
+                .catch { error(it) { fetchGames() } }
+                .collect { _games.emit(it) }
+        }
     }
 }

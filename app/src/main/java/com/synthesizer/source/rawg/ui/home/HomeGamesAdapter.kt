@@ -1,6 +1,5 @@
 package com.synthesizer.source.rawg.ui.home
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -27,10 +26,9 @@ class HomeGamesAdapter : RecyclerView.Adapter<HomeScreenItemViewHolder>() {
         return _items.size
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun addItem(data: GameImage) {
         _items.add(data)
-        notifyDataSetChanged()
+        notifyItemChanged(_items.size - 1)
     }
 
     fun getItem(position: Int) = _items[position]

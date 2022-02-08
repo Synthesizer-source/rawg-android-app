@@ -10,9 +10,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
-import com.synthesizer.source.rawg.core.UIState
 import com.synthesizer.source.rawg.databinding.FragmentGameListBinding
 import com.synthesizer.source.rawg.ui.BaseFragment
+import com.synthesizer.source.rawg.utils.gone
+import com.synthesizer.source.rawg.utils.invisible
+import com.synthesizer.source.rawg.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
@@ -44,27 +46,12 @@ class GameListFragment : BaseFragment() {
         adapter.itemClickListener = {
             navigateToGameDetail(it)
         }
-        adapter.firstItemLoadedListener = {
-            binding.loadingIcon.visibility = View.GONE
-        }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.uiState.filterNotNull().collect {
-                        when (it) {
-                            is UIState.Error -> viewModel.error(it.throwable) {
-                                viewModel.fetchGames()
-                            }
-                            UIState.Loading -> {
-                                binding.loadingIcon.visibility = View.VISIBLE
-                                binding.gameList.visibility = View.INVISIBLE
-                            }
-                            is UIState.Success -> {
-
-                                adapter.submitData(lifecycle, it.data)
-                            }
-                        }
+                    viewModel.games.filterNotNull().collect {
+                        adapter.submitData(lifecycle, it)
                     }
                 }
 
@@ -76,12 +63,7 @@ class GameListFragment : BaseFragment() {
                                 viewModel.fetchGames()
                             }
                         } else if (state.append is LoadState.Loading) {
-                            onLoaded()
-                        } else if (state.append is LoadState.NotLoading
-                            && state.append.endOfPaginationReached
-                            && adapter.itemCount == 0
-                        ) {
-//                            onEmpty()
+                            viewModel.loading(false)
                         }
                     }
                 }
@@ -89,9 +71,20 @@ class GameListFragment : BaseFragment() {
         }
     }
 
-    private fun onLoaded() {
-        binding.loadingIcon.visibility = View.GONE
-        binding.gameList.visibility = View.VISIBLE
+    override fun onLoaded() {
+        super.onLoaded()
+        binding.apply {
+            loadingIcon.gone()
+            gameList.visible()
+        }
+    }
+
+    override fun onLoading() {
+        super.onLoading()
+        binding.apply {
+            loadingIcon.visible()
+            gameList.invisible()
+        }
     }
 
     private fun navigateToGameDetail(id: Int) {

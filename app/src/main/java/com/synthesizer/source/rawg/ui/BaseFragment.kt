@@ -35,8 +35,12 @@ abstract class BaseFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
+                    viewModel.loading.filterNotNull().distinctUntilChanged().collectLatest {
+                        if (it) onLoading() else onLoaded()
+                    }
+                }
+                launch {
                     viewModel.error.filterNotNull().distinctUntilChanged().collectLatest {
-                        println(it)
                         when (it.errorType) {
                             ErrorType.RETRY -> createRetryableErrorDialog(
                                 message = it.messageRes,
@@ -48,6 +52,14 @@ abstract class BaseFragment : Fragment() {
                 }
             }
         }
+    }
+
+    open fun onLoading() {
+        /* no-op */
+    }
+
+    open fun onLoaded() {
+        /* no-op */
     }
 
     private fun createRetryableErrorDialog(@StringRes message: Int, callback: () -> Unit) {

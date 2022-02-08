@@ -30,9 +30,6 @@ class GameDetailViewModel @Inject constructor(
 
     private val gameId = savedStateHandle.get<Int>("gameId") ?: 1
 
-    private var _isLoading = MutableStateFlow<Boolean?>(null)
-    val isLoading: StateFlow<Boolean?> = _isLoading.asStateFlow()
-
     private var _detail = MutableStateFlow<GameDetail?>(null)
     val detail: StateFlow<GameDetail?>
         get() = _detail.asStateFlow()
@@ -59,7 +56,7 @@ class GameDetailViewModel @Inject constructor(
             )
 
             deffered.awaitAll().also {
-                _isLoading.emit(false)
+                loading(false)
             }
         }
     }
@@ -67,12 +64,9 @@ class GameDetailViewModel @Inject constructor(
     private suspend fun fetchGameDetail() {
         fetchGameDetailUseCase(gameId).collect {
             when (it) {
-                is Resource.Loading -> onLoading()
+                is Resource.Loading -> loading()
                 is Resource.Success -> onSuccess(it.data)
-                is Resource.Error -> error(it.throwable) {
-                    loadDataJob?.cancel()
-                    loadDetailData()
-                }
+                is Resource.Error -> onError(it.throwable)
             }
         }
     }
@@ -80,35 +74,38 @@ class GameDetailViewModel @Inject constructor(
     private suspend fun fetchGameScreenshots() {
         fetchGameScreenshotsUseCase(gameId).collect {
             when (it) {
-                is Resource.Loading -> onLoading()
+                is Resource.Loading -> loading()
                 is Resource.Success -> onScreenshotSuccess(it.data)
-                is Resource.Error -> error(it.throwable) {
-                    loadDataJob?.cancel()
-                    loadDetailData()
-                }
+                is Resource.Error -> onError(it.throwable)
             }
         }
     }
 
     private fun onScreenshotSuccess(data: List<GameImage>) {
-        if (!data.isNullOrEmpty()) {
-            viewModelScope.launch { _screenshots.emit(data) }
-        }
+        if (data.isNullOrEmpty()) return
+        viewModelScope.launch { _screenshots.emit(data) }
     }
 
     private fun onSuccess(data: GameDetail) {
-        _metascoreColor = when (data.metascore) {
-            in 70..100 -> R.color.green_dark
-            in 51..69 -> R.color.yellow_dark
-            else -> R.color.red_dark
-        }
+        _metascoreColor = getMetascoreColor(data.metascore)
         viewModelScope.launch {
             _detail.emit(data)
         }
     }
 
-    private fun onLoading() {
-        viewModelScope.launch { _isLoading.emit(true) }
+    private fun onError(throwable: Throwable) {
+        error(throwable) {
+            loadDataJob?.cancel()
+            loadDetailData()
+        }
+    }
+
+    private fun getMetascoreColor(score: Int): Int {
+        return when (score) {
+            in 70..100 -> R.color.green_dark
+            in 51..69 -> R.color.yellow_dark
+            else -> R.color.red_dark
+        }
     }
 
     fun getPlatformIcons(): IntArray {
