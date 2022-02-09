@@ -11,7 +11,7 @@
         android:id="@+id/homeMotionLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layoutDescription="@xml/fragment_new_home_scene">
+        app:layoutDescription="@xml/motion_scene_fragment_home">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineStart"
@@ -84,6 +84,7 @@
             android:layout_marginStart="@dimen/_4sdp"
             android:layout_marginTop="@dimen/_36sdp"
             android:drawableLeft="@drawable/ic_baseline_link_24"
+            android:focusable="false"
             android:outlineProvider="background"
             android:text="@string/visit_website"
             android:textColor="@color/gray_soft"
@@ -95,56 +96,26 @@
             app:strokeColor="@color/gray_soft"
             app:strokeWidth="@dimen/_2sdp" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/searchCardView"
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_64sdp"
-            android:backgroundTint="@android:color/transparent"
-            android:paddingHorizontal="0dp"
-            app:cardCornerRadius="@dimen/_16sdp"
-            app:cardUseCompatPadding="true"
+            android:background="@drawable/shape_home_searchview"
+            android:theme="@style/styleSearchView"
+            app:closeIcon="@drawable/ic_baseline_close_24"
+            app:iconifiedByDefault="false"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/headerImage">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/searchTextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusableInTouchMode="true"
-                app:boxCornerRadiusBottomEnd="@dimen/_20sdp"
-                app:boxCornerRadiusBottomStart="@dimen/_20sdp"
-                app:boxCornerRadiusTopEnd="@dimen/_20sdp"
-                app:boxCornerRadiusTopStart="@dimen/_20sdp"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="0dp"
-                app:hintAnimationEnabled="false"
-                app:hintEnabled="false">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/searchEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/gray_normal"
-                    android:drawableEnd="@android:drawable/ic_menu_search"
-                    android:drawableTint="@color/gray_soft"
-                    android:hint="@string/search"
-                    android:imeOptions="actionSearch"
-                    android:inputType="textNoSuggestions"
-                    android:paddingVertical="@dimen/_4sdp"
-                    android:textColor="@color/gray_light"
-                    android:textColorHint="@color/gray_soft"
-                    android:textCursorDrawable="@null"
-                    android:textSize="@dimen/_14sdp" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </com.google.android.material.card.MaterialCardView>
+            app:layout_constraintTop_toBottomOf="@id/headerImage"
+            app:searchIcon="@drawable/ic_baseline_search_24" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/popularGamesButton"
             android:layout_width="0dp"
             android:layout_height="@dimen/_84sdp"
             android:layout_marginHorizontal="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_24sdp"
             android:backgroundTint="@color/gray_normal"
             android:drawableLeft="@drawable/ic_baseline_bar_chart_24"
             android:text="@string/popular_in_2020"
@@ -153,7 +124,7 @@
             app:cornerRadius="@dimen/_16sdp"
             app:layout_constraintEnd_toEndOf="@id/guidelineCenter"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/searchCardView"
+            app:layout_constraintTop_toBottomOf="@id/searchView"
             app:rippleColor="@color/button_ripple_color" />
 
         <com.google.android.material.button.MaterialButton
@@ -161,6 +132,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/_84sdp"
             android:layout_marginHorizontal="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_24sdp"
             android:backgroundTint="@color/gray_normal"
             android:drawableLeft="@drawable/ic_trophy"
             android:text="@string/best_of_the_year"
@@ -169,7 +141,7 @@
             app:cornerRadius="@dimen/_16sdp"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineCenter"
-            app:layout_constraintTop_toBottomOf="@id/searchCardView"
+            app:layout_constraintTop_toBottomOf="@id/searchView"
             app:rippleColor="@color/button_ripple_color" />
 
         <TextView

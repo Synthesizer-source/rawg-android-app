@@ -7,6 +7,12 @@
         <item name="chipStyle">@style/styleGameDetailGenreChip</item>
     </style>
 
+    <style name="styleSearchView" parent="Widget.AppCompat.SearchView">
+        <item name="android:textColor">@color/gray_light</item>
+        <item name="android:editTextColor">@color/gray_light</item>
+        <item name="android:textColorHint">@color/gray_light</item>
+    </style>
+
     <style name="styleGameDetailGenreChip" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="android:textSize">@dimen/_10sdp</item>
         <item name="chipBackgroundColor">@color/gray_normal</item>

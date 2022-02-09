@@ -26,8 +26,12 @@ class HomeViewModel @Inject constructor(
     val gamesImages: SharedFlow<GameImage> = _gameImages.asSharedFlow()
 
     // 0 : Off , 1 : On
-    private val _searchViewState: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val searchViewState: StateFlow<Boolean> = _searchViewState.asStateFlow()
+    private val _searchViewState: MutableStateFlow<SearchViewState?> = MutableStateFlow(null)
+    val searchViewState: StateFlow<SearchViewState?> = _searchViewState.asStateFlow()
+
+    enum class SearchViewState {
+        ANIM_TO_START, ANIM_TO_END, FOCUS, NO_FOCUS, TOP, BOTTOM
+    }
 
     private val gameIds = listOf(
         28,
@@ -67,18 +71,6 @@ class HomeViewModel @Inject constructor(
 
                 }
             }
-        }
-    }
-
-    fun setState(state: Boolean) {
-        viewModelScope.launch {
-            _searchViewState.emit(state)
-        }
-    }
-
-    fun switchSearchState() {
-        viewModelScope.launch {
-            _searchViewState.emit(!_searchViewState.value)
         }
     }
 }
