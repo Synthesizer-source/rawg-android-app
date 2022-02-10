@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.synthesizer.source.rawg.databinding.FragmentHomeBinding
 import com.synthesizer.source.rawg.ui.BaseFragment
-import com.synthesizer.source.rawg.utils.loadImage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -52,36 +51,38 @@ class HomeFragment : BaseFragment() {
             homeScreenGames.adapter = adapter
             viewLifecycleOwner.lifecycleScope.launchWhenCreated {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.gamesImages.collect {
-                        homeScreenGames.post {
-                            adapter.addItem(it)
-                        }
+                    viewModel.images.collect {
+                        adapter.submitList(it)
                     }
                 }
             }
         }
     }
 
-    private fun registerListeners() {
+    private fun registerListeners() = binding.apply {
+        adapter.imageLoadedListener = {
+            if (selectedGameImageView.drawable == null)
+                drawSelectedImage(homeScreenGames.currentItem)
+        }
 
-        binding.homeScreenGames.registerOnPageChangeCallback(object :
+        homeScreenGames.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
 
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                binding.selectedGameImageView.loadImage(adapter.getItem(position).imageUrl)
+                drawSelectedImage(position)
             }
         })
 
-        binding.searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
-            binding.visitWebSiteButton.isEnabled = !hasFocus
-            binding.popularGamesButton.isEnabled = !hasFocus
-            binding.bestOfTheYearGamesButton.isEnabled = !hasFocus
+        searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
+            visitWebSiteButton.isEnabled = !hasFocus
+            popularGamesButton.isEnabled = !hasFocus
+            bestOfTheYearGamesButton.isEnabled = !hasFocus
             if (!hasFocus) transitionToStart()
             else scrollToTop()
         }
 
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 navigateToSearchResult()
                 return true
@@ -93,19 +94,19 @@ class HomeFragment : BaseFragment() {
 
         })
 
-        binding.visitWebSiteButton.setOnClickListener {
+        visitWebSiteButton.setOnClickListener {
             goToRAWGWebsite()
         }
 
-        binding.bestOfTheYearGamesButton.setOnClickListener {
+        bestOfTheYearGamesButton.setOnClickListener {
             navigateToBestOfTheYear()
         }
 
-        binding.popularGamesButton.setOnClickListener {
+        popularGamesButton.setOnClickListener {
             navigateToPopularIn2020()
         }
 
-        binding.seeMoreGamesButton.setOnClickListener {
+        seeMoreGamesButton.setOnClickListener {
             navigateToAllGames()
         }
     }
@@ -171,5 +172,16 @@ class HomeFragment : BaseFragment() {
     private fun navigateToAllGames() {
         val action = HomeFragmentDirections.showGames()
         findNavController().navigate(action)
+    }
+
+    private fun drawSelectedImage(position: Int) {
+        binding.apply {
+            val viewHolder =
+                (homeScreenGames[0] as RecyclerView).findViewHolderForAdapterPosition(
+                    position
+                ) as HomeGamesAdapter.ViewHolder
+            val drawable = viewHolder.binding.homeScreenGameImage.drawable
+            selectedGameImageView.setImageDrawable(drawable)
+        }
     }
 }

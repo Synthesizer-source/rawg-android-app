@@ -4,17 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@null"
     android:layout_marginHorizontal="@dimen/_14sdp"
+    android:background="@null"
     app:cardBackgroundColor="@android:color/transparent"
     app:cardCornerRadius="@dimen/_24sdp"
     app:cardElevation="@dimen/_4sdp">
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:shimmer_auto_start="true"
+        app:shimmer_duration="1000">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/gray_light" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <ImageView
         android:id="@+id/homeScreenGameImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
+        tools:ignore="ContentDescription"
         tools:src="@tools:sample/avatars"
-        tools:ignore="ContentDescription" />
+        tools:visibility="invisible" />
 </com.google.android.material.card.MaterialCardView>

@@ -9,11 +9,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -22,16 +19,8 @@ class HomeViewModel @Inject constructor(
     private val fetchGamesBackgroundImagesUseCase: FetchGamesBackgroundImagesUseCase
 ) : BaseViewModel() {
 
-    private val _gameImages: MutableSharedFlow<GameImage> = MutableSharedFlow()
-    val gamesImages: SharedFlow<GameImage> = _gameImages.asSharedFlow()
-
-    // 0 : Off , 1 : On
-    private val _searchViewState: MutableStateFlow<SearchViewState?> = MutableStateFlow(null)
-    val searchViewState: StateFlow<SearchViewState?> = _searchViewState.asStateFlow()
-
-    enum class SearchViewState {
-        ANIM_TO_START, ANIM_TO_END, FOCUS, NO_FOCUS, TOP, BOTTOM
-    }
+    private val _images: MutableSharedFlow<List<GameImage>> = MutableSharedFlow()
+    val images: SharedFlow<List<GameImage>> = _images.asSharedFlow()
 
     private val gameIds = listOf(
         28,
@@ -51,24 +40,19 @@ class HomeViewModel @Inject constructor(
     )
 
     init {
-        fetchGames()
+        fetchGameImages()
     }
 
-    private fun fetchGames() {
+    private fun fetchGameImages() {
         viewModelScope.launch {
             fetchGamesBackgroundImagesUseCase(gameIds).collect {
                 when (it) {
                     is Resource.Error -> error(it.throwable) {
                         cancel()
-                        fetchGames()
+                        fetchGameImages()
                     }
-                    is Resource.Loading -> {
-                        /* no-op */
-                    }
-                    is Resource.Success -> {
-                        _gameImages.emit(it.data)
-                    }
-
+                    is Resource.Loading -> _images.emit(it.data.orEmpty())
+                    is Resource.Success -> _images.emit(it.data)
                 }
             }
         }
