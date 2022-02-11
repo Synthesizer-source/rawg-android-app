@@ -31,7 +31,7 @@
             app:destination="@id/gameDetailFragment" />
         <argument
             android:name="searchParams"
-            app:argType="com.synthesizer.source.rawg.core.domain.SearchParams"
+            app:argType="com.synthesizer.source.rawg.core.domain.model.SearchParams"
             app:nullable="true" />
     </fragment>
 </navigation>

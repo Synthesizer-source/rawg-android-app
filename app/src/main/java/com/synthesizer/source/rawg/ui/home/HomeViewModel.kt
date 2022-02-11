@@ -1,7 +1,7 @@
 package com.synthesizer.source.rawg.ui.home
 
 import androidx.lifecycle.viewModelScope
-import com.synthesizer.source.rawg.core.domain.SearchParams
+import com.synthesizer.source.rawg.core.domain.model.SearchParams
 import com.synthesizer.source.rawg.data.Resource
 import com.synthesizer.source.rawg.domain.model.GameImage
 import com.synthesizer.source.rawg.domain.usecase.FetchGamesBackgroundImagesUseCase

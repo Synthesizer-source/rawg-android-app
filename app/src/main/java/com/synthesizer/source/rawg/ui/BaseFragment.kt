@@ -9,7 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.synthesizer.source.rawg.core.domain.ErrorType
+import com.synthesizer.source.rawg.core.domain.model.ErrorType
 import com.synthesizer.source.rawg.ui.error.ErrorDialogListener
 import com.synthesizer.source.rawg.ui.error.RetryableErrorDialog
 import com.synthesizer.source.rawg.ui.error.RetryableErrorDialogListener

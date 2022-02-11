@@ -17,7 +17,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.synthesizer.source.rawg.core.domain.SearchParams
+import com.synthesizer.source.rawg.core.domain.model.SearchParams
 import com.synthesizer.source.rawg.databinding.FragmentHomeBinding
 import com.synthesizer.source.rawg.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint

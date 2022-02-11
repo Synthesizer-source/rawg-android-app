@@ -1,10 +1,6 @@
-package com.synthesizer.source.rawg.core.domain
+package com.synthesizer.source.rawg.core.domain.model
 
 import androidx.annotation.StringRes
-
-enum class ErrorType {
-    RETRY, NONE
-}
 
 data class Error(
     val errorType: ErrorType,

@@ -1,4 +1,4 @@
-package com.synthesizer.source.rawg.core.domain
+package com.synthesizer.source.rawg.core.domain.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
