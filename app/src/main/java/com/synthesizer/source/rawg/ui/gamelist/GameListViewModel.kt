@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.synthesizer.source.rawg.core.domain.SearchParams
 import com.synthesizer.source.rawg.domain.model.GameListItem
 import com.synthesizer.source.rawg.domain.usecase.FetchGameListUseCase
 import com.synthesizer.source.rawg.ui.BaseViewModel
@@ -33,17 +34,17 @@ class GameListViewModel @Inject constructor(
 
     fun fetchGames() {
         viewModelScope.launch {
-            val search = savedStateHandle.get<String>("search").orEmpty()
-            val ordering = savedStateHandle.get<String>("ordering").orEmpty()
-            val dates = savedStateHandle.get<String>("dates").orEmpty()
-            fetchGameListUseCase(
-                search = search,
-                ordering = ordering,
-                dates = dates
-            ).cachedIn(viewModelScope)
-                .onStart { loading() }
-                .catch { error(it) { fetchGames() } }
-                .collect { _games.emit(it) }
+            val searchParams = savedStateHandle.get<SearchParams>("searchParams")
+            searchParams?.apply {
+                fetchGameListUseCase(
+                    search = search,
+                    ordering = ordering,
+                    dates = dates
+                ).cachedIn(viewModelScope)
+                    .onStart { loading() }
+                    .catch { error(it) { fetchGames() } }
+                    .collect { _games.emit(it) }
+            }
         }
     }
 }

@@ -30,16 +30,8 @@
             android:id="@+id/showGameDetail"
             app:destination="@id/gameDetailFragment" />
         <argument
-            android:name="search"
-            android:defaultValue=""
-            app:argType="string" />
-        <argument
-            android:name="ordering"
-            android:defaultValue=""
-            app:argType="string" />
-        <argument
-            android:name="dates"
-            android:defaultValue=""
-            app:argType="string" />
+            android:name="searchParams"
+            app:argType="com.synthesizer.source.rawg.core.domain.SearchParams"
+            app:nullable="true" />
     </fragment>
 </navigation>

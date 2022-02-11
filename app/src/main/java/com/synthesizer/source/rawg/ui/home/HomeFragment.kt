@@ -17,10 +17,13 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.synthesizer.source.rawg.core.domain.SearchParams
 import com.synthesizer.source.rawg.databinding.FragmentHomeBinding
 import com.synthesizer.source.rawg.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -51,8 +54,15 @@ class HomeFragment : BaseFragment() {
             homeScreenGames.adapter = adapter
             viewLifecycleOwner.lifecycleScope.launchWhenCreated {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.images.collect {
-                        adapter.submitList(it)
+                    launch {
+                        viewModel.images.filterNotNull().collect {
+                            adapter.submitList(it)
+                        }
+                    }
+                    launch {
+                        viewModel.searchParams.collect {
+                            navigateToList(it)
+                        }
                     }
                 }
             }
@@ -78,13 +88,13 @@ class HomeFragment : BaseFragment() {
             visitWebSiteButton.isEnabled = !hasFocus
             popularGamesButton.isEnabled = !hasFocus
             bestOfTheYearGamesButton.isEnabled = !hasFocus
-            if (!hasFocus) transitionToStart()
+            if (!hasFocus) homeMotionLayout.transitionToStart()
             else scrollToTop()
         }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                navigateToSearchResult()
+                viewModel.searchQuery(query.orEmpty())
                 return true
             }
 
@@ -99,15 +109,15 @@ class HomeFragment : BaseFragment() {
         }
 
         bestOfTheYearGamesButton.setOnClickListener {
-            navigateToBestOfTheYear()
+            viewModel.searchBestGamesOfTheYear()
         }
 
         popularGamesButton.setOnClickListener {
-            navigateToPopularIn2020()
+            viewModel.searchPopularGamesIn2020()
         }
 
         seeMoreGamesButton.setOnClickListener {
-            navigateToAllGames()
+            viewModel.seeMoreGames()
         }
     }
 
@@ -124,19 +134,11 @@ class HomeFragment : BaseFragment() {
         }
 
         valueAnimator.doOnEnd {
-            transitionToEnd()
+            binding.homeMotionLayout.transitionToEnd()
             it.removeAllListeners()
         }
 
         valueAnimator.start()
-    }
-
-    private fun transitionToStart() {
-        binding.homeMotionLayout.transitionToStart()
-    }
-
-    private fun transitionToEnd() {
-        binding.homeMotionLayout.transitionToEnd()
     }
 
     private fun goToRAWGWebsite() {
@@ -145,32 +147,8 @@ class HomeFragment : BaseFragment() {
         startActivity(intent)
     }
 
-    private fun navigateToSearchResult() {
-        val action =
-            HomeFragmentDirections.showGames(search = binding.searchView.query.toString())
-        findNavController().navigate(action)
-    }
-
-    private fun navigateToPopularIn2020() {
-        val action = HomeFragmentDirections.showGames(
-            ordering = "-metacritic,-rating",
-            dates = "2020-01-01,2020-12-31"
-        )
-        findNavController().navigate(action)
-    }
-
-
-    private fun navigateToBestOfTheYear() {
-        val action = HomeFragmentDirections.showGames(
-            ordering = "-added",
-            dates = "2021-01-01,2021-12-31"
-        )
-
-        findNavController().navigate(action)
-    }
-
-    private fun navigateToAllGames() {
-        val action = HomeFragmentDirections.showGames()
+    private fun navigateToList(searchParams: SearchParams) {
+        val action = HomeFragmentDirections.showGames(searchParams)
         findNavController().navigate(action)
     }
 
