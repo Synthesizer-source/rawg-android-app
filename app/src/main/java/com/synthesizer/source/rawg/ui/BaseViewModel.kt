@@ -3,8 +3,6 @@ package com.synthesizer.source.rawg.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.synthesizer.source.rawg.core.domain.model.Error
-import com.synthesizer.source.rawg.core.domain.usecase.GetErrorMessageResUseCase
-import com.synthesizer.source.rawg.core.domain.usecase.GetErrorTypeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,12 +12,6 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 open class BaseViewModel @Inject constructor() : ViewModel() {
-
-    @Inject
-    lateinit var getErrorTypeUseCase: GetErrorTypeUseCase
-
-    @Inject
-    lateinit var getErrorMessageResUseCase: GetErrorMessageResUseCase
 
     private val _error: MutableStateFlow<Error?> = MutableStateFlow(null)
     val error: StateFlow<Error?>
@@ -43,9 +35,8 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
                 callback?.invoke()
             }
         }
-        val errorType = getErrorTypeUseCase(throwable)
-        val errorMessageRes = getErrorMessageResUseCase(throwable)
-        val error = Error(errorType = errorType, messageRes = errorMessageRes) { retryCallback() }
+
+        val error = Error(throwable) { retryCallback() }
 
         viewModelScope.launch {
             _error.emit(error)

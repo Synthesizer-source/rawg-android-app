@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.synthesizer.source.rawg.core.domain.model.ErrorType
+import com.synthesizer.source.rawg.core.ui.viewstate.ErrorViewState
 import com.synthesizer.source.rawg.ui.error.ErrorDialogListener
 import com.synthesizer.source.rawg.ui.error.RetryableErrorDialog
 import com.synthesizer.source.rawg.ui.error.RetryableErrorDialogListener
@@ -41,12 +42,15 @@ abstract class BaseFragment : Fragment() {
                 }
                 launch {
                     viewModel.error.filterNotNull().distinctUntilChanged().collectLatest {
-                        when (it.errorType) {
+                        val errorViewState = ErrorViewState(it)
+                        val errorType = errorViewState.getErrorType()
+                        val errorMessage = errorViewState.getErrorMessage()
+                        when (errorType) {
                             ErrorType.RETRY -> createRetryableErrorDialog(
-                                message = it.messageRes,
+                                message = errorMessage,
                                 callback = it.callback
                             )
-                            ErrorType.NONE -> createSingleOptionErrorDialog(it.messageRes)
+                            ErrorType.NONE -> createSingleOptionErrorDialog(errorMessage)
                         }
                     }
                 }
