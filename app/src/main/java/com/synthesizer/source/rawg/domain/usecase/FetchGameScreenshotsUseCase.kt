@@ -4,9 +4,8 @@ import com.synthesizer.source.rawg.data.Resource
 import com.synthesizer.source.rawg.data.repository.GameDetailRepository
 import com.synthesizer.source.rawg.domain.model.GameImage
 import com.synthesizer.source.rawg.utils.map
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
+import kotlinx.coroutines.flow.flow
 
 class FetchGameScreenshotsUseCase @Inject constructor(private val repository: GameDetailRepository) {
 
@@ -18,7 +17,5 @@ class FetchGameScreenshotsUseCase @Inject constructor(private val repository: Ga
                 }
             }
         })
-    }.onStart {
-        emit(Resource.Loading())
     }
 }

@@ -59,26 +59,24 @@ class GameDetailFragment : BaseFragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.detail.filterNotNull().collect {
+                        val viewState = GameDetailViewState(it.detail)
+                        val detail = it.detail
+                        val screenshots = it.screenshots
                         binding.apply {
-                            background.loadImage(it.backgroundImage)
-                            name.text = it.name
-                            releaseDate.text = it.releaseDate
-                            publisherName.text = it.publisher
-                            platforms.addPlatformIcons(icons = viewModel.getPlatformIcons())
+                            background.loadImage(detail.backgroundImage)
+                            name.text = detail.name
+                            releaseDate.text = detail.releaseDate
+                            publisherName.text = detail.publisher
+                            platforms.addPlatformIcons(icons = viewState.getPlatformIcons())
                             metascore.setMetascore(
-                                it.metascore,
-                                viewModel.metascoreColor
+                                detail.metascore,
+                                viewState.getMetascoreColor()
                             )
-                            genreChipGroup.load(it.genres)
-                            description.setBodyContent(it.description)
-                            rating.startAnimation(it.rating)
+                            genreChipGroup.load(detail.genres)
+                            description.setBodyContent(detail.description)
+                            rating.startAnimation(detail.rating)
+                            adapter.submitList(screenshots)
                         }
-                    }
-                }
-
-                launch {
-                    viewModel.screenshots.filterNotNull().collect {
-                        adapter.submitList(it)
                     }
                 }
             }
