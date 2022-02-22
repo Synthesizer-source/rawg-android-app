@@ -1,11 +1,11 @@
 package com.synthesizer.source.rawg.domain.mapper
 
 import com.synthesizer.source.rawg.data.remote.GameDetailResponse
-import com.synthesizer.source.rawg.domain.model.GameDetail
+import com.synthesizer.source.rawg.domain.model.GameDetailInfo
 import com.synthesizer.source.rawg.utils.convertToDate
 
-fun GameDetailResponse.toDomain(): GameDetail {
-    return GameDetail(
+fun GameDetailResponse.toDomain(): GameDetailInfo {
+    return GameDetailInfo(
         id = id,
         name = name,
         backgroundImage = background_image,

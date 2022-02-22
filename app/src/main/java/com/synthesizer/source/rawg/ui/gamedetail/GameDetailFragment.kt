@@ -58,19 +58,18 @@ class GameDetailFragment : BaseFragment() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.detail.filterNotNull().collect {
-                        val viewState = GameDetailViewState(it.detail)
-                        val detail = it.detail
-                        val screenshots = it.screenshots
+                    viewModel.uiState.filterNotNull().collect {
+                        val detail = it.detail.info
+                        val screenshots = it.detail.screenshots
                         binding.apply {
                             background.loadImage(detail.backgroundImage)
                             name.text = detail.name
                             releaseDate.text = detail.releaseDate
                             publisherName.text = detail.publisher
-                            platforms.addPlatformIcons(icons = viewState.getPlatformIcons())
+                            platforms.addPlatformIcons(icons = it.getPlatformIcons())
                             metascore.setMetascore(
                                 detail.metascore,
-                                viewState.getMetascoreColor()
+                                it.getMetascoreColor()
                             )
                             genreChipGroup.load(detail.genres)
                             description.setBodyContent(detail.description)

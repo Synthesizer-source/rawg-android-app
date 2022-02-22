@@ -3,7 +3,7 @@ package com.synthesizer.source.rawg.ui.gamedetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.synthesizer.source.rawg.data.Resource
-import com.synthesizer.source.rawg.domain.model.GameDetailWithScreenshots
+import com.synthesizer.source.rawg.domain.model.GameDetail
 import com.synthesizer.source.rawg.domain.usecase.FetchGameDetailWithScreenshotsUseCase
 import com.synthesizer.source.rawg.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,9 +23,9 @@ class GameDetailViewModel @Inject constructor(
 
     private val gameId = savedStateHandle.get<Int>("gameId") ?: 1
 
-    private var _detail = MutableStateFlow<GameDetailWithScreenshots?>(null)
-    val detail: StateFlow<GameDetailWithScreenshots?>
-        get() = _detail.asStateFlow()
+    private var _uiState = MutableStateFlow<GameDetailUiState?>(null)
+    val uiState: StateFlow<GameDetailUiState?>
+        get() = _uiState.asStateFlow()
 
     private var job: Job? = null
 
@@ -45,8 +45,8 @@ class GameDetailViewModel @Inject constructor(
         }
     }
 
-    private suspend fun onSuccessNewGameDetail(newGameDetail: GameDetailWithScreenshots) {
-        _detail.emit(newGameDetail)
+    private suspend fun onSuccessNewGameDetail(detail: GameDetail) {
+        _uiState.emit(GameDetailUiState(detail))
         loading(false)
     }
 
