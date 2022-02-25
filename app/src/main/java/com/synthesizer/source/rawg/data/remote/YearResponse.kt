@@ -1,7 +1,12 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class YearResponse(
-    val count: Int,
-    val nofollow: Boolean,
-    val year: Int
+import com.google.gson.annotations.SerializedName
+
+class YearResponse(
+    @SerializedName("count")
+    val count: Int? = null,
+    @SerializedName("nofollow")
+    val nofollow: Boolean? = null,
+    @SerializedName("year")
+    val year: Int? = null
 )

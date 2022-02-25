@@ -1,10 +1,18 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class AddedByStatusResponse(
-    val beaten: Int,
-    val dropped: Int,
-    val owned: Int,
-    val playing: Int,
-    val toplay: Int,
-    val yet: Int
+import com.google.gson.annotations.SerializedName
+
+class AddedByStatusResponse(
+    @SerializedName("beaten")
+    val beaten: Int? = null,
+    @SerializedName("dropped")
+    val dropped: Int? = null,
+    @SerializedName("owned")
+    val owned: Int? = null,
+    @SerializedName("playing")
+    val playing: Int? = null,
+    @SerializedName("toplay")
+    val toplay: Int? = null,
+    @SerializedName("yet")
+    val yet: Int? = null
 )

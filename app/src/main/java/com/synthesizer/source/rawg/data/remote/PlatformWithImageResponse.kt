@@ -1,12 +1,22 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class PlatformWithImageResponse(
-    val games_count: Int,
-    val id: Int,
-    val image: Any,
-    val image_background: String,
-    val name: String,
-    val slug: String,
-    val year_end: Any,
-    val year_start: Int
+import com.google.gson.annotations.SerializedName
+
+class PlatformWithImageResponse(
+    @SerializedName("games_count")
+    val gamesCount: Int? = null,
+    @SerializedName("id")
+    val id: Int? = null,
+    @SerializedName("image")
+    val image: Any? = null,
+    @SerializedName("image_background")
+    val imageBackground: String? = null,
+    @SerializedName("name")
+    val name: String? = null,
+    @SerializedName("slug")
+    val slug: String? = null,
+    @SerializedName("year_end")
+    val yearEnd: Any? = null,
+    @SerializedName("year_start")
+    val yearStart: Int? = null
 )

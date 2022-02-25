@@ -10,7 +10,10 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class FetchGameListUseCase @Inject constructor(private val repository: GameListRepository) {
+class FetchGameListUseCase @Inject constructor(
+    private val repository: GameListRepository,
+    private val gameListItemValidationUseCase: GameListItemValidationUseCase
+) {
 
     operator fun invoke(
         search: String,
@@ -19,7 +22,7 @@ class FetchGameListUseCase @Inject constructor(private val repository: GameListR
     ): Flow<PagingData<GameListItem>> {
         return repository.fetchGames(search, ordering, dates).map { pagingData ->
             pagingData.filter {
-                it.isValid()
+                gameListItemValidationUseCase(it)
             }.map {
                 it.toDomain()
             }

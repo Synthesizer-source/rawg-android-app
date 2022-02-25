@@ -1,58 +1,114 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class GameDetailResponse(
-    val achievements_count: Int,
-    val added: Int,
-    val added_by_status: AddedByStatusResponse,
-    val additions_count: Int,
-    val alternative_names: List<String>,
-    val background_image: String,
-    val background_image_additional: String,
-    val clip: Any,
-    val creators_count: Int,
-    val description: String,
-    val description_raw: String,
-    val developers: List<DeveloperResponse>,
-    val dominant_color: String,
-    val esrb_rating: EsrbRatingResponse?,
-    val game_series_count: Int,
-    val genres: List<GenreResponse>,
-    val id: Int,
-    val metacritic: Int,
-    val metacritic_platforms: List<MetacriticPlatformResponse>,
-    val metacritic_url: String,
-    val movies_count: Int,
-    val name: String,
-    val name_original: String,
-    val parent_achievements_count: Int,
-    val parent_platforms: List<ParentPlatformResponse>,
-    val parents_count: Int,
-    val platforms: List<PlatformWithRequirementsResponse>,
-    val playtime: Int,
-    val publishers: List<PublisherResponse>,
-    val rating: Double,
-    val rating_top: Int,
-    val ratings: List<RatingResponse>,
-    val ratings_count: Int,
-    val reactions: ReactionsResponse,
-    val reddit_count: Int,
-    val reddit_description: String,
-    val reddit_logo: String,
-    val reddit_name: String,
-    val reddit_url: String,
-    val released: String,
-    val reviews_count: Int,
-    val reviews_text_count: Int,
-    val saturated_color: String,
-    val screenshots_count: Int,
-    val slug: String,
-    val stores: List<StoreResponse>,
-    val suggestions_count: Int,
-    val tags: List<TagResponse>,
-    val tba: Boolean,
-    val twitch_count: Int,
-    val updated: String,
-    val user_game: Any,
-    val website: String,
-    val youtube_count: Int
+import com.google.gson.annotations.SerializedName
+
+class GameDetailResponse(
+    @SerializedName("achievements_count")
+    val achievementsCount: Int? = null,
+    @SerializedName("added")
+    val added: Int? = null,
+    @SerializedName("added_by_status")
+    val addedByStatus: AddedByStatusResponse? = null,
+    @SerializedName("additions_count")
+    val additionsCount: Int? = null,
+    @SerializedName("alternative_names")
+    val alternativeNames: List<String>? = null,
+    @SerializedName("background_image")
+    val backgroundImage: String? = null,
+    @SerializedName("background_image_additional")
+    val backgroundImageAdditional: String? = null,
+    @SerializedName("clip")
+    val clip: Any? = null,
+    @SerializedName("creators_count")
+    val creatorsCount: Int? = null,
+    @SerializedName("description")
+    val description: String? = null,
+    @SerializedName("description_raw")
+    val descriptionRaw: String? = null,
+    @SerializedName("developers")
+    val developers: List<DeveloperResponse>? = null,
+    @SerializedName("dominant_color")
+    val dominantColor: String? = null,
+    @SerializedName("esrb_rating")
+    val esrbRating: EsrbRatingResponse? = null,
+    @SerializedName("game_series_count")
+    val gameSeriesCount: Int? = null,
+    @SerializedName("genres")
+    val genres: List<GenreResponse>? = null,
+    @SerializedName("id")
+    val id: Int? = null,
+    @SerializedName("metacritic")
+    val metacritic: Int? = null,
+    @SerializedName("metacritic_platforms")
+    val metacriticPlatforms: List<MetacriticPlatformResponse>? = null,
+    @SerializedName("metacritic_url")
+    val metacriticUrl: String? = null,
+    @SerializedName("movies_count")
+    val moviesCount: Int? = null,
+    @SerializedName("name")
+    val name: String? = null,
+    @SerializedName("name_original")
+    val nameOriginal: String? = null,
+    @SerializedName("parent_achievements_count")
+    val parentAchievementsCount: Int? = null,
+    @SerializedName("parent_platforms")
+    val parentPlatforms: List<ParentPlatformResponse>? = null,
+    @SerializedName("parents_count")
+    val parentsCount: Int? = null,
+    @SerializedName("platforms")
+    val platforms: List<PlatformWithRequirementsResponse>? = null,
+    @SerializedName("playtime")
+    val playtime: Int? = null,
+    @SerializedName("publishers")
+    val publishers: List<PublisherResponse>? = null,
+    @SerializedName("rating")
+    val rating: Double? = null,
+    @SerializedName("rating_top")
+    val ratingTop: Int? = null,
+    @SerializedName("ratings")
+    val ratings: List<RatingResponse>? = null,
+    @SerializedName("ratings_count")
+    val ratingsCount: Int? = null,
+    @SerializedName("reactions")
+    val reactions: ReactionsResponse? = null,
+    @SerializedName("reddit_count")
+    val redditCount: Int? = null,
+    @SerializedName("reddit_description")
+    val redditDescription: String? = null,
+    @SerializedName("reddit_logo")
+    val redditLogo: String? = null,
+    @SerializedName("reddit_name")
+    val redditName: String? = null,
+    @SerializedName("reddit_url")
+    val redditUrl: String? = null,
+    @SerializedName("released")
+    val released: String? = null,
+    @SerializedName("reviews_count")
+    val reviewsCount: Int? = null,
+    @SerializedName("reviews_text_count")
+    val reviewsTextCount: Int? = null,
+    @SerializedName("saturated_color")
+    val saturatedColor: String? = null,
+    @SerializedName("screenshots_count")
+    val screenshotsCount: Int? = null,
+    @SerializedName("slug")
+    val slug: String? = null,
+    @SerializedName("stores")
+    val stores: List<StoreResponse>? = null,
+    @SerializedName("suggestions_count")
+    val suggestionsCount: Int? = null,
+    @SerializedName("tags")
+    val tags: List<TagResponse>? = null,
+    @SerializedName("tba")
+    val tba: Boolean? = null,
+    @SerializedName("twitch_count")
+    val twitchCount: Int? = null,
+    @SerializedName("updated")
+    val updated: String? = null,
+    @SerializedName("user_game")
+    val userGame: Any? = null,
+    @SerializedName("website")
+    val website: String? = null,
+    @SerializedName("youtube_count")
+    val youtubeCount: Int? = null
 )

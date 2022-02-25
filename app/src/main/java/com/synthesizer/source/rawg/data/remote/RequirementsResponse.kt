@@ -1,6 +1,10 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class RequirementsResponse(
-    val minimum: String?,
-    val recommended: String?
+import com.google.gson.annotations.SerializedName
+
+class RequirementsResponse(
+    @SerializedName("minimum")
+    val minimum: String? = null,
+    @SerializedName("recommended")
+    val recommended: String? = null
 )

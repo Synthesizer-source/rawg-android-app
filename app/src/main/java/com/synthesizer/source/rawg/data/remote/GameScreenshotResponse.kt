@@ -1,3 +1,10 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class GameScreenshotResponse(val count: Int, val results: List<ScreenshotResponse>)
+import com.google.gson.annotations.SerializedName
+
+class GameScreenshotResponse(
+    @SerializedName("count")
+    val count: Int? = null,
+    @SerializedName("results")
+    val results: List<ScreenshotResponse>? = null
+)

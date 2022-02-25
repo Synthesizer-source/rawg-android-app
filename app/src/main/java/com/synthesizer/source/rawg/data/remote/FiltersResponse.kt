@@ -1,5 +1,8 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class FiltersResponse(
-    val yearDetails: List<YearDetailResponse>
+import com.google.gson.annotations.SerializedName
+
+class FiltersResponse(
+    @SerializedName("years")
+    val yearDetails: List<YearDetailResponse>? = null
 )

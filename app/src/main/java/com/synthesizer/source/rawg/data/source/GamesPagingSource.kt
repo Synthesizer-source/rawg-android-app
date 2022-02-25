@@ -27,7 +27,7 @@ class GamesPagingSource @Inject constructor(
                 )
 
             val responseData = mutableListOf<GameListItemResponse>()
-            responseData.addAll(response.results)
+            responseData.addAll(response.results.orEmpty())
             val prevKey = if (pageIndex == 1) null else pageIndex - 1
 
             LoadResult.Page(

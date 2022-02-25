@@ -1,11 +1,20 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class YearDetailResponse(
-    val count: Int,
-    val decade: Int,
-    val filter: String,
-    val from: Int,
-    val nofollow: Boolean,
-    val to: Int,
-    val years: List<YearResponse>
+import com.google.gson.annotations.SerializedName
+
+class YearDetailResponse(
+    @SerializedName("count")
+    val count: Int? = null,
+    @SerializedName("decade")
+    val decade: Int? = null,
+    @SerializedName("filter")
+    val filter: String? = null,
+    @SerializedName("from")
+    val from: Int? = null,
+    @SerializedName("nofollow")
+    val nofollow: Boolean? = null,
+    @SerializedName("to")
+    val to: Int? = null,
+    @SerializedName("years")
+    val years: List<YearResponse>? = null
 )

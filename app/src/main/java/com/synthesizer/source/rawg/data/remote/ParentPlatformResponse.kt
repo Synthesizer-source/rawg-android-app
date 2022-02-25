@@ -1,5 +1,8 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class ParentPlatformResponse(
-    val platform: PlatformResponse
+import com.google.gson.annotations.SerializedName
+
+class ParentPlatformResponse(
+    @SerializedName("platform")
+    val platform: PlatformResponse? = null
 )

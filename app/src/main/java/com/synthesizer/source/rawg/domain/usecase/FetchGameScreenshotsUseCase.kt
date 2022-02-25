@@ -12,7 +12,7 @@ class FetchGameScreenshotsUseCase @Inject constructor(private val repository: Ga
     operator fun invoke(id: Int) = flow {
         emit(Resource.of {
             repository.fetchGameScreenshots(id).map { response ->
-                response.results.map { it.toDomain() }
+                response.results.orEmpty().map { it.toDomain() }
             }
         })
     }

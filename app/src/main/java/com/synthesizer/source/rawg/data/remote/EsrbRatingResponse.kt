@@ -1,7 +1,12 @@
 package com.synthesizer.source.rawg.data.remote
 
-data class EsrbRatingResponse(
-    val id: Int,
-    val name: String,
-    val slug: String
+import com.google.gson.annotations.SerializedName
+
+class EsrbRatingResponse(
+    @SerializedName("id")
+    val id: Int? = null,
+    @SerializedName("name")
+    val name: String? = null,
+    @SerializedName("slug")
+    val slug: String? = null
 )
