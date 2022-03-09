@@ -5,7 +5,7 @@ import com.synthesizer.source.rawg.data.remote.DeveloperResponse
 import com.synthesizer.source.rawg.data.remote.GameDetailResponse
 import com.synthesizer.source.rawg.data.remote.GenreResponse
 import com.synthesizer.source.rawg.data.remote.PublisherResponse
-import com.synthesizer.source.rawg.domain.mapper.getGameImage
+import com.synthesizer.source.rawg.domain.mapper.toGameImage
 import com.synthesizer.source.rawg.domain.mapper.toDomain
 import org.junit.Test
 
@@ -74,18 +74,5 @@ class GameDetailMapperTest {
         val actual = given.toDomain()
         //then
         Truth.assertThat(actual.genres).isEqualTo(expected)
-    }
-
-    @Test
-    fun `given id and backgroundImage, when called getGameImage, then return GameImage`() {
-        //given
-        val id = 1
-        val backgroundImageUrl = "url"
-        val given = GameDetailResponse(id = 1, backgroundImage = backgroundImageUrl)
-        //when
-        val actual = given.getGameImage()
-        //then
-        Truth.assertThat(actual.id).isEqualTo(given.id)
-        Truth.assertThat(actual.imageUrl).isEqualTo(given.backgroundImage)
     }
 }

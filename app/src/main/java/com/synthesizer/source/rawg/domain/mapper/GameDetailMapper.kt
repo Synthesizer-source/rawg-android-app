@@ -22,7 +22,3 @@ fun GameDetailResponse.toDomain(): GameDetailInfo {
         platforms = parentPlatforms.orEmpty().mapNotNull { it.platform }.mapNotNull { it.slug }
     )
 }
-
-fun GameDetailResponse.getGameImage(): GameImage {
-    return GameImage(id.orIntMin(), backgroundImage.orEmpty())
-}
