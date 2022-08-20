@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.synthesizer.source.rawg.databinding.FragmentGameDetailBinding
 import com.synthesizer.source.rawg.ui.BaseFragment
+import com.synthesizer.source.rawg.ui.gamedetail.component.summary.SummaryUIModel
 import com.synthesizer.source.rawg.utils.addPlatformIcons
 import com.synthesizer.source.rawg.utils.gone
 import com.synthesizer.source.rawg.utils.hideChildren
@@ -63,17 +64,21 @@ class GameDetailFragment : BaseFragment() {
                         val screenshots = it.detail.screenshots
                         binding.apply {
                             background.loadImage(detail.backgroundImage)
-                            name.text = detail.name
-                            releaseDate.text = detail.releaseDate
-                            publisherName.text = detail.publisher
-                            platforms.addPlatformIcons(icons = it.getPlatformIcons())
+                            summary.initialize(
+                                SummaryUIModel(
+                                    gameName = detail.name,
+                                    releaseDate = detail.releaseDate,
+                                    publisherName = detail.publisher,
+                                    rating = detail.rating,
+                                    platforms = detail.platforms
+                                )
+                            )
                             metascore.setMetascore(
                                 detail.metascore,
                                 it.getMetascoreColor()
                             )
                             genreChipGroup.load(detail.genres)
                             description.setBodyContent(detail.description)
-                            rating.startAnimation(detail.rating)
                             adapter.submitList(screenshots)
                         }
                     }

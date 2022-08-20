@@ -57,119 +57,25 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5" />
 
-        <TextView
-            android:id="@+id/name"
+        <com.synthesizer.source.rawg.ui.gamedetail.component.summary.SummaryView
+            android:id="@+id/summary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingVertical="@dimen/_12sdp"
-            android:textAlignment="center"
-            android:textSize="@dimen/_16sdp"
-            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/background"
-            tools:text="Red dead Redemption II" />
-
-        <TextView
-            android:id="@+id/releaseDateLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_12sdp"
-            android:layout_marginTop="@dimen/_16sdp"
-            android:labelFor="@id/releaseDate"
-            android:text="@string/release_date"
-            android:textColor="@color/gray_light"
-            android:textSize="@dimen/_10sdp"
-            app:layout_constraintEnd_toEndOf="@id/guidelineCenter"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/name" />
-
-        <TextView
-            android:id="@+id/releaseDate"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/_12sdp"
-            app:layout_constraintEnd_toEndOf="@id/guidelineCenter"
-            app:layout_constraintStart_toStartOf="@id/releaseDateLabel"
-            app:layout_constraintTop_toBottomOf="@id/releaseDateLabel"
-            tools:text="May 7, 2021" />
-
-        <TextView
-            android:id="@+id/publisherNameLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_12sdp"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:labelFor="@id/publisherName"
-            android:text="@string/publisher"
-            android:textColor="@color/gray_light"
-            android:textSize="@dimen/_10sdp"
-            app:flow_horizontalAlign="center"
-            app:flow_verticalAlign="top"
-            app:layout_constraintEnd_toEndOf="@id/guidelineCenter"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/releaseDate" />
-
-        <TextView
-            android:id="@+id/publisherName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/_24sdp"
-            android:textSize="@dimen/_12sdp"
-            app:layout_constraintEnd_toEndOf="@id/guidelineCenter"
-            app:layout_constraintStart_toStartOf="@id/publisherNameLabel"
-            app:layout_constraintTop_toBottomOf="@id/publisherNameLabel"
-            tools:text="Rockstar Games" />
-
-        <TextView
-            android:id="@+id/ratingLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_12sdp"
-            android:text="@string/rating"
-            android:textColor="@color/gray_light"
-            android:textSize="@dimen/_10sdp"
-            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/guidelineCenter"
-            app:layout_constraintTop_toTopOf="@id/releaseDateLabel" />
-
-        <com.synthesizer.source.rawg.ui.custom.AnimatedRatingBar
-            android:id="@+id/rating"
-            style="?android:attr/ratingBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:isIndicator="true"
-            android:numStars="5"
-            android:progressTint="#FFCA28"
-            android:rating="3.5"
-            android:scaleX="0.65"
-            android:scaleY="0.65"
-            android:secondaryProgressTint="@android:color/transparent"
-            android:stepSize="0.01"
-            android:transformPivotX="0dp"
-            android:transformPivotY="0dp"
-            app:layout_constraintStart_toStartOf="@id/ratingLabel"
-            app:layout_constraintTop_toBottomOf="@id/ratingLabel" />
-
-        <LinearLayout
-            android:id="@+id/platforms"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_12sdp"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="@id/guidelineCenter"
-            app:layout_constraintTop_toTopOf="@id/publisherNameLabel" />
+            app:layout_constraintTop_toBottomOf="@id/background" />
 
         <TextView
             android:id="@+id/metascoreLabel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_24sdp"
             android:text="@string/metascore"
             android:textColor="@color/gray_light"
             android:textSize="@dimen/_10sdp"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/publisherName" />
+            app:layout_constraintTop_toBottomOf="@id/summary" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/metascore"
