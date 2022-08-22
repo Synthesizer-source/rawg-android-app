@@ -49,13 +49,6 @@
             android:orientation="vertical"
             app:layout_constraintGuide_end="@dimen/_16sdp" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineCenter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
-
         <com.synthesizer.source.rawg.ui.gamedetail.component.summary.SummaryView
             android:id="@+id/summary"
             android:layout_width="0dp"
@@ -73,30 +66,13 @@
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
             app:layout_constraintTop_toBottomOf="@id/summary" />
 
-        <TextView
-            android:id="@+id/screenshotsLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_24sdp"
-            android:text="@string/screenshots"
-            android:textSize="@dimen/_14sdp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/description" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/screenshots"
+        <com.synthesizer.source.rawg.ui.gamedetail.component.screenshot.ScreenshotView
+            android:id="@+id/screenshot"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_12sdp"
-            android:orientation="horizontal"
-            android:overScrollMode="never"
-            android:paddingTop="@dimen/_8sdp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="@dimen/_36sdp"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/screenshotsLabel"
-            tools:listitem="@layout/item_game_detail_screenshot" />
+            app:layout_constraintTop_toBottomOf="@id/description" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

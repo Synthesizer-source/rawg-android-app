@@ -11,6 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.synthesizer.source.rawg.databinding.FragmentGameDetailBinding
 import com.synthesizer.source.rawg.ui.BaseFragment
 import com.synthesizer.source.rawg.ui.gamedetail.component.description.DescriptionUIModel
+import com.synthesizer.source.rawg.ui.gamedetail.component.screenshot.ScreenshotUIModel
 import com.synthesizer.source.rawg.ui.gamedetail.component.summary.SummaryUIModel
 import com.synthesizer.source.rawg.utils.gone
 import com.synthesizer.source.rawg.utils.hideChildren
@@ -31,8 +32,6 @@ class GameDetailFragment : BaseFragment() {
 
     override val viewModel: GameDetailViewModel by viewModels()
 
-    private val adapter by lazy { GameDetailScreenshotAdapter() }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,7 +43,6 @@ class GameDetailFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.screenshots.adapter = adapter
         observe()
     }
 
@@ -78,7 +76,11 @@ class GameDetailFragment : BaseFragment() {
                                     description = detail.description
                                 )
                             )
-                            adapter.submitList(screenshots)
+                            screenshot.initialize(
+                                ScreenshotUIModel(
+                                    screenshots = screenshots
+                                )
+                            )
                         }
                     }
                 }
