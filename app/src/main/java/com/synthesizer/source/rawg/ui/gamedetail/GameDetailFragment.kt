@@ -10,13 +10,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.synthesizer.source.rawg.databinding.FragmentGameDetailBinding
 import com.synthesizer.source.rawg.ui.BaseFragment
+import com.synthesizer.source.rawg.ui.gamedetail.component.description.DescriptionUIModel
 import com.synthesizer.source.rawg.ui.gamedetail.component.summary.SummaryUIModel
-import com.synthesizer.source.rawg.utils.addPlatformIcons
 import com.synthesizer.source.rawg.utils.gone
 import com.synthesizer.source.rawg.utils.hideChildren
-import com.synthesizer.source.rawg.utils.load
 import com.synthesizer.source.rawg.utils.loadImage
-import com.synthesizer.source.rawg.utils.setMetascore
 import com.synthesizer.source.rawg.utils.showChildren
 import com.synthesizer.source.rawg.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -70,15 +68,16 @@ class GameDetailFragment : BaseFragment() {
                                     releaseDate = detail.releaseDate,
                                     publisherName = detail.publisher,
                                     rating = detail.rating,
-                                    platforms = detail.platforms
+                                    platforms = detail.platforms,
+                                    metascore = detail.metascore,
+                                    genres = detail.genres
                                 )
                             )
-                            metascore.setMetascore(
-                                detail.metascore,
-                                it.getMetascoreColor()
+                            description.initialize(
+                                DescriptionUIModel(
+                                    description = detail.description
+                                )
                             )
-                            genreChipGroup.load(detail.genres)
-                            description.setBodyContent(detail.description)
                             adapter.submitList(screenshots)
                         }
                     }

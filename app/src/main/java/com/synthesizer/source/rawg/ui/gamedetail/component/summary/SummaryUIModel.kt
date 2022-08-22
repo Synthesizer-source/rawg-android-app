@@ -5,5 +5,7 @@ class SummaryUIModel(
     val releaseDate: String,
     val publisherName: String,
     val rating: Float,
-    val platforms: List<String>
+    val platforms: List<String>,
+    val metascore: Int,
+    val genres: List<String>
 )

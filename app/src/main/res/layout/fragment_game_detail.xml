@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -65,90 +64,14 @@
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
             app:layout_constraintTop_toBottomOf="@id/background" />
 
-        <TextView
-            android:id="@+id/metascoreLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_12sdp"
-            android:layout_marginTop="@dimen/_24sdp"
-            android:text="@string/metascore"
-            android:textColor="@color/gray_light"
-            android:textSize="@dimen/_10sdp"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/summary" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/metascore"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="@dimen/_48sdp"
-            android:layout_height="@dimen/_48sdp"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:clickable="false"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:textAlignment="center"
-            android:textColor="@color/green_dark"
-            android:textSize="@dimen/_12sdp"
-            app:cornerRadius="@dimen/_8sdp"
-            app:layout_constraintStart_toStartOf="@id/metascoreLabel"
-            app:layout_constraintTop_toBottomOf="@id/metascoreLabel"
-            app:strokeColor="@color/green_dark"
-            app:strokeWidth="@dimen/_2sdp"
-            tools:text="97" />
-
-        <TextView
-            android:id="@+id/genreLabel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_24sdp"
-            android:text="@string/genre"
-            android:textColor="@color/gray_light"
-            android:textSize="@dimen/_10sdp"
-            app:layout_constraintStart_toEndOf="@id/metascoreLabel"
-            app:layout_constraintTop_toTopOf="@id/metascoreLabel" />
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/genreChipGroup"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:chipSpacing="@dimen/_4sdp"
-            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/genreLabel"
-            app:layout_constraintTop_toTopOf="@id/metascore" />
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/barrier"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="metascore, genreChipGroup" />
-
-        <TextView
-            android:id="@+id/descriptionLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_36sdp"
-            android:text="@string/description"
-            android:textSize="@dimen/_14sdp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/barrier" />
-
-        <com.synthesizer.source.rawg.ui.custom.ShowHideLayout
+        <com.synthesizer.source.rawg.ui.gamedetail.component.description.DescriptionView
             android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="@dimen/_8sdp"
-            android:paddingTop="@dimen/_8sdp"
-            android:textSize="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_36sdp"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
             app:layout_constraintStart_toStartOf="@id/guidelineStart"
-            app:layout_constraintTop_toBottomOf="@id/descriptionLabel"
-            custom:buttonText="SHOW | HIDE"
-            custom:buttonTextColor="@color/gray_soft"
-            custom:collapseLines="3"
-            custom:initialState="hide" />
+            app:layout_constraintTop_toBottomOf="@id/summary" />
 
         <TextView
             android:id="@+id/screenshotsLabel"
