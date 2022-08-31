@@ -8,11 +8,21 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Dns
 import okhttp3.OkHttpClient
+import okhttp3.logging.LoggingEventListener
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.Inet4Address
+import java.net.InetAddress
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
+
+class DnsSelector() : Dns {
+    override fun lookup(hostname: String): List<InetAddress> {
+        return Dns.SYSTEM.lookup(hostname).filter { Inet4Address::class.java.isInstance(it) }
+    }
+}
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -24,11 +34,14 @@ object NetworkModule {
     private val gson =
         GsonBuilder().setFieldNamingStrategy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
 
+    private val eventListenerFactory = LoggingEventListener.Factory()
+
     @Singleton
     private val client = OkHttpClient().newBuilder()
-        .connectTimeout(20, TimeUnit.SECONDS)
         .writeTimeout(20, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
+        .dns(DnsSelector())
+        .eventListenerFactory(eventListenerFactory)
         .addInterceptor(ApiInterceptor()).build()
 
     @Singleton
