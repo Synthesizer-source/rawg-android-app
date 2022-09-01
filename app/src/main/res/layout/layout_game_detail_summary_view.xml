@@ -17,7 +17,7 @@
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/_12sdp"
+        android:paddingBottom="@dimen/_12sdp"
         android:textAlignment="center"
         android:textSize="@dimen/_16sdp"
         android:textStyle="bold"
@@ -28,7 +28,6 @@
         android:id="@+id/releaseDateLabel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_16sdp"
         android:labelFor="@id/releaseDate"
         android:text="@string/release_date"
@@ -52,7 +51,6 @@
         android:id="@+id/publisherNameLabel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_8sdp"
         android:labelFor="@id/publisherName"
         android:text="@string/publisher"
@@ -164,10 +162,10 @@
         app:layout_constraintStart_toStartOf="@id/genreLabel"
         app:layout_constraintTop_toTopOf="@id/metascore" />
 
-<!--    <androidx.constraintlayout.widget.Barrier-->
-<!--        android:id="@+id/barrier"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:barrierDirection="bottom"-->
-<!--        app:constraint_referenced_ids="metascore, genreChipGroup" />-->
+    <!--    <androidx.constraintlayout.widget.Barrier-->
+    <!--        android:id="@+id/barrier"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:barrierDirection="bottom"-->
+    <!--        app:constraint_referenced_ids="metascore, genreChipGroup" />-->
 </merge>

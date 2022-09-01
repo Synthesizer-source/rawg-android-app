@@ -8,14 +8,18 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.synthesizer.source.rawg.R
 import com.synthesizer.source.rawg.databinding.FragmentGameDetailBinding
 import com.synthesizer.source.rawg.ui.BaseFragment
+import com.synthesizer.source.rawg.ui.gamedetail.adapter.GameDetailAdapter
+import com.synthesizer.source.rawg.ui.gamedetail.component.Component
 import com.synthesizer.source.rawg.ui.gamedetail.component.description.DescriptionUIModel
+import com.synthesizer.source.rawg.ui.gamedetail.component.header.HeaderUIModel
 import com.synthesizer.source.rawg.ui.gamedetail.component.screenshot.ScreenshotUIModel
 import com.synthesizer.source.rawg.ui.gamedetail.component.summary.SummaryUIModel
+import com.synthesizer.source.rawg.ui.gamedetail.itemdecoration.ComponentItemDecoration
 import com.synthesizer.source.rawg.utils.gone
 import com.synthesizer.source.rawg.utils.hideChildren
-import com.synthesizer.source.rawg.utils.loadImage
 import com.synthesizer.source.rawg.utils.showChildren
 import com.synthesizer.source.rawg.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +35,8 @@ class GameDetailFragment : BaseFragment() {
     private val binding get() = _binding!!
 
     override val viewModel: GameDetailViewModel by viewModels()
+
+    private val gameDetailAdapter = GameDetailAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,15 +58,27 @@ class GameDetailFragment : BaseFragment() {
     }
 
     private fun observe() {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.uiState.filterNotNull().collect {
                         val detail = it.detail.info
                         val screenshots = it.detail.screenshots
-                        binding.apply {
-                            background.loadImage(detail.backgroundImage)
-                            summary.initialize(
+                        binding.components.apply {
+                            adapter = gameDetailAdapter
+                            if (itemDecorationCount == 0) {
+                                addItemDecoration(
+                                    ComponentItemDecoration(
+                                        horizontalSpace = R.dimen._16sdp,
+                                        verticalSpacing = R.dimen._16sdp
+                                    )
+                                )
+                            }
+
+                            val components = listOf<Component>(
+                                HeaderUIModel(
+                                    image = detail.backgroundImage
+                                ),
                                 SummaryUIModel(
                                     gameName = detail.name,
                                     releaseDate = detail.releaseDate,
@@ -69,18 +87,16 @@ class GameDetailFragment : BaseFragment() {
                                     platforms = detail.platforms,
                                     metascore = detail.metascore,
                                     genres = detail.genres
-                                )
-                            )
-                            description.initialize(
+                                ),
                                 DescriptionUIModel(
                                     description = detail.description
-                                )
-                            )
-                            screenshot.initialize(
+                                ),
                                 ScreenshotUIModel(
                                     screenshots = screenshots
                                 )
                             )
+
+                            gameDetailAdapter.submitList(components)
                         }
                     }
                 }
@@ -91,7 +107,7 @@ class GameDetailFragment : BaseFragment() {
     override fun onLoading() {
         super.onLoading()
         binding.apply {
-            constraintLayout.hideChildren()
+            root.hideChildren()
             loadingIcon.visible()
         }
     }
@@ -99,7 +115,7 @@ class GameDetailFragment : BaseFragment() {
     override fun onLoaded() {
         super.onLoaded()
         binding.apply {
-            constraintLayout.showChildren()
+            root.showChildren()
             loadingIcon.gone()
         }
     }

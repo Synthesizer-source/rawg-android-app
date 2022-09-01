@@ -92,7 +92,6 @@ class ShowHideLayout @JvmOverloads constructor(
 
     fun setBodyContent(text: String) {
         body.text = text
-        _maxHeight = body.layout.height + body.paddingTop + body.paddingBottom
     }
 
     fun setButtonText(text: String) {
@@ -111,6 +110,8 @@ class ShowHideLayout @JvmOverloads constructor(
         if (_currState == 0) {
             body.maxLines = _collapseLines
         }
+
+        _maxHeight = body.height + body.paddingTop + body.paddingBottom
 
         button.setOnClickListener {
             if (button.isClickable) {
