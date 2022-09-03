@@ -102,7 +102,7 @@
         app:layout_constraintStart_toStartOf="@id/ratingLabel"
         app:layout_constraintTop_toBottomOf="@id/ratingLabel" />
 
-    <LinearLayout
+    <com.synthesizer.source.rawg.common.platform.PlatformView
         android:id="@+id/platforms"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -161,11 +161,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/genreLabel"
         app:layout_constraintTop_toTopOf="@id/metascore" />
-
-    <!--    <androidx.constraintlayout.widget.Barrier-->
-    <!--        android:id="@+id/barrier"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:barrierDirection="bottom"-->
-    <!--        app:constraint_referenced_ids="metascore, genreChipGroup" />-->
 </merge>

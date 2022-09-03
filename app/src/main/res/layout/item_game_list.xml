@@ -24,78 +24,28 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
 
-        <ImageView
-            android:id="@+id/pcPlatformIcon"
+        <com.synthesizer.source.rawg.common.platform.PlatformView
+            android:id="@+id/platforms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_2sdp"
-            android:scaleX="0.75"
-            android:scaleY="0.75"
-            android:src="@drawable/ic_windows"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/name"
-            app:layout_constraintStart_toStartOf="@id/name"
-            tools:visibility="visible"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
-            android:id="@+id/psPlatformIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/_2sdp"
-            android:scaleX="0.75"
-            android:scaleY="0.75"
-            android:src="@drawable/ic_playstation"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/name"
-            app:layout_constraintStart_toEndOf="@id/pcPlatformIcon"
-            tools:visibility="visible"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
-            android:id="@+id/xboxPlatformIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/_2sdp"
-            android:scaleX="0.75"
-            android:scaleY="0.75"
-            android:src="@drawable/ic_xbox"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/name"
-            app:layout_constraintStart_toEndOf="@id/psPlatformIcon"
-            tools:visibility="visible"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
-            android:id="@+id/nintendoPlatformIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/_2sdp"
-            android:scaleX="0.75"
-            android:scaleY="0.75"
-            android:src="@drawable/ic_nintendo"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/name"
-            app:layout_constraintStart_toEndOf="@id/xboxPlatformIcon"
-            tools:visibility="visible"
-            tools:ignore="ContentDescription" />
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_12sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/background" />
 
         <TextView
             android:id="@+id/name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_12sdp"
-            android:layout_marginTop="@dimen/_28sdp"
-            android:layout_marginEnd="@dimen/_12sdp"
-            android:paddingHorizontal="@dimen/_6sdp"
+            android:layout_marginHorizontal="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_4sdp"
             android:paddingBottom="@dimen/_14sdp"
             android:textAlignment="viewStart"
             android:textSize="@dimen/_18sdp"
             android:textStyle="bold"
-            android:includeFontPadding="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/background"
+            app:layout_constraintTop_toBottomOf="@id/platforms"
             tools:text="Red Dead Redemption II" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

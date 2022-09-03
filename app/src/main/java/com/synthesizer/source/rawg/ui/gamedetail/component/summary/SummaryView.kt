@@ -5,8 +5,9 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.annotation.StyleRes
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.synthesizer.source.rawg.common.platform.PlatformConfig
+import com.synthesizer.source.rawg.common.platform.PlatformUIModel
 import com.synthesizer.source.rawg.databinding.LayoutGameDetailSummaryViewBinding
-import com.synthesizer.source.rawg.utils.addPlatformIcons
 import com.synthesizer.source.rawg.utils.load
 import com.synthesizer.source.rawg.utils.setMetascore
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,11 +33,18 @@ class SummaryView @JvmOverloads constructor(
             publisherName.text = summaryUIModel.publisherName
             rating.startAnimation(summaryUIModel.rating)
             releaseDate.text = summaryUIModel.releaseDate
-            platforms.addPlatformIcons(icons = viewState.getPlatformIcons())
+
+
+            platforms.initialize(
+                platformUIModel = PlatformUIModel(summaryUIModel.platforms),
+                config = PlatformConfig.Medium
+            )
+
             metascore.setMetascore(
                 summaryUIModel.metascore,
                 viewState.getMetascoreColor()
             )
+
             genreChipGroup.load(summaryUIModel.genres)
         }
     }

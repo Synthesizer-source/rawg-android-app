@@ -7,11 +7,12 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.synthesizer.source.rawg.common.platform.PlatformConfig
+import com.synthesizer.source.rawg.common.platform.PlatformUIModel
 import com.synthesizer.source.rawg.databinding.ItemGameListBinding
 import com.synthesizer.source.rawg.domain.model.GameListItem
 import com.synthesizer.source.rawg.ui.gamelist.GameListAdapter.GameListViewHolder
 import com.synthesizer.source.rawg.utils.loadImage
-import com.synthesizer.source.rawg.utils.setVisibility
 
 class GameListAdapter : PagingDataAdapter<GameListItem, GameListViewHolder>(DIFF) {
 
@@ -45,15 +46,11 @@ class GameListAdapter : PagingDataAdapter<GameListItem, GameListViewHolder>(DIFF
                 name.text = item.name
                 background.loadImage(item.imageUrl)
 
-                val isPcGame = item.platforms.any { it == "pc" }
-                val isPsGame = item.platforms.any { it == "playstation" }
-                val isXboxGame = item.platforms.any { it == "xbox" }
-                val isNintendoGame = item.platforms.any { it == "nintendo" }
-
-                pcPlatformIcon.setVisibility(isPcGame)
-                psPlatformIcon.setVisibility(isPsGame)
-                xboxPlatformIcon.setVisibility(isXboxGame)
-                nintendoPlatformIcon.setVisibility(isNintendoGame)
+                val platformUIModel = PlatformUIModel(item.platforms)
+                platforms.initialize(
+                    platformUIModel = platformUIModel,
+                    config = PlatformConfig.Small
+                )
 
                 root.setOnClickListener {
                     itemClickListener(item.id)
