@@ -3,17 +3,18 @@ package com.synthesizer.source.rawg.ui.gamedetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.synthesizer.source.rawg.data.Resource
+import com.synthesizer.source.rawg.domain.mapper.toComponents
 import com.synthesizer.source.rawg.domain.model.GameDetail
 import com.synthesizer.source.rawg.domain.usecase.FetchGameDetailWithScreenshotsUseCase
 import com.synthesizer.source.rawg.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class GameDetailViewModel @Inject constructor(
@@ -39,14 +40,14 @@ class GameDetailViewModel @Inject constructor(
                 when (it) {
                     is Resource.Error -> onError(it.throwable)
                     is Resource.Loading -> loading()
-                    is Resource.Success -> onSuccessNewGameDetail(it.data)
+                    is Resource.Success -> onSuccess(it.data)
                 }
             }
         }
     }
 
-    private suspend fun onSuccessNewGameDetail(detail: GameDetail) {
-        _uiState.emit(GameDetailUiState(detail))
+    private suspend fun onSuccess(detail: GameDetail) {
+        _uiState.emit(GameDetailUiState(detail.toComponents()))
         loading(false)
     }
 

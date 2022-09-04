@@ -12,11 +12,6 @@ import com.synthesizer.source.rawg.R
 import com.synthesizer.source.rawg.databinding.FragmentGameDetailBinding
 import com.synthesizer.source.rawg.ui.BaseFragment
 import com.synthesizer.source.rawg.ui.gamedetail.adapter.GameDetailAdapter
-import com.synthesizer.source.rawg.ui.gamedetail.component.Component
-import com.synthesizer.source.rawg.ui.gamedetail.component.description.DescriptionUIModel
-import com.synthesizer.source.rawg.ui.gamedetail.component.header.HeaderUIModel
-import com.synthesizer.source.rawg.ui.gamedetail.component.screenshot.ScreenshotUIModel
-import com.synthesizer.source.rawg.ui.gamedetail.component.summary.SummaryUIModel
 import com.synthesizer.source.rawg.ui.gamedetail.itemdecoration.ComponentItemDecoration
 import com.synthesizer.source.rawg.utils.gone
 import com.synthesizer.source.rawg.utils.hideChildren
@@ -62,8 +57,6 @@ class GameDetailFragment : BaseFragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.uiState.filterNotNull().collect {
-                        val detail = it.detail.info
-                        val screenshots = it.detail.screenshots
                         binding.components.apply {
                             adapter = gameDetailAdapter
                             if (itemDecorationCount == 0) {
@@ -75,28 +68,7 @@ class GameDetailFragment : BaseFragment() {
                                 )
                             }
 
-                            val components = listOf<Component>(
-                                HeaderUIModel(
-                                    image = detail.backgroundImage
-                                ),
-                                SummaryUIModel(
-                                    gameName = detail.name,
-                                    releaseDate = detail.releaseDate,
-                                    publisherName = detail.publisher,
-                                    rating = detail.rating,
-                                    platforms = detail.platforms,
-                                    metascore = detail.metascore,
-                                    genres = detail.genres
-                                ),
-                                DescriptionUIModel(
-                                    description = detail.description
-                                ),
-                                ScreenshotUIModel(
-                                    screenshots = screenshots
-                                )
-                            )
-
-                            gameDetailAdapter.submitList(components)
+                            gameDetailAdapter.submitList(it.components)
                         }
                     }
                 }
