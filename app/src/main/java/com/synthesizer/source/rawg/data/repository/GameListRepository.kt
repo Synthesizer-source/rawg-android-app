@@ -7,14 +7,14 @@ import com.synthesizer.source.rawg.data.source.GamesPagingSource
 import javax.inject.Inject
 
 class GameListRepository @Inject constructor(private val service: RawgService) {
+
     fun fetchGames(
         search: String,
         ordering: String,
         dates: String
     ) = Pager(
         PagingConfig(
-            pageSize = 20,
-            enablePlaceholders = true
+            pageSize = 20
         )
     ) {
         GamesPagingSource(

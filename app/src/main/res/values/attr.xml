@@ -19,4 +19,6 @@
         <attr name="buttonText" format="string" />
         <attr name="buttonTextColor" format="color|reference" />
     </declare-styleable>
+
+    <attr name="attrGameListItemStyle" format="reference" />
 </resources>

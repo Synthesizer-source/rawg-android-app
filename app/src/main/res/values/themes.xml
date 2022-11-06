@@ -5,6 +5,7 @@
         <item name="android:windowBackground">@color/gray_dark</item>
         <item name="android:textColor">@color/white_dark</item>
         <item name="chipStyle">@style/styleGameDetailGenreChip</item>
+        <item name="attrGameListItemStyle">@style/styleGameListItem</item>
     </style>
 
     <style name="styleSearchView" parent="Widget.AppCompat.SearchView">
@@ -25,5 +26,13 @@
         <item name="android:windowMinWidthMajor">85%</item>
         <item name="android:windowMinWidthMinor">85%</item>
         <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="styleGameListItem" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">@dimen/_8sdp</item>
+        <item name="cardElevation">@dimen/_4sdp</item>
+        <item name="cardPreventCornerOverlap">true</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardBackgroundColor">@color/gray_normal</item>
     </style>
 </resources>
