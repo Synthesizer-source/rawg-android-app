@@ -5,17 +5,21 @@ import com.synthesizer.source.rawg.databinding.ItemGameListBinding
 import com.synthesizer.source.rawg.domain.model.GameListItem
 
 class GameListViewHolder(
-    val itemBinding: ItemGameListBinding,
-    private val itemClickListener: (Int) -> Unit
+    val binding: ItemGameListBinding,
+    private val clickListener: (Int) -> Unit
 ) :
-    RecyclerView.ViewHolder(itemBinding.root) {
+    RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: GameListItem) {
-        itemBinding.root.apply {
+        binding.root.apply {
             initialize(item)
             setOnClickListener {
-                itemClickListener(item.id)
+                clickListener(item.id)
             }
         }
+    }
+
+    fun clearImage(){
+        binding.root.clearImage()
     }
 }

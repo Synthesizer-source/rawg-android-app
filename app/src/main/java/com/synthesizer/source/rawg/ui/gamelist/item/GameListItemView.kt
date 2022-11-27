@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.ImageView
 import androidx.annotation.AttrRes
+import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import com.synthesizer.source.rawg.R
 import com.synthesizer.source.rawg.common.platform.PlatformConfig
@@ -23,9 +24,6 @@ class GameListItemView @JvmOverloads constructor(
         this
     )
 
-    val backgroundImage: ImageView
-        get() = binding.background
-
     fun initialize(gameListItem: GameListItem) {
         binding.apply {
             name.text = gameListItem.name
@@ -36,5 +34,9 @@ class GameListItemView @JvmOverloads constructor(
                 config = PlatformConfig.Small
             )
         }
+    }
+
+    fun clearImage(){
+        Glide.with(this).clear(binding.background)
     }
 }

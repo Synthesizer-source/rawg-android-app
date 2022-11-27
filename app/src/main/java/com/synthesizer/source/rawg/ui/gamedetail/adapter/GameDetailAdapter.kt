@@ -66,12 +66,6 @@ class GameDetailAdapter : ListAdapter<Component, RecyclerView.ViewHolder>(DIFF) 
             is DescriptionUIModel -> (holder as DescriptionViewHolder).bind(item)
             is ScreenshotUIModel -> (holder as ScreenshotViewHolder).bind(item)
         }
-//        when (holder) {
-//            is HeaderViewHolder -> holder.bind(item as HeaderUIModel)
-//            is SummaryViewHolder -> holder.bind(item as SummaryUIModel)
-//            is DescriptionViewHolder -> holder.bind(item as DescriptionUIModel)
-//            is ScreenshotViewHolder -> holder.bind(item as ScreenshotUIModel)
-//        }
     }
 
     override fun getItemViewType(position: Int): Int {

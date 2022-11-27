@@ -5,18 +5,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import com.bumptech.glide.Glide
 import com.synthesizer.source.rawg.databinding.ItemGameListBinding
 import com.synthesizer.source.rawg.domain.model.GameListItem
 
 class GameListAdapter : PagingDataAdapter<GameListItem, GameListViewHolder>(DIFF) {
 
-    var itemClickListener: (id: Int) -> Unit = {}
+    var clickListener: (id: Int) -> Unit = {}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameListViewHolder {
-        val itemView =
+        val binding =
             ItemGameListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return GameListViewHolder(itemView, itemClickListener)
+        return GameListViewHolder(binding, clickListener)
     }
 
     override fun onBindViewHolder(holder: GameListViewHolder, position: Int) {
@@ -25,7 +24,7 @@ class GameListAdapter : PagingDataAdapter<GameListItem, GameListViewHolder>(DIFF
 
     override fun onViewRecycled(holder: GameListViewHolder) {
         super.onViewRecycled(holder)
-        Glide.with(holder.itemBinding.root).clear(holder.itemBinding.root.backgroundImage)
+        holder.clearImage()
     }
 
     private object DIFF : DiffUtil.ItemCallback<GameListItem>() {

@@ -43,7 +43,7 @@ class GameListFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.gameList.adapter = adapter
-        adapter.itemClickListener = {
+        adapter.clickListener = {
             navigateToGameDetail(it)
         }
 
