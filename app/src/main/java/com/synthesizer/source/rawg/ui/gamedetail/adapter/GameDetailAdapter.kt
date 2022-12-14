@@ -10,6 +10,7 @@ import com.synthesizer.source.rawg.databinding.ItemGameDetailHeaderComponentBind
 import com.synthesizer.source.rawg.databinding.ItemGameDetailScreenshotComponentBinding
 import com.synthesizer.source.rawg.databinding.ItemGameDetailSummaryComponentBinding
 import com.synthesizer.source.rawg.ui.gamedetail.component.Component
+import com.synthesizer.source.rawg.ui.gamedetail.component.ViewType
 import com.synthesizer.source.rawg.ui.gamedetail.component.description.DescriptionUIModel
 import com.synthesizer.source.rawg.ui.gamedetail.component.header.HeaderUIModel
 import com.synthesizer.source.rawg.ui.gamedetail.component.screenshot.ScreenshotUIModel
@@ -35,21 +36,24 @@ class GameDetailAdapter : ListAdapter<Component, RecyclerView.ViewHolder>(DIFF) 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         when (viewType) {
-            HEADER_VIEW_TYPE -> {
+            ViewType.HEADER_VIEW_TYPE.type -> {
                 val binding =
                     ItemGameDetailHeaderComponentBinding.inflate(inflater, parent, false)
                 return HeaderViewHolder(binding)
             }
-            SUMMARY_VIEW_TYPE -> {
+
+            ViewType.SUMMARY_VIEW_TYPE.type -> {
                 val binding =
                     ItemGameDetailSummaryComponentBinding.inflate(inflater, parent, false)
                 return SummaryViewHolder(binding)
             }
-            DESCRIPTION_VIEW_TYPE -> {
+
+            ViewType.DESCRIPTION_VIEW_TYPE.type -> {
                 val binding =
                     ItemGameDetailDescriptionComponentBinding.inflate(inflater, parent, false)
                 return DescriptionViewHolder(binding)
             }
+
             else -> {
                 val binding =
                     ItemGameDetailScreenshotComponentBinding.inflate(inflater, parent, false)
@@ -59,8 +63,7 @@ class GameDetailAdapter : ListAdapter<Component, RecyclerView.ViewHolder>(DIFF) 
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = getItem(position)
-        when (item) {
+        when (val item = getItem(position)) {
             is HeaderUIModel -> (holder as HeaderViewHolder).bind(item)
             is SummaryUIModel -> (holder as SummaryViewHolder).bind(item)
             is DescriptionUIModel -> (holder as DescriptionViewHolder).bind(item)
@@ -70,18 +73,11 @@ class GameDetailAdapter : ListAdapter<Component, RecyclerView.ViewHolder>(DIFF) 
 
     override fun getItemViewType(position: Int): Int {
         return when (position) {
-            0 -> HEADER_VIEW_TYPE
-            1 -> SUMMARY_VIEW_TYPE
-            2 -> DESCRIPTION_VIEW_TYPE
-            3 -> SCREENSHOT_VIEW_TYPE
+            ViewType.HEADER_VIEW_TYPE.position -> ViewType.HEADER_VIEW_TYPE.type
+            ViewType.SUMMARY_VIEW_TYPE.position -> ViewType.SUMMARY_VIEW_TYPE.type
+            ViewType.DESCRIPTION_VIEW_TYPE.position -> ViewType.DESCRIPTION_VIEW_TYPE.type
+            ViewType.SCREENSHOT_VIEW_TYPE.position -> ViewType.SCREENSHOT_VIEW_TYPE.type
             else -> -1
         }
-    }
-
-    companion object {
-        private const val HEADER_VIEW_TYPE = 1
-        private const val SUMMARY_VIEW_TYPE = 2
-        private const val DESCRIPTION_VIEW_TYPE = 3
-        private const val SCREENSHOT_VIEW_TYPE = 4
     }
 }

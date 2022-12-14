@@ -1,6 +1,7 @@
 package com.synthesizer.source.rawg.ui.gamedetail.component.summary
 
 import com.synthesizer.source.rawg.ui.gamedetail.component.Component
+import com.synthesizer.source.rawg.ui.gamedetail.component.ViewType
 
 class SummaryUIModel(
     val gameName: String,
@@ -11,6 +12,6 @@ class SummaryUIModel(
     val metascore: Int,
     val genres: List<String>
 ) : Component {
-    override val type: String
-        get() = "Summary"
+    override val type: ViewType
+        get() = ViewType.SUMMARY_VIEW_TYPE
 }
